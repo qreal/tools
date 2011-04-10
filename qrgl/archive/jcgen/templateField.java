@@ -1,0 +1,1 @@
+	@@FieldVisibility@@ @@FieldType@@ @@FieldName@@;

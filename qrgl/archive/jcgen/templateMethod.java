@@ -1,0 +1,3 @@
+	@@MethodVisibility@@ @@MethodReturnType@@ @@MethodName@@(@@MethodParameters@@) { 
+
+	}
