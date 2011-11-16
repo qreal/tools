@@ -12,7 +12,8 @@ public:
     int xLeft();
     int yUpper();
     Diagram getRasterizedDiagram();
-    Diagram getComponent(int x, int y);
+    Diagram getComponent(QPoint const & point);
+    QList<Diagram> getAllComponents();
 
 private:
     void rasterizeDiagram();
@@ -29,5 +30,7 @@ private:
     void setLeft();
     int sign(int a);
     bool initComponents(int x, int y, int componentNumber);
+    int mGridHeight;
+    int mGridWidth;
 };
 

@@ -11,5 +11,5 @@ typedef QPair<int, int> SquarePos;
 
 typedef QList<SquarePos> Diagram;
 
-const int gridHeight = 50;
-const int gridWidth = 50;
+const int hStep = 5;
+const int wStep = 5;

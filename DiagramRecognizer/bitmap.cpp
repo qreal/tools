@@ -4,12 +4,18 @@
 
 Bitmap::Bitmap(PathVector const & diagram)
 {
-    mBitmap = new int*[gridWidth];
-    for (int i = 0; i < gridWidth; i ++)
-    {
-        mBitmap[i] = new int[gridHeight];
-    }
     mDiagram = diagram;
+    setUpper();
+    setLower();
+    setLeft();
+    setRight();
+    mGridHeight = height() / hStep;
+    mGridWidth = width() / wStep;
+    mBitmap = new int*[mGridWidth];
+    for (int i = 0; i < mGridWidth; i ++)
+    {
+        mBitmap[i] = new int[mGridHeight];
+    }
     rasterizeDiagram();
     initComponents();
 }
@@ -69,13 +75,9 @@ void Bitmap::setRight()
 void Bitmap::rasterizeDiagram()
 {
     qDebug() << "rasterizeDiagram";
-    setUpper();
-    setLower();
-    setLeft();
-    setRight();
-    for (int i = 0; i < gridHeight; i++)
+    for (int i = 0; i < mGridHeight; i++)
     {
-        for (int j = 0; j < gridWidth; j++)
+        for (int j = 0; j < mGridWidth; j++)
             mBitmap[j][i] = 0;
     }
     foreach (PointVector path, mDiagram)
@@ -89,22 +91,22 @@ void Bitmap::rasterizeDiagram()
         {
             if (mLower - mUpper == 0)
             {
-                x2 = (point.x() - mLeft) * gridWidth / (mRight - mLeft);
+                x2 = (point.x() - mLeft) * mGridWidth / (mRight - mLeft);
                 y2 = 0;
             }
             else if (mRight - mLeft == 0)
             {
                 x2 = 0;
-                y2 = (point.y() - mUpper) * gridHeight / (mLower - mUpper);
+                y2 = (point.y() - mUpper) * mGridHeight / (mLower - mUpper);
             }
             else
             {
-                x2 = (int)((point.x() - mLeft) * gridWidth / (mRight - mLeft));
-                y2 = (int)((point.y() - mUpper) * gridHeight / (mLower - mUpper));
+                x2 = (int)((point.x() - mLeft) * mGridWidth / (mRight - mLeft));
+                y2 = (int)((point.y() - mUpper) * mGridHeight / (mLower - mUpper));
             }
-            if (x2 == gridWidth)
+            if (x2 == mGridWidth)
                 x2 --;
-            if (y2 == gridHeight)
+            if (y2 == mGridHeight)
                 y2 --;
             if (!firstPoint)
                 rasterizeSegment(x1, y1, x2, y2);
@@ -164,9 +166,9 @@ int Bitmap::sign(int a)
 void Bitmap::initComponents()
 {
     int componentNumber = 1;
-    for (int i = 0; i < gridWidth; i ++)
+    for (int i = 0; i < mGridWidth; i ++)
     {
-        for (int j = 0; j < gridHeight; j++)
+        for (int j = 0; j < mGridHeight; j++)
             if (initComponents(i, j, componentNumber))
                 componentNumber ++;
     }
@@ -177,28 +179,39 @@ bool Bitmap::initComponents(int x, int y, int componentNumber)
     if (mBitmap[x][y] != -1)
         return false;
     mBitmap[x][y] = componentNumber;
+    if (x > 0 && y > 0 && mBitmap[x - 1][y - 1] != 0 && mBitmap[x - 1][y] != 0 && mBitmap[x][y - 1] != 0)
+        return true;
+    if (x > 0 && y < mGridHeight - 1 &&
+        mBitmap[x - 1][y + 1] != 0 && mBitmap[x - 1][y] != 0 && mBitmap[x][y + 1] != 0)
+        return true;
+    if (x < mGridWidth - 1 && y < mGridHeight - 1 && mBitmap[x + 1][y + 1] != 0
+        && mBitmap[x + 1][y] != 0 && mBitmap[x][y + 1] != 0)
+        return true;
+    if (x < mGridWidth - 1 && y > 0 &&
+        mBitmap[x + 1][y - 1] != 0 && mBitmap[x + 1][y] != 0 && mBitmap[x][y - 1] != 0)
+        return true;
     int edges = 0;
     if (x > 0 && y > 0 && mBitmap[x - 1][y - 1] != 0 && mBitmap[x][y - 1] == 0)
         edges ++;
-    if (x < gridWidth - 1 && y > 0 && mBitmap[x][y - 1] != 0 && mBitmap[x + 1][y - 1] == 0)
+    if (x < mGridWidth - 1 && y > 0 && mBitmap[x][y - 1] != 0 && mBitmap[x + 1][y - 1] == 0)
         edges ++;
-    if (x < gridWidth - 1 && y > 0 && mBitmap[x + 1][y - 1] != 0 && mBitmap[x + 1][y] == 0)
+    if (x < mGridWidth - 1 && y > 0 && mBitmap[x + 1][y - 1] != 0 && mBitmap[x + 1][y] == 0)
         edges ++;
-    if (x < gridWidth - 1 && y < gridHeight - 1 && mBitmap[x + 1][y] != 0 && mBitmap[x + 1] [y + 1] == 0)
+    if (x < mGridWidth - 1 && y < mGridHeight - 1 && mBitmap[x + 1][y] != 0 && mBitmap[x + 1] [y + 1] == 0)
         edges ++;
-    if (x < gridWidth - 1 && y < gridHeight - 1 && mBitmap[x + 1][y + 1] != 0 && mBitmap[x][y + 1] == 0)
+    if (x < mGridWidth - 1 && y < mGridHeight - 1 && mBitmap[x + 1][y + 1] != 0 && mBitmap[x][y + 1] == 0)
         edges ++;
-    if (x > 0 && y < gridHeight - 1 && mBitmap[x][y + 1] != 0 && mBitmap[x - 1][y + 1] == 0)
+    if (x > 0 && y < mGridHeight - 1 && mBitmap[x][y + 1] != 0 && mBitmap[x - 1][y + 1] == 0)
         edges ++;
-    if (x > 0 && y < gridHeight - 1 && mBitmap[x - 1][y + 1] != 0 && mBitmap[x - 1][y] == 0)
+    if (x > 0 && y < mGridHeight - 1 && mBitmap[x - 1][y + 1] != 0 && mBitmap[x - 1][y] == 0)
         edges ++;
     if (x > 0 && y > 0 && mBitmap[x - 1][y] != 0 && mBitmap[x - 1][y - 1] == 0)
         edges ++;
     if (edges <= 2)
     {
-        for (int i = std::max(0, y - 1); i <= std::min(gridHeight - 1, y + 1); i ++)
+        for (int i = std::max(0, y - 1); i <= std::min(mGridHeight - 1, y + 1); i ++)
         {
-            for (int j = std::max(0, x - 1); j <= std::min(gridWidth - 1, x + 1); j ++)
+            for (int j = std::max(0, x - 1); j <= std::min(mGridWidth - 1, x + 1); j ++)
                 initComponents(j, i, componentNumber);
         }
     }
@@ -228,9 +241,9 @@ int Bitmap::yUpper()
 Diagram Bitmap::getRasterizedDiagram()
 {
     Diagram diagram;
-    for (int i = 0; i < gridWidth; i ++)
+    for (int i = 0; i < mGridWidth; i ++)
     {
-        for (int j = 0; j < gridHeight; j ++)
+        for (int j = 0; j < mGridHeight; j ++)
         {
             if (mBitmap[i][j] != 0)
             {
@@ -241,15 +254,21 @@ Diagram Bitmap::getRasterizedDiagram()
     return diagram;
 }
 
-Diagram Bitmap::getComponent(int x, int y)
+Diagram Bitmap::getComponent(QPoint const & point)
 {
     Diagram diagram;
+    if (point.x() < mLeft || point.x() > mRight
+        || point.y() < mUpper || point.y() > mLower) {
+        return diagram;
+    }
+    int x = (point.x() - mLeft) / hStep;
+    int y = (point.y() - mUpper) / hStep;
     int component = mBitmap[x][y];
     if (component == 0)
         return diagram;
-    for (int i = 0; i < gridWidth; i ++)
+    for (int i = 0; i < mGridWidth; i ++)
     {
-        for (int j = 0; j < gridHeight; j ++)
+        for (int j = 0; j < mGridHeight; j ++)
         {
             if (mBitmap[i][j] == component)
             {
@@ -258,4 +277,23 @@ Diagram Bitmap::getComponent(int x, int y)
         }
     }
     return diagram;
+}
+
+QList<Diagram> Bitmap::getAllComponents()
+{
+    QMap<int, Diagram> components;
+    for (int i = 0; i < mGridWidth; i ++) {
+        for (int j = 0; j < mGridHeight; j ++) {
+            int currentComponentNum = mBitmap[i][j];
+            if (components.contains(currentComponentNum)) {
+                components[currentComponentNum].push_back(SquarePos(i, j));
+            }
+            else if (currentComponentNum != 0) {
+                Diagram newComponent;
+                newComponent.push_back(SquarePos(i, j));
+                components.insert(currentComponentNum, newComponent);
+            }
+        }
+    }
+    return components.values();
 }
