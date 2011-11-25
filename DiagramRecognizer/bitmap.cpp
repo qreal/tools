@@ -177,43 +177,69 @@ void Bitmap::initComponents()
 bool Bitmap::initComponents(int x, int y, int componentNumber)
 {
     if (mBitmap[x][y] != -1)
-        return false;
+        return true;
     mBitmap[x][y] = componentNumber;
-    if (x > 0 && y > 0 && mBitmap[x - 1][y - 1] != 0 && mBitmap[x - 1][y] != 0 && mBitmap[x][y - 1] != 0)
-        return true;
-    if (x > 0 && y < mGridHeight - 1 &&
-        mBitmap[x - 1][y + 1] != 0 && mBitmap[x - 1][y] != 0 && mBitmap[x][y + 1] != 0)
-        return true;
-    if (x < mGridWidth - 1 && y < mGridHeight - 1 && mBitmap[x + 1][y + 1] != 0
-        && mBitmap[x + 1][y] != 0 && mBitmap[x][y + 1] != 0)
-        return true;
-    if (x < mGridWidth - 1 && y > 0 &&
-        mBitmap[x + 1][y - 1] != 0 && mBitmap[x + 1][y] != 0 && mBitmap[x][y - 1] != 0)
-        return true;
-    int edges = 0;
-    if (x > 0 && y > 0 && mBitmap[x - 1][y - 1] != 0 && mBitmap[x][y - 1] == 0)
-        edges ++;
-    if (x < mGridWidth - 1 && y > 0 && mBitmap[x][y - 1] != 0 && mBitmap[x + 1][y - 1] == 0)
-        edges ++;
-    if (x < mGridWidth - 1 && y > 0 && mBitmap[x + 1][y - 1] != 0 && mBitmap[x + 1][y] == 0)
-        edges ++;
-    if (x < mGridWidth - 1 && y < mGridHeight - 1 && mBitmap[x + 1][y] != 0 && mBitmap[x + 1] [y + 1] == 0)
-        edges ++;
-    if (x < mGridWidth - 1 && y < mGridHeight - 1 && mBitmap[x + 1][y + 1] != 0 && mBitmap[x][y + 1] == 0)
-        edges ++;
-    if (x > 0 && y < mGridHeight - 1 && mBitmap[x][y + 1] != 0 && mBitmap[x - 1][y + 1] == 0)
-        edges ++;
-    if (x > 0 && y < mGridHeight - 1 && mBitmap[x - 1][y + 1] != 0 && mBitmap[x - 1][y] == 0)
-        edges ++;
-    if (x > 0 && y > 0 && mBitmap[x - 1][y] != 0 && mBitmap[x - 1][y - 1] == 0)
-        edges ++;
-    if (edges <= 2)
-    {
-        for (int i = std::max(0, y - 1); i <= std::min(mGridHeight - 1, y + 1); i ++)
-        {
+    int cornerX = -1;
+    int cornerY = -1;
+    for (int i = 0; i < 4; i ++) {
+        int nextCornerX = - cornerY;
+        int nextCornerY = cornerX;
+        int x1 = x + cornerX;
+        int y1 = y + cornerY;
+        int x2 = x + nextCornerX;
+        int y2 = y + nextCornerY;
+        if (x1 >= 0 && y1 >= 0 && x2 >= 0 && y2 >= 0
+            && x1 < mGridWidth && y1 < mGridHeight && x2 < mGridWidth && y2 < mGridHeight
+            && mBitmap[x1][y1] != 0 && mBitmap[x2][y2] != 0) {
+            qDebug() << x << y << "corners" << x1 << y1 << x2 << y2;
+            return false;
+        }
+        cornerX = nextCornerX;
+        cornerY = nextCornerY;
+    }
+    if ((y == 0 || mBitmap[x][y - 1] == 0) &&
+        (y == mGridHeight - 1 || mBitmap[x][y + 1] == 0) &&
+        (x == 0 || mBitmap[x - 1][y] == 0) &&
+        (x == mGridWidth - 1 || mBitmap[x + 1][y] ==0)) {
+        //TODO:: new method
+        for (int i = std::max(0, y - 1); i <= std::min(mGridHeight - 1, y + 1); i ++) {
             for (int j = std::max(0, x - 1); j <= std::min(mGridWidth - 1, x + 1); j ++)
                 initComponents(j, i, componentNumber);
         }
+        return true;
+    }
+    int neighbourX = 0;
+    int neighbourY = 1;
+    for (int i = 0; i < 4; i ++) {
+        int nextNeighbourX = - neighbourY;
+        int nextNeighbourY = neighbourX;
+        if (x + neighbourX >= 0 && y + neighbourY >= 0 &&
+            x + neighbourX < mGridWidth && y + neighbourY < mGridHeight &&
+            x + nextNeighbourX >= 0 && y + nextNeighbourY >= 0 &&
+            x + nextNeighbourX < mGridWidth && y + nextNeighbourY < mGridHeight &&
+            mBitmap[x + neighbourX][y + neighbourY] != 0 && mBitmap[x + nextNeighbourX][y + nextNeighbourY] != 0) {
+            int x1 = x + neighbourX - neighbourY;
+            int y1 = y + neighbourX + neighbourY;
+            int x2 = x - neighbourX;
+            int y2 = y - neighbourY;
+            int x3 = x - neighbourX + neighbourY;
+            int y3 = y - neighbourX - neighbourY;
+            int x4 = x + neighbourY;
+            int y4 = y - neighbourX;
+            if ((x1 >= 0 && x1 < mGridWidth && y1 >= 0 && y1 < mGridHeight && mBitmap[x1][y1] != 0) ||
+                (x2 >= 0 && x2 < mGridWidth && y2 >= 0 && y2 < mGridHeight && mBitmap[x2][y2] != 0) ||
+                (x3 >= 0 && x3 < mGridWidth && y3 >= 0 && y3 < mGridHeight && mBitmap[x3][y3] != 0) ||
+                (x4 >= 0 && x4 < mGridWidth && y4 >= 0 && y4 < mGridHeight && mBitmap[x4][y4] != 0)) {
+                return false;
+            }
+
+        }
+        neighbourX = nextNeighbourX;
+        neighbourY = nextNeighbourY;
+    }
+    for (int i = std::max(0, y - 1); i <= std::min(mGridHeight - 1, y + 1); i ++) {
+        for (int j = std::max(0, x - 1); j <= std::min(mGridWidth - 1, x + 1); j ++)
+            initComponents(j, i, componentNumber);
     }
     return true;
 }
