@@ -9,7 +9,5 @@ typedef QList<PointVector> PathVector;
 
 typedef QPair<int, int> SquarePos;
 
-typedef QList<SquarePos> Diagram;
-
 const int hStep = 5;
 const int wStep = 5;

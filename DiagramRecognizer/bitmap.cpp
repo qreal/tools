@@ -11,10 +11,14 @@ Bitmap::Bitmap(PathVector const & diagram)
     setRight();
     mGridHeight = height() / hStep;
     mGridWidth = width() / wStep;
-    mBitmap = new int*[mGridWidth];
     for (int i = 0; i < mGridWidth; i ++)
     {
-        mBitmap[i] = new int[mGridHeight];
+        QList<int> column;
+        for (int j = 0; j < mGridHeight; j ++)
+        {
+            column.push_back(0);
+        }
+        mBitmap.push_back(column);
     }
     rasterizeDiagram();
     initComponents();
@@ -214,10 +218,11 @@ bool Bitmap::initComponents(int x, int y, int componentNumber)
         int nextNeighbourX = - neighbourY;
         int nextNeighbourY = neighbourX;
         if (x + neighbourX >= 0 && y + neighbourY >= 0 &&
-            x + neighbourX < mGridWidth && y + neighbourY < mGridHeight &&
-            x + nextNeighbourX >= 0 && y + nextNeighbourY >= 0 &&
-            x + nextNeighbourX < mGridWidth && y + nextNeighbourY < mGridHeight &&
-            mBitmap[x + neighbourX][y + neighbourY] != 0 && mBitmap[x + nextNeighbourX][y + nextNeighbourY] != 0) {
+                x + neighbourX < mGridWidth && y + neighbourY < mGridHeight &&
+                x + nextNeighbourX >= 0 && y + nextNeighbourY >= 0 &&
+                x + nextNeighbourX < mGridWidth && y + nextNeighbourY < mGridHeight &&
+                mBitmap[x + neighbourX][y + neighbourY] != 0 &&
+                mBitmap[x + nextNeighbourX][y + nextNeighbourY] != 0) {
             int x1 = x + neighbourX - neighbourY;
             int y1 = y + neighbourX + neighbourY;
             int x2 = x - neighbourX;
@@ -227,9 +232,9 @@ bool Bitmap::initComponents(int x, int y, int componentNumber)
             int x4 = x + neighbourY;
             int y4 = y - neighbourX;
             if ((x1 >= 0 && x1 < mGridWidth && y1 >= 0 && y1 < mGridHeight && mBitmap[x1][y1] != 0) ||
-                (x2 >= 0 && x2 < mGridWidth && y2 >= 0 && y2 < mGridHeight && mBitmap[x2][y2] != 0) ||
-                (x3 >= 0 && x3 < mGridWidth && y3 >= 0 && y3 < mGridHeight && mBitmap[x3][y3] != 0) ||
-                (x4 >= 0 && x4 < mGridWidth && y4 >= 0 && y4 < mGridHeight && mBitmap[x4][y4] != 0)) {
+                    (x2 >= 0 && x2 < mGridWidth && y2 >= 0 && y2 < mGridHeight && mBitmap[x2][y2] != 0) ||
+                    (x3 >= 0 && x3 < mGridWidth && y3 >= 0 && y3 < mGridHeight && mBitmap[x3][y3] != 0) ||
+                    (x4 >= 0 && x4 < mGridWidth && y4 >= 0 && y4 < mGridHeight && mBitmap[x4][y4] != 0)) {
                 return false;
             }
 
@@ -298,7 +303,7 @@ Diagram Bitmap::getComponent(QPoint const & point)
         {
             if (mBitmap[i][j] == component)
             {
-                diagram.push_back(SquarePos(i, j));
+                diagram.insert(SquarePos(i, j));
             }
         }
     }

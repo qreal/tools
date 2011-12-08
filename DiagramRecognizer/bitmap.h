@@ -18,7 +18,7 @@ public:
 private:
     void rasterizeDiagram();
     void rasterizeSegment(int x1, int y1, int x2, int y2);
-    int ** mBitmap;
+    QList<QList<int> > mBitmap;
     int mLower;
     int mUpper;
     int mRight;

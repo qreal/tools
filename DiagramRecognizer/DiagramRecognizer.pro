@@ -18,6 +18,7 @@ SOURCES += main.cpp\
 HEADERS  += diagramrecognizer.h \
     geometricForms.h \
     bitmap.h \
-    paintmanager.h
+    paintmanager.h \
+    diagram.h
 
 FORMS    += diagramrecognizer.ui
