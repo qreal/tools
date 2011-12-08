@@ -18,7 +18,7 @@ Bitmap::Bitmap(PathVector const & diagram)
         {
             column.push_back(0);
         }
-        mBitmap.push_back(column);
+        push_back(column);
     }
     rasterizeDiagram();
     initComponents();
@@ -82,7 +82,7 @@ void Bitmap::rasterizeDiagram()
     for (int i = 0; i < mGridHeight; i++)
     {
         for (int j = 0; j < mGridWidth; j++)
-            mBitmap[j][i] = 0;
+            operator[] (j)[i] = 0;
     }
     foreach (PointVector path, mDiagram)
     {
@@ -123,7 +123,7 @@ void Bitmap::rasterizeDiagram()
 
 void Bitmap::rasterizeSegment(int x1, int y1, int x2, int y2)
 {
-    mBitmap[x1][y1] = -1;
+    operator [](x1)[y1] = -1;
     int x = x1;
     int y = y1;
     int deltaX = abs(x2 - x);
@@ -141,7 +141,7 @@ void Bitmap::rasterizeSegment(int x1, int y1, int x2, int y2)
     int e = 2 * deltaY - deltaX;
     for (int i = 0; i < deltaX; i ++)
     {
-        mBitmap[x][y] = -1;
+        operator[](x)[y] = -1;
         while (e >= 0)
         {
             if (isChanged)
@@ -180,9 +180,9 @@ void Bitmap::initComponents()
 
 bool Bitmap::initComponents(int x, int y, int componentNumber)
 {
-    if (mBitmap[x][y] != -1)
+    if (at(x).at(y) != -1)
         return true;
-    mBitmap[x][y] = componentNumber;
+    operator[](x)[y] = componentNumber;
     int cornerX = -1;
     int cornerY = -1;
     for (int i = 0; i < 4; i ++) {
@@ -194,17 +194,17 @@ bool Bitmap::initComponents(int x, int y, int componentNumber)
         int y2 = y + nextCornerY;
         if (x1 >= 0 && y1 >= 0 && x2 >= 0 && y2 >= 0
             && x1 < mGridWidth && y1 < mGridHeight && x2 < mGridWidth && y2 < mGridHeight
-            && mBitmap[x1][y1] != 0 && mBitmap[x2][y2] != 0) {
+            && at(x1).at(y1) != 0 && at(x2).at(y2) != 0) {
             qDebug() << x << y << "corners" << x1 << y1 << x2 << y2;
             return false;
         }
         cornerX = nextCornerX;
         cornerY = nextCornerY;
     }
-    if ((y == 0 || mBitmap[x][y - 1] == 0) &&
-        (y == mGridHeight - 1 || mBitmap[x][y + 1] == 0) &&
-        (x == 0 || mBitmap[x - 1][y] == 0) &&
-        (x == mGridWidth - 1 || mBitmap[x + 1][y] ==0)) {
+    if ((y == 0 || at(x).at(y - 1) == 0) &&
+        (y == mGridHeight - 1 || at(x).at(y + 1) == 0) &&
+        (x == 0 || at(x - 1).at(y) == 0) &&
+        (x == mGridWidth - 1 || at(x + 1).at(y) ==0)) {
         //TODO:: new method
         for (int i = std::max(0, y - 1); i <= std::min(mGridHeight - 1, y + 1); i ++) {
             for (int j = std::max(0, x - 1); j <= std::min(mGridWidth - 1, x + 1); j ++)
@@ -221,8 +221,8 @@ bool Bitmap::initComponents(int x, int y, int componentNumber)
                 x + neighbourX < mGridWidth && y + neighbourY < mGridHeight &&
                 x + nextNeighbourX >= 0 && y + nextNeighbourY >= 0 &&
                 x + nextNeighbourX < mGridWidth && y + nextNeighbourY < mGridHeight &&
-                mBitmap[x + neighbourX][y + neighbourY] != 0 &&
-                mBitmap[x + nextNeighbourX][y + nextNeighbourY] != 0) {
+                at(x + neighbourX)[y + neighbourY] != 0 &&
+                at(x + nextNeighbourX)[y + nextNeighbourY] != 0) {
             int x1 = x + neighbourX - neighbourY;
             int y1 = y + neighbourX + neighbourY;
             int x2 = x - neighbourX;
@@ -231,10 +231,10 @@ bool Bitmap::initComponents(int x, int y, int componentNumber)
             int y3 = y - neighbourX - neighbourY;
             int x4 = x + neighbourY;
             int y4 = y - neighbourX;
-            if ((x1 >= 0 && x1 < mGridWidth && y1 >= 0 && y1 < mGridHeight && mBitmap[x1][y1] != 0) ||
-                    (x2 >= 0 && x2 < mGridWidth && y2 >= 0 && y2 < mGridHeight && mBitmap[x2][y2] != 0) ||
-                    (x3 >= 0 && x3 < mGridWidth && y3 >= 0 && y3 < mGridHeight && mBitmap[x3][y3] != 0) ||
-                    (x4 >= 0 && x4 < mGridWidth && y4 >= 0 && y4 < mGridHeight && mBitmap[x4][y4] != 0)) {
+            if ((x1 >= 0 && x1 < mGridWidth && y1 >= 0 && y1 < mGridHeight && at(x1)[y1] != 0) ||
+                    (x2 >= 0 && x2 < mGridWidth && y2 >= 0 && y2 < mGridHeight && at(x2)[y2] != 0) ||
+                    (x3 >= 0 && x3 < mGridWidth && y3 >= 0 && y3 < mGridHeight && at(x3)[y3] != 0) ||
+                    (x4 >= 0 && x4 < mGridWidth && y4 >= 0 && y4 < mGridHeight && at(x4)[y4] != 0)) {
                 return false;
             }
 
@@ -264,9 +264,19 @@ int Bitmap::xLeft()
     return mLeft;
 }
 
+int Bitmap::xRight()
+{
+    return mRight;
+}
+
 int Bitmap::yUpper()
 {
     return mUpper;
+}
+
+int Bitmap::yLower()
+{
+    return mLower;
 }
 
 Diagram Bitmap::getRasterizedDiagram()
@@ -276,55 +286,11 @@ Diagram Bitmap::getRasterizedDiagram()
     {
         for (int j = 0; j < mGridHeight; j ++)
         {
-            if (mBitmap[i][j] != 0)
+            if (at(i)[j] != 0)
             {
                 diagram.push_back(SquarePos(i, j));
             }
         }
     }
     return diagram;
-}
-
-Diagram Bitmap::getComponent(QPoint const & point)
-{
-    Diagram diagram;
-    if (point.x() < mLeft || point.x() > mRight
-        || point.y() < mUpper || point.y() > mLower) {
-        return diagram;
-    }
-    int x = (point.x() - mLeft) / hStep;
-    int y = (point.y() - mUpper) / hStep;
-    int component = mBitmap[x][y];
-    if (component == 0)
-        return diagram;
-    for (int i = 0; i < mGridWidth; i ++)
-    {
-        for (int j = 0; j < mGridHeight; j ++)
-        {
-            if (mBitmap[i][j] == component)
-            {
-                diagram.insert(SquarePos(i, j));
-            }
-        }
-    }
-    return diagram;
-}
-
-QList<Diagram> Bitmap::getAllComponents()
-{
-    QMap<int, Diagram> components;
-    for (int i = 0; i < mGridWidth; i ++) {
-        for (int j = 0; j < mGridHeight; j ++) {
-            int currentComponentNum = mBitmap[i][j];
-            if (components.contains(currentComponentNum)) {
-                components[currentComponentNum].push_back(SquarePos(i, j));
-            }
-            else if (currentComponentNum != 0) {
-                Diagram newComponent;
-                newComponent.push_back(SquarePos(i, j));
-                components.insert(currentComponentNum, newComponent);
-            }
-        }
-    }
-    return components.values();
 }

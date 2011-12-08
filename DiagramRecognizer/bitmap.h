@@ -1,24 +1,22 @@
 #pragma once
 #include "geometricForms.h"
+#include "diagram.h"
 
-class Bitmap
+class Bitmap : public QList<QList<int> >
 {
 public:
     Bitmap(PathVector const & diagram);
-    void print();
-    void initComponents();
     int width();
     int height();
     int xLeft();
+    int xRight();
     int yUpper();
+    int yLower();
     Diagram getRasterizedDiagram();
-    Diagram getComponent(QPoint const & point);
-    QList<Diagram> getAllComponents();
 
 private:
     void rasterizeDiagram();
     void rasterizeSegment(int x1, int y1, int x2, int y2);
-    QList<QList<int> > mBitmap;
     int mLower;
     int mUpper;
     int mRight;
@@ -29,6 +27,7 @@ private:
     void setRight();
     void setLeft();
     int sign(int a);
+    void initComponents();
     bool initComponents(int x, int y, int componentNumber);
     int mGridHeight;
     int mGridWidth;

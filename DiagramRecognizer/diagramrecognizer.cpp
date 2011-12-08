@@ -1,6 +1,7 @@
 #include "diagramrecognizer.h"
 #include "ui_diagramrecognizer.h"
 #include "bitmap.h"
+#include "formsegmentator.h"
 #include <QMouseEvent>
 #include <QPainter>
 #include <QRect>
@@ -90,7 +91,8 @@ void DiagramRecognizer::paintEvent(QPaintEvent *paintEvent)
                    wStep, hStep);
         painter.drawRect(rect);
     }
-    QList<Diagram> components = mBitmap->getAllComponents();
+    FormSegmentator segmentator(mBitmap);
+    QList<Diagram> components = segmentator.getAllComponents();
     int size = components.size();
     for (int i = 0; i < size; i ++) {
         //TODO:: do something with colors. They are to close
@@ -99,7 +101,7 @@ void DiagramRecognizer::paintEvent(QPaintEvent *paintEvent)
         Diagram component = components.at(i);
         drawDiagram(component, color, &painter);
     }
-    Diagram curComponent = mBitmap->getComponent(mComponentPoint);
+    Diagram curComponent = segmentator.getComponent(mComponentPoint);
     drawDiagram(curComponent, Qt::black, &painter);
     painter.setPen(Qt::black);
     for (int i = 1; i < height / hStep; i++)

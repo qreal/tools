@@ -13,12 +13,15 @@ TEMPLATE = app
 SOURCES += main.cpp\
         diagramrecognizer.cpp \
     bitmap.cpp \
-    paintmanager.cpp
+    paintmanager.cpp \
+    diagram.cpp \
+    formsegmentator.cpp
 
 HEADERS  += diagramrecognizer.h \
     geometricForms.h \
     bitmap.h \
     paintmanager.h \
-    diagram.h
+    diagram.h \
+    formsegmentator.h
 
 FORMS    += diagramrecognizer.ui
