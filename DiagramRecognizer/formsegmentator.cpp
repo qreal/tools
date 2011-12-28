@@ -1,10 +1,13 @@
 #include "formsegmentator.h"
 #include <QMap>
+#include "stdlib.h"
+#include <QDebug>
 
 FormSegmentator::FormSegmentator(Bitmap *bitmap)
 {
     mBitmap = bitmap;
     initComponents();
+    qDebug() << "components initialized";
 }
 
 Diagram FormSegmentator::getComponent(const QPoint &point)
@@ -34,7 +37,6 @@ QList<Diagram> FormSegmentator::getAllComponents()
 
 void FormSegmentator::initComponents()
 {
-    //redundancy for diagram id !!!
     QMap<int, Diagram> components;
     for (int i = 0; i < mBitmap->size(); i ++) {
         if (mBitmap->at(i).empty()) {
@@ -47,11 +49,27 @@ void FormSegmentator::initComponents()
             }
             else if (currentComponentNum != 0) {
                 Diagram newComponent;
-                newComponent.setID(currentComponentNum);
                 newComponent.insertPos(SquarePos(i, j));
                 components.insert(currentComponentNum, newComponent);
             }
         }
     }
     mAllComponents = components.values();
+    foreach (Diagram diagram, mAllComponents) {
+        //diagram.analyze();
+    }
+}
+
+void FormSegmentator::uniteComponents()
+{
+    QList<Diagram> newComponents;
+    while (!mAllComponents.empty()) {
+        Diagram diagram = mAllComponents.back();
+        mAllComponents.pop_back();
+        foreach (Diagram checkDiagram, mAllComponents) {
+            diagram.checkNeighbour(checkDiagram);
+        }
+        newComponents.push_back(diagram);;
+    }
+    mAllComponents = newComponents;
 }

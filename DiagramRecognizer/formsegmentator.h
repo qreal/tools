@@ -7,6 +7,7 @@ public:
     FormSegmentator(Bitmap *bimap);
     Diagram getComponent(QPoint const & point);
     QList<Diagram> getAllComponents();
+    void uniteComponents();
 
 private:
     Bitmap *mBitmap;
