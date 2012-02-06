@@ -45,22 +45,22 @@ void Diagram::analyze()
 {
     if (at(0).dist(back()) <= neighbourhoodRad)
         mHasSelfIntersection = true;
-    int next = 0;
-    while (next < size() && at(next).first == at(0).first) {
+    int next = 1;
+    while (next < size() && abs(at(next).first - at(0).first) <= 1) {
         next ++;
     }
-    int sign = (back().second - at(0).second) / abs(back().second - at(0).second);
-    if (next == size()) {
+    if (next == size() && back().first == at(0).first) {
+        int sign = (back().second - at(0).second) / abs(back().second - at(0).second);
         mDerivative1 = infDerivative * sign;
         mDerivative2 = - infDerivative * sign;
         return;
     }
-    mDerivative1 = at(next).second - at(0).second;
-    int prev = size() - 1;
-    while (prev >= 0 && at(prev).first == back().first) {
+    mDerivative1 = (at(next - 1).second - at(0).second) / (at(next - 1). first - at(0).first);
+    int prev = size() - 2;
+    while (prev >= 0 && abs(at(prev).first - back().first) <= 1) {
         prev --;
     }
-    mDerivative2 = at(prev).second - back().second;
+    mDerivative2 = (at(prev + 1).second - back().second) / (at(prev + 1).first - back().first);
 }
 
 double Diagram::getDerivativeBack()
