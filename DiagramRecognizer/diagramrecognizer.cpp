@@ -92,6 +92,7 @@ void DiagramRecognizer::paintEvent(QPaintEvent *paintEvent)
         painter.drawRect(rect);
     }
     FormSegmentator segmentator(mBitmap);
+    segmentator.uniteComponents();
     QList<Diagram> components = segmentator.getAllComponents();
     int size = components.size();
     for (int i = 0; i < size; i ++) {

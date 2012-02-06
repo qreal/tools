@@ -3,6 +3,7 @@
 #include "stdlib.h"
 #include <QDebug>
 
+
 FormSegmentator::FormSegmentator(Bitmap *bitmap)
 {
     mBitmap = bitmap;
@@ -54,10 +55,10 @@ void FormSegmentator::initComponents()
             }
         }
     }
-    mAllComponents = components.values();
     foreach (Diagram diagram, mAllComponents) {
-        //diagram.analyze();
+        diagram.analyze();
     }
+    mAllComponents = components.values();
 }
 
 void FormSegmentator::uniteComponents()
@@ -66,8 +67,60 @@ void FormSegmentator::uniteComponents()
     while (!mAllComponents.empty()) {
         Diagram diagram = mAllComponents.back();
         mAllComponents.pop_back();
+        bool isBegin = false;
+        int mergeDiagram = -1;
+        int derDiff = 5000;
         foreach (Diagram checkDiagram, mAllComponents) {
-            diagram.checkNeighbour(checkDiagram);
+            if (diagram.at(0).dist(checkDiagram.at(0)) <= neighbourhoodRad
+                && abs(diagram.getDerivativeBegin() + checkDiagram.getDerivativeBegin()) < derDiff) {
+                derDiff = abs(diagram.getDerivativeBegin() + checkDiagram.getDerivativeBegin());
+                mergeDiagram = checkDiagram.ID();
+                isBegin = true;
+            }
+            if (diagram.at(0).dist(checkDiagram.back()) <= neighbourhoodRad
+                && abs(diagram.getDerivativeBegin() + checkDiagram.getDerivativeBack()) < derDiff) {
+                derDiff = abs(diagram.getDerivativeBegin() + checkDiagram.getDerivativeBack());
+                mergeDiagram = checkDiagram.ID();
+                isBegin = false;
+            }
+        }
+        if (mergeDiagram > 0) {
+            int i = 0;
+            Diagram currentDiagram = mAllComponents.at(i);
+            while (i < mAllComponents.size() && currentDiagram.ID() != mergeDiagram) {
+                //Bad!!! Very very bad!!! Cause order of SquarePos is important!!!
+                //TODO:: kill this
+                diagram.append(currentDiagram);
+                mAllComponents.removeAt(i);
+            }
+        }
+        //TODO: kill Indian code
+        isBegin = false;
+        mergeDiagram = -1;
+        derDiff = 5000;
+        foreach (Diagram checkDiagram, mAllComponents) {
+            if (diagram.back().dist(checkDiagram.at(0)) <= neighbourhoodRad
+                && abs(diagram.getDerivativeBack() + checkDiagram.getDerivativeBegin()) < derDiff) {
+                derDiff = abs(diagram.getDerivativeBack() + checkDiagram.getDerivativeBegin());
+                mergeDiagram = checkDiagram.ID();
+                isBegin = true;
+            }
+            if (diagram.back().dist(checkDiagram.back()) <= neighbourhoodRad
+                && abs(diagram.getDerivativeBegin() + checkDiagram.getDerivativeBack()) < derDiff) {
+                derDiff = abs(diagram.getDerivativeBack() + checkDiagram.getDerivativeBack());
+                mergeDiagram = checkDiagram.ID();
+                isBegin = false;
+            }
+        }
+        if (mergeDiagram > 0) {
+            int i = 0;
+            Diagram currentDiagram = mAllComponents.at(i);
+            while (i < mAllComponents.size() && currentDiagram.ID() != mergeDiagram) {
+                //Bad!!! Very very bad!!! Cause order of SquarePos is important!!!
+                //TODO:: kill this
+                diagram.append(currentDiagram);
+                mAllComponents.removeAt(i);
+            }
         }
         newComponents.push_back(diagram);;
     }

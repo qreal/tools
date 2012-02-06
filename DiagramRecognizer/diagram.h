@@ -2,7 +2,7 @@
 #include "geometricForms.h"
 #include <QList>
 
-const int neighbourhoodRad = 3;
+
 const double infDerivative = 1000;
 
 class Diagram : public QList<SquarePos>
@@ -23,7 +23,6 @@ private:
     int mID;
     double mDerivative1;
     double mDerivative2;
-    int norm(SquarePos const & pos1, SquarePos const & pos2) const;
     enum NeighbourhoodType
     {
         BeginBegin,

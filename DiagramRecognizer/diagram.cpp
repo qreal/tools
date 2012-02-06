@@ -37,15 +37,30 @@ void Diagram::insertPos(const SquarePos &pos)
 //TODO:: init norm for SquarePos
 bool Diagram::isNeighbours(const SquarePos &pos1, const SquarePos &pos2) const
 {
-    return norm(pos1, pos2) <= 1;
+    return pos1.dist(pos2) <= 1;
 }
 
 
 void Diagram::analyze()
 {
-    if (norm(at(0), back()) <= neighbourhoodRad)
+    if (at(0).dist(back()) <= neighbourhoodRad)
         mHasSelfIntersection = true;
-    //TODO:: initialize direction for ends of diagram
+    int next = 0;
+    while (next < size() && at(next).first == at(0).first) {
+        next ++;
+    }
+    int sign = (back().second - at(0).second) / abs(back().second - at(0).second);
+    if (next == size()) {
+        mDerivative1 = infDerivative * sign;
+        mDerivative2 = - infDerivative * sign;
+        return;
+    }
+    mDerivative1 = at(next).second - at(0).second;
+    int prev = size() - 1;
+    while (prev >= 0 && at(prev).first == back().first) {
+        prev --;
+    }
+    mDerivative2 = at(prev).second - back().second;
 }
 
 double Diagram::getDerivativeBack()
@@ -58,31 +73,24 @@ double Diagram::getDerivativeBegin()
     return mDerivative2;
 }
 
-int Diagram::norm(const SquarePos &pos1, const SquarePos &pos2) const
-{
-    return std::max(abs(pos1.first - pos2.first), abs(pos1.second - pos2.second));
-}
+//bool Diagram::checkNeighbour(const Diagram &diagram)
+//{
 
-
-bool Diagram::checkNeighbour(const Diagram &diagram)
-{
-    bool isNeighbour = false;
-    if (norm(back(), diagram.at(0)) <= neighbourhoodRad) {
-        mNeighborDiagrams.push_back(QPair<int, NeighbourhoodType>(diagram.ID(), EndBegin));
-        isNeighbour = true;
-    }
-    if (norm(back(), diagram.back()) <= neighbourhoodRad) {
-        mNeighborDiagrams.push_back(QPair<int, NeighbourhoodType>(diagram.ID(), EndEnd));
-        isNeighbour = true;
-    }
-    if (norm(at(0), diagram.at(0)) <= neighbourhoodRad) {
-        mNeighborDiagrams.push_back(QPair<int, NeighbourhoodType>(diagram.ID(), BeginBegin));
-        isNeighbour = true;
-    }
-    if (norm(at(0), diagram.back()) <= neighbourhoodRad) {
-        mNeighborDiagrams.push_back(QPair<int, NeighbourhoodType>(diagram.ID(), BeginEnd));
-        isNeighbour = true;
-    }
-    return isNeighbour;
-}
-
+//    if (norm(back(), diagram.at(0)) <= neighbourhoodRad) {
+//        mNeighborDiagrams.push_back(QPair<int, NeighbourhoodType>(diagram.ID(), EndBegin));
+//        return true;
+//    }
+//    if (norm(back(), diagram.back()) <= neighbourhoodRad) {
+//        mNeighborDiagrams.push_back(QPair<int, NeighbourhoodType>(diagram.ID(), EndEnd));
+//        return true;
+//    }
+//    if (norm(at(0), diagram.at(0)) <= neighbourhoodRad) {
+//        mNeighborDiagrams.push_back(QPair<int, NeighbourhoodType>(diagram.ID(), BeginBegin));
+//        return true;
+//    }
+//    if (norm(at(0), diagram.back()) <= neighbourhoodRad) {
+//        mNeighborDiagrams.push_back(QPair<int, NeighbourhoodType>(diagram.ID(), BeginEnd));
+//        return true;
+//    }
+//    return false;
+//}
