@@ -27,8 +27,6 @@ private:
     void setRight();
     void setLeft();
     int sign(int a);
-    void initComponents();
-    bool initComponents(int x, int y, int componentNumber);
     int mGridHeight;
     int mGridWidth;
 };
