@@ -91,9 +91,8 @@ void DiagramRecognizer::paintEvent(QPaintEvent *paintEvent)
                    wStep, hStep);
         painter.drawRect(rect);
     }
-    FormSegmentator segmentator(mBitmap);
-    segmentator.uniteComponents();
-    QList<Diagram> components = segmentator.getAllComponents();
+    //segmentator.uniteComponents();
+    QList<Diagram> components = mFormSegmentator->getAllComponents();
     int size = components.size();
     for (int i = 0; i < size; i ++) {
         //TODO:: do something with colors. They are to close
@@ -102,7 +101,7 @@ void DiagramRecognizer::paintEvent(QPaintEvent *paintEvent)
         Diagram component = components.at(i);
         drawDiagram(component, color, &painter);
     }
-    Diagram curComponent = segmentator.getComponent(mComponentPoint);
+    Diagram curComponent = mFormSegmentator->getComponent(mComponentPoint);
     drawDiagram(curComponent, Qt::black, &painter);
     painter.setPen(Qt::black);
     for (int i = 1; i < height / hStep; i++)
@@ -121,6 +120,7 @@ void DiagramRecognizer::recognize()
 {
     mBitmap = new Bitmap(mDiagram);
     mRecognized = true;
+    mFormSegmentator = new FormSegmentator(mBitmap);
     update();
 }
 

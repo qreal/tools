@@ -34,7 +34,6 @@ void Diagram::insertPos(const SquarePos &pos)
     push_back(pos);
 }
 
-//TODO:: init norm for SquarePos
 bool Diagram::isNeighbours(const SquarePos &pos1, const SquarePos &pos2) const
 {
     return pos1.dist(pos2) <= 1;
@@ -43,6 +42,8 @@ bool Diagram::isNeighbours(const SquarePos &pos1, const SquarePos &pos2) const
 
 void Diagram::analyze()
 {
+    qDebug() << ID() << "first" << at(0).first << at(0).second << "last"
+            << back().first << back().second;
     if (at(0).dist(back()) <= neighbourhoodRad)
         mHasSelfIntersection = true;
     int next = 1;

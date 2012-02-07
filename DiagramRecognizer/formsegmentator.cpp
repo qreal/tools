@@ -45,7 +45,7 @@ void FormSegmentator::initComponents()
         }
         for (int j = 0; j < mBitmap->at(i).size(); j ++) {
             int currentComponentNum = mBitmap->at(i)[j];
-            if (components.contains(currentComponentNum)) {
+            if (components.keys().contains(currentComponentNum)) {
                 components[currentComponentNum].insertPos(SquarePos(i, j));
             }
             else if (currentComponentNum != 0) {
@@ -55,10 +55,10 @@ void FormSegmentator::initComponents()
             }
         }
     }
+    mAllComponents = components.values();
     foreach (Diagram diagram, mAllComponents) {
         diagram.analyze();
     }
-    mAllComponents = components.values();
 }
 
 void FormSegmentator::uniteComponents()

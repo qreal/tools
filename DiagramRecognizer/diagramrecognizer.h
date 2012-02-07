@@ -1,5 +1,6 @@
 #pragma once
 #include "bitmap.h"
+#include "formsegmentator.h"
 #include <QMainWindow>
 
 namespace Ui {
@@ -25,6 +26,7 @@ private:
     Ui::DiagramRecognizer *ui;
     QList<QList<QPoint> > mDiagram;
     Bitmap * mBitmap;
+    FormSegmentator *mFormSegmentator;
     bool mRecognized;
     bool mLeftButtonPressed;
     QPoint mComponentPoint;
