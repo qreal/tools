@@ -8,27 +8,28 @@ FormSegmentator::FormSegmentator(Bitmap *bitmap)
 {
     mBitmap = bitmap;
     analyzeBitmap();
-    initComponents();
+    //initComponents();
     qDebug() << "components initialized";
 }
 
 void FormSegmentator::analyzeBitmap()
 {
-    int componentNumber = 1;
+    Diagram * diagram = new Diagram();
     for (int i = 0; i < mBitmap->size(); i ++)
     {
         for (int j = 0; j < mBitmap->at(i).size(); j++)
-            if (initComponents(i, j, componentNumber)) {
-                componentNumber ++;
+            if (initComponents(i, j, diagram)) {
+                mAllComponents.push_back(*diagram);
+                diagram = new Diagram();
             }
     }
-    qDebug() << componentNumber;
 }
-bool FormSegmentator::initComponents(int x, int y, int componentNumber)
+bool FormSegmentator::initComponents(int x, int y, Diagram *diagram)
 {
     if (mBitmap->at(x).at(y) >= 0)
         return false;
-    mBitmap->operator [](x)[y] = componentNumber;
+    diagram->insertPos(SquarePos(x, y));
+    mBitmap->operator [](x)[y] = 1;
     int gridWidth = mBitmap->size();
     int gridHeight = mBitmap->at(x).size();
     int cornerX = -1;
@@ -56,7 +57,7 @@ bool FormSegmentator::initComponents(int x, int y, int componentNumber)
         //TODO:: new method
         for (int i = std::max(0, y - 1); i <= std::min(gridHeight - 1, y + 1); i ++) {
             for (int j = std::max(0, x - 1); j <= std::min(gridWidth - 1, x + 1); j ++)
-                initComponents(j, i, componentNumber);
+                initComponents(j, i, diagram);
         }
         return true;
     }
@@ -92,7 +93,7 @@ bool FormSegmentator::initComponents(int x, int y, int componentNumber)
     }
     for (int i = std::max(0, y - 1); i <= std::min(gridHeight - 1, y + 1); i ++) {
         for (int j = std::max(0, x - 1); j <= std::min(gridWidth - 1, x + 1); j ++)
-            initComponents(j, i, componentNumber);
+            initComponents(j, i, diagram);
     }
     return true;
 }
@@ -124,24 +125,6 @@ QList<Diagram> FormSegmentator::getAllComponents()
 
 void FormSegmentator::initComponents()
 {
-    QMap<int, Diagram> components;
-    for (int i = 0; i < mBitmap->size(); i ++) {
-        if (mBitmap->at(i).empty()) {
-            return;
-        }
-        for (int j = 0; j < mBitmap->at(i).size(); j ++) {
-            int currentComponentNum = mBitmap->at(i)[j];
-            if (components.keys().contains(currentComponentNum)) {
-                components[currentComponentNum].insertPos(SquarePos(i, j));
-            }
-            else if (currentComponentNum != 0) {
-                Diagram newComponent;
-                newComponent.insertPos(SquarePos(i, j));
-                components.insert(currentComponentNum, newComponent);
-            }
-        }
-    }
-    mAllComponents = components.values();
     foreach (Diagram diagram, mAllComponents) {
         //diagram.analyze();
     }

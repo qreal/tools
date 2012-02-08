@@ -22,16 +22,20 @@ int Diagram::ID() const
 void Diagram::insertPos(const SquarePos &pos)
 {
     for (int i = 0; i < this->size() - 1; i ++) {
-        if (isNeighbours(pos, at(i)) && isNeighbours(pos, at(i + 1))) {
+        if (pos.distP1(at(i)) <= 1 && pos.distP1(at(i + 1)) <= 1) {
             insert(i + 1, pos);
             return;
         }
     }
-    if (!empty() && isNeighbours(at(0), pos)) {
+    if  (empty() || pos.dist(back()) <= 1){
+        push_back(pos);
+        return;
+    }
+    if (pos.dist(at(0)) <= 1) {
         push_front(pos);
         return;
     }
-    push_back(pos);
+    qDebug() << "could not insert " << pos.first << pos.second;
 }
 
 bool Diagram::isNeighbours(const SquarePos &pos1, const SquarePos &pos2) const

@@ -12,7 +12,7 @@ public:
 private:
     Bitmap *mBitmap;
     void analyzeBitmap();
-    bool initComponents(int x, int y, int componentNumber);
+    bool initComponents(int x, int y, Diagram * diagram);
     void initComponents();
     QList<Diagram> mAllComponents;
 };
