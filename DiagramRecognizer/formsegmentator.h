@@ -10,9 +10,10 @@ public:
     void uniteComponents();
 
 private:
+    Diagram *mCurrentDiagram;
     Bitmap *mBitmap;
     void analyzeBitmap();
-    bool initComponents(int x, int y, Diagram * diagram);
+    void initComponent(int x, int y);
     void initComponents();
     QList<Diagram> mAllComponents;
 };

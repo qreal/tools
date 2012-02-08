@@ -13,16 +13,16 @@ public:
     void analyze();
     int ID() const;
     bool checkNeighbour(Diagram const &diagram);
-    double getDerivativeBegin();
-    double getDerivativeBack();
+    QPair<double, double> getDerivativeBegin();
+    QPair<double, double> getDerivativeBack();
 
 private:
     static int mNextID;
     bool isNeighbours(SquarePos const & pos1, SquarePos const & pos2) const;
     bool mHasSelfIntersection;
     int mID;
-    double mDerivative1;
-    double mDerivative2;
+    QPair<double,double> mDerivative1;
+    QPair<double,double> mDerivative2;
     enum NeighbourhoodType
     {
         BeginBegin,

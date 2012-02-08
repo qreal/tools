@@ -75,23 +75,10 @@ void DiagramRecognizer::paintEvent(QPaintEvent *paintEvent)
     }
     if (!mRecognized)
         return;
-//    painter.setPen(Qt::green);
     int xLeft = mBitmap->xLeft();
     int yUpper = mBitmap->yUpper();
     int width = mBitmap->width();
     int height = mBitmap->height();
-//    painter.drawRect(xLeft, yUpper, width, height);
-//    Diagram diagram = mBitmap->getRasterizedDiagram();
-//    painter.setBrush(Qt::green);
-//    //TODO::addMethod
-//    foreach (SquarePos pos, diagram)
-//    {
-//        QRect rect(xLeft + pos.first * wStep,
-//                   yUpper + pos.second * hStep,
-//                   wStep, hStep);
-//        painter.drawRect(rect);
-//    }
-    //segmentator.uniteComponents();
     QList<Diagram> components = mFormSegmentator->getAllComponents();
     int size = components.size();
     for (int i = 0; i < size; i ++) {
@@ -121,6 +108,7 @@ void DiagramRecognizer::recognize()
     mBitmap = new Bitmap(mDiagram);
     mRecognized = true;
     mFormSegmentator = new FormSegmentator(mBitmap);
+    //mFormSegmentator->uniteComponents();
     update();
 }
 
@@ -130,25 +118,10 @@ void DiagramRecognizer::drawDiagram(const Diagram &component, const QColor &colo
     int yUpper = mBitmap->yUpper();
     painter->setPen(color);
     painter->setBrush(color);
-    for (int i = 1; i < component.size() - 1; i ++) {
-        SquarePos pos = component.at(i);
+    foreach (SquarePos pos, component) {
         QRect rect(xLeft + pos.first * wStep,
                    yUpper + pos.second * hStep,
                    wStep, hStep);
         painter->drawRect(rect);
-    }
-    if (!component.empty()) {
-        painter->setPen(Qt::red);
-        painter->setBrush(Qt::red);
-        SquarePos begin = component.at(0);
-        QRect rect1(xLeft + begin.first * wStep,
-                   yUpper + begin.second * hStep,
-                   wStep, hStep);
-        painter->drawRect(rect1);
-        SquarePos end = component.back();
-        QRect rect2(xLeft + end.first * wStep,
-                   yUpper + end.second * hStep,
-                   wStep, hStep);
-        painter->drawRect(rect2);
     }
 }
