@@ -36,4 +36,4 @@ public:
 
 const int hStep = 5;
 const int wStep = 5;
-const int neighbourhoodRad = 3;
+const int neighbourhoodRad = 4;

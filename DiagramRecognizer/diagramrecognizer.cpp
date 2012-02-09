@@ -108,7 +108,7 @@ void DiagramRecognizer::recognize()
     mBitmap = new Bitmap(mDiagram);
     mRecognized = true;
     mFormSegmentator = new FormSegmentator(mBitmap);
-    //mFormSegmentator->uniteComponents();
+    mFormSegmentator->uniteComponents();
     update();
 }
 

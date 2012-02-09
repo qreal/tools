@@ -67,6 +67,10 @@ void Diagram::analyze()
         mDerivative2.first /= std::min(pointNum, size() - 1);
         mDerivative2.second /= std::min(pointNum, size() - 1);
     }
+    qDebug() << "first position" << at(0).first << at(0).second
+            << "begin derivative" << mDerivative1.first << mDerivative1.second
+            << "last point" << back().first << back().second
+            << "back derivative" << mDerivative2.first << mDerivative2.second;
 //    int next = 1;
 //    while (next < size() && at(next).first == at(0).first) {
 //        next ++;

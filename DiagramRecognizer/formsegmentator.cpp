@@ -97,7 +97,6 @@ void FormSegmentator::initComponent(int x, int y)
         for (int j = std::max(0, x - 1); j <= std::min(gridWidth - 1, x + 1); j ++)
             initComponent(j, i);
     }
-    return;
 }
 
 Diagram FormSegmentator::getComponent(const QPoint &point)
@@ -135,81 +134,45 @@ void FormSegmentator::initComponents()
 void FormSegmentator::uniteComponents()
 {
     QList<Diagram> newComponents;
-    while (!mAllComponents.empty()) {
+    //while (!mAllComponents.empty()) {
         Diagram diagram = mAllComponents.back();
         mAllComponents.pop_back();
-        bool isBegin = false;
+        bool isBeginDiagram1 = false;
+        bool isBeginDiagram2 = false;
         int mergeDiagram = -1;
-        int derDiff = 5000;
-        QPair<double, double> diagramDer1 = diagram.getDerivativeBegin();
-        QPair<double, double> diagramDer2 = diagram.getDerivativeBack();
-        foreach (Diagram checkDiagram, mAllComponents) {
-            QPair<double, double> checkDiagramDer1 = checkDiagram.getDerivativeBegin();
-            QPair<double, double> checkDiagramDer2 = checkDiagram.getDerivativeBack();
-            if (diagram.at(0).dist(checkDiagram.at(0)) <= neighbourhoodRad
-                && abs(diagramDer1.first + checkDiagramDer1.first)
-                + abs(diagramDer1.second + checkDiagramDer1.second) < derDiff) {
-                derDiff = abs(diagramDer1.first + checkDiagramDer1.first)
-                          + abs(diagramDer1.second + checkDiagramDer1.second);
-                mergeDiagram = checkDiagram.ID();
-                isBegin = true;
-            }
-            if (diagram.at(0).dist(checkDiagram.back()) <= neighbourhoodRad
-                && abs(diagramDer1.first + checkDiagramDer2.first)
-                + abs(diagramDer1.second + checkDiagramDer2.second) < derDiff) {
-                derDiff = abs(diagramDer1.first + checkDiagramDer2.first)
-                          + abs(diagramDer1.second + checkDiagramDer2.second);
-                mergeDiagram = checkDiagram.ID();
-                isBegin = false;
+        int derDiff = 10;
+        for (int i = 0; i < mAllComponents.size(); i++) {
+            Diagram checkDiagram = mAllComponents.at(i);
+            //TODO:: kill indian code
+            for (int j = 0; j <= 1; j ++) {
+                for (int k = 0; k <= 1; k ++){
+                    int num1 = (j == 1) ? 0 : (diagram.size() - 1);
+                    int num2 = (k == 1) ? 0 : (checkDiagram.size() - 1);
+                    QPair<double, double> diagramDer =
+                            (j == 1) ? diagram.getDerivativeBegin() : diagram.getDerivativeBack();
+                    QPair<double, double> checkDiagramDer =
+                            (k == 1) ? checkDiagram.getDerivativeBegin() : checkDiagram.getDerivativeBack();
+                    if (diagram.at(num1).dist(checkDiagram.at(num2)) <= neighbourhoodRad
+                        && abs(diagramDer.first + checkDiagramDer.first)
+                        + abs(diagramDer.second + checkDiagramDer.second) < derDiff) {
+                        derDiff = abs(diagramDer.first + checkDiagramDer.first)
+                                  + abs(diagramDer.second + checkDiagramDer.second);
+                        mergeDiagram = i;
+                        isBeginDiagram1 = (j == 1) ? true : false; //I think it could be shorter
+                        isBeginDiagram2 = (k == 1) ? true : false;
+                    }
+                }
             }
         }
-        if (mergeDiagram > 0) {
-            int i = 0;
-            while (i < mAllComponents.size() && mAllComponents.at(i).ID() != mergeDiagram) {
-                i++;
-            }
+        if (mergeDiagram >= 0) {
             //Bad!!! Very very bad!!! Cause order of SquarePos is important!!!
             //TODO:: kill this
-            Diagram currentDiagram = mAllComponents.at(i);
+            Diagram currentDiagram = mAllComponents.at(mergeDiagram);
             diagram.append(currentDiagram);
-            mAllComponents.removeAt(i);
+            mAllComponents.removeAt(mergeDiagram);
+            qDebug() << "merge";
         }
-        //TODO: kill Indian code
-        isBegin = false;
-        mergeDiagram = -1;
-        derDiff = 5000;
-        foreach (Diagram checkDiagram, mAllComponents) {
-            QPair<double, double> checkDiagramDer1 = checkDiagram.getDerivativeBegin();
-            QPair<double, double> checkDiagramDer2 = checkDiagram.getDerivativeBack();
-            if (diagram.back().dist(checkDiagram.at(0)) <= neighbourhoodRad
-                && abs(diagramDer2.first + checkDiagramDer1.first)
-                + abs(diagramDer2.second + checkDiagramDer1.second) < derDiff) {
-                derDiff = abs(diagramDer2.first + checkDiagramDer1.first)
-                          + abs(diagramDer2.second + checkDiagramDer1.second);
-                mergeDiagram = checkDiagram.ID();
-                isBegin = true;
-            }
-            if (diagram.back().dist(checkDiagram.back()) <= neighbourhoodRad
-                && abs(diagramDer2.first + checkDiagramDer2.first)
-                + abs(diagramDer2.second + checkDiagramDer2.second) < derDiff) {
-                derDiff = abs(diagramDer2.first + checkDiagramDer2.first)
-                          + abs(diagramDer2.second + checkDiagramDer2.second);
-                mergeDiagram = checkDiagram.ID();
-                isBegin = false;
-            }
-        }
-        if (mergeDiagram > 0) {
-            int i = 0;
-            while (i < mAllComponents.size() && mAllComponents.at(i).ID() != mergeDiagram) {
-                i++;
-            }
-            //Bad!!! Very very bad!!! Cause order of SquarePos is important!!!
-            //TODO:: kill this
-            Diagram currentDiagram = mAllComponents.at(i);
-            diagram.append(currentDiagram);
-            mAllComponents.removeAt(i);
-        }
-        newComponents.push_back(diagram);;
-    }
-    mAllComponents = newComponents;
+        //newComponents.push_back(diagram);;
+    //}
+    mAllComponents.push_back(diagram);
 }
