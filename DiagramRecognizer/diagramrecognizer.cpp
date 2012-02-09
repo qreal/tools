@@ -89,6 +89,12 @@ void DiagramRecognizer::paintEvent(QPaintEvent *paintEvent)
         drawDiagram(component, color, &painter);
     }
     Diagram curComponent = mFormSegmentator->getComponent(mComponentPoint);
+//    if (!curComponent.empty()) {
+//        qDebug() << "first position" << curComponent.at(0).first << curComponent.at(0).second
+//                << "begin derivative" << curComponent.getDerivativeBegin().first << curComponent.getDerivativeBegin().second
+//                << "last point" << curComponent.back().first << curComponent.back().second
+//                << "back derivative" << curComponent.getDerivativeBack().first << curComponent.getDerivativeBack().second;
+//    }
     drawDiagram(curComponent, Qt::black, &painter);
     painter.setPen(Qt::black);
     for (int i = 1; i < height / hStep; i++)

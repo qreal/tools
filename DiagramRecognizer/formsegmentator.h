@@ -14,7 +14,7 @@ private:
     Bitmap *mBitmap;
     void analyzeBitmap();
     void initComponent(int x, int y);
-    void initComponents();
+    Diagram merge(Diagram const & diagram1, Diagram const & diagram2, bool isBegin1, bool isBegin2);
     QList<Diagram> mAllComponents;
 };
 

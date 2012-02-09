@@ -8,7 +8,7 @@ FormSegmentator::FormSegmentator(Bitmap *bitmap)
 {
     mBitmap = bitmap;
     analyzeBitmap();
-    initComponents();
+    //initComponents();
     qDebug() << "components initialized";
 }
 
@@ -20,6 +20,7 @@ void FormSegmentator::analyzeBitmap()
         for (int j = 0; j < mBitmap->at(i).size(); j++) {
             initComponent(i, j);
             if (!mCurrentDiagram->empty()) {
+                mCurrentDiagram->analyze();
                 mAllComponents.push_back(*mCurrentDiagram);
                 mCurrentDiagram = new Diagram();
             }
@@ -124,12 +125,12 @@ QList<Diagram> FormSegmentator::getAllComponents()
     return mAllComponents;
 }
 
-void FormSegmentator::initComponents()
-{
-    foreach (Diagram diagram, mAllComponents) {
-        diagram.analyze();
-    }
-}
+//void FormSegmentator::initComponents()
+//{
+//    for (int i = 0; i < mAllComponents.size(); i ++) {
+//        mAllComponents.at(i).analyze();
+//    }
+//}
 
 void FormSegmentator::uniteComponents()
 {
@@ -157,6 +158,7 @@ void FormSegmentator::uniteComponents()
                         + abs(diagramDer.second + checkDiagramDer.second) < derDiff) {
                         derDiff = abs(diagramDer.first + checkDiagramDer.first)
                                   + abs(diagramDer.second + checkDiagramDer.second);
+                        qDebug() << diagramDer.first << diagramDer.second;
                         mergeDiagram = i;
                         isBeginDiagram1 = (j == 1) ? true : false; //I think it could be shorter
                         isBeginDiagram2 = (k == 1) ? true : false;
@@ -165,14 +167,39 @@ void FormSegmentator::uniteComponents()
             }
         }
         if (mergeDiagram >= 0) {
-            //Bad!!! Very very bad!!! Cause order of SquarePos is important!!!
-            //TODO:: kill this
             Diagram currentDiagram = mAllComponents.at(mergeDiagram);
-            diagram.append(currentDiagram);
+            diagram = merge(diagram, currentDiagram, isBeginDiagram1, isBeginDiagram2);
             mAllComponents.removeAt(mergeDiagram);
             qDebug() << "merge";
         }
         //newComponents.push_back(diagram);;
     //}
     mAllComponents.push_back(diagram);
+}
+
+Diagram FormSegmentator::merge(const Diagram &diagram1, const Diagram &diagram2,
+                               bool isBegin1, bool isBegin2)
+{
+    Diagram finalDiagram;
+    if (isBegin1 && !isBegin2) {
+        finalDiagram = diagram2;
+        finalDiagram.append(diagram1);
+    }
+    else if (!isBegin1 && isBegin2) {
+        finalDiagram = diagram1;
+        finalDiagram.append(diagram2);
+    }
+    else if (isBegin1 && isBegin2) {
+        finalDiagram = diagram1;
+        foreach (SquarePos pos, diagram2) {
+            finalDiagram.push_front(pos);
+        }
+    }
+    else {
+        finalDiagram = diagram1;
+        for (int i = diagram2.size() - 1; i >= 0; i --) {
+            finalDiagram.push_back(diagram2.at(i));
+        }
+    }
+    return finalDiagram;
 }
