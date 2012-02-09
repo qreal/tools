@@ -134,17 +134,16 @@ QList<Diagram> FormSegmentator::getAllComponents()
 
 void FormSegmentator::uniteComponents()
 {
-    QList<Diagram> newComponents;
-    //while (!mAllComponents.empty()) {
-        Diagram diagram = mAllComponents.back();
-        mAllComponents.pop_back();
+    int withNeighbour = componentWithNeighbour();
+    while (withNeighbour >= 0) {
+        Diagram diagram = mAllComponents.at(withNeighbour);
+        mAllComponents.removeAt(withNeighbour);;
         bool isBeginDiagram1 = false;
         bool isBeginDiagram2 = false;
         int mergeDiagram = -1;
         int derDiff = 10;
         for (int i = 0; i < mAllComponents.size(); i++) {
             Diagram checkDiagram = mAllComponents.at(i);
-            //TODO:: kill indian code
             for (int j = 0; j <= 1; j ++) {
                 for (int k = 0; k <= 1; k ++){
                     int num1 = (j == 1) ? 0 : (diagram.size() - 1);
@@ -172,9 +171,9 @@ void FormSegmentator::uniteComponents()
             mAllComponents.removeAt(mergeDiagram);
             qDebug() << "merge";
         }
-        //newComponents.push_back(diagram);;
-    //}
-    mAllComponents.push_back(diagram);
+        mAllComponents.push_back(diagram);
+        withNeighbour = componentWithNeighbour();
+    }
 }
 
 Diagram FormSegmentator::merge(const Diagram &diagram1, const Diagram &diagram2,
@@ -201,5 +200,23 @@ Diagram FormSegmentator::merge(const Diagram &diagram1, const Diagram &diagram2,
             finalDiagram.push_back(diagram2.at(i));
         }
     }
+    finalDiagram.analyze();
     return finalDiagram;
+}
+
+int FormSegmentator::componentWithNeighbour()
+{
+    for (int i = 0; i < mAllComponents.size() - 1; i ++) {
+        Diagram diagram = mAllComponents.at(i);
+        for (int j = i + 1; j < mAllComponents.size(); j ++) {
+            Diagram neighbour = mAllComponents.at(j);
+            if (diagram.at(0).dist(neighbour.at(0)) <= neighbourhoodRad
+                || diagram.back().dist(neighbour.at(0)) <= neighbourhoodRad
+                || diagram.at(0).dist(neighbour.back()) <= neighbourhoodRad
+                || diagram.back().dist(neighbour.back()) <= neighbourhoodRad) {
+                return i;
+            }
+        }
+    }
+    return  -1;
 }
