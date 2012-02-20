@@ -141,7 +141,7 @@ void FormSegmentator::uniteComponents()
         bool isBeginDiagram1 = false;
         bool isBeginDiagram2 = false;
         int mergeDiagram = -1;
-        int derDiff = 10;
+        int derDiff = 3;
         for (int i = 0; i < mAllComponents.size(); i++) {
             Diagram checkDiagram = mAllComponents.at(i);
             for (int j = 0; j <= 1; j ++) {
