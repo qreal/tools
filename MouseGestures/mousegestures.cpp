@@ -167,14 +167,23 @@ void MouseGestures::loadFile()
 void MouseGestures::showTable()
 {
     this->disconnect(ui->twObjectPathTable, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(changePath()));
+    this->disconnect(ui->twObjectPathTable, SIGNAL
+                     (currentItemChanged(QTableWidgetItem*,QTableWidgetItem*)), this, SLOT(drawGesture()));
+    int rowCount = ui->twObjectPathTable->rowCount();
+    for (int i = 0; i < rowCount; i++)
+    {
+        ui->twObjectPathTable->removeRow(0);
+    }
     foreach (QString object, mRecognizer->getObjects())
     {
-        int rowCount = ui->twObjectPathTable->rowCount();
+        rowCount = ui->twObjectPathTable->rowCount();
         ui->twObjectPathTable->setRowCount(rowCount + 1);
         QTableWidgetItem *item = new QTableWidgetItem(object);
         ui->twObjectPathTable->setItem(rowCount, 0, item);
     }
     connect(ui->twObjectPathTable, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(changePath()));
+    connect(ui->twObjectPathTable, SIGNAL
+            (currentItemChanged(QTableWidgetItem*,QTableWidgetItem*)), this, SLOT(drawGesture()));
 }
 
 void MouseGestures::mouseMoveEvent(QMouseEvent * event)
