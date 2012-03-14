@@ -140,7 +140,7 @@ void FormSegmentator::uniteComponents()
 	bool isBeginDiagram2 = false;
 	int mergeDiagram1 = -1;
 	int mergeDiagram2 = -1;
-	double minDerDiff = 3;
+	double minDerDiff = 1.5;
 	for (int g = 0; g < mAllComponents.size() - 1; g++) {
 	  Diagram diagram = mAllComponents.at(g);
 	  for (int i = g + 1; i < mAllComponents.size(); i++) {
@@ -177,4 +177,26 @@ void FormSegmentator::uniteComponents()
 	  mAllComponents.push_back(currentDiagram1);
 	}
   }
+}
+
+QList<Diagram> FormSegmentator::getObjects()
+{
+  QList<Diagram> objects;
+  foreach (Diagram diagram, mAllComponents) {
+	if (diagram.hasSelfIntersection()) {
+	  objects.push_back(diagram);
+	}
+  }
+  return objects;
+}
+
+QList<Diagram> FormSegmentator::getEdges()
+{
+  QList<Diagram> edges;
+  foreach (Diagram diagram, mAllComponents) {
+	if (diagram.hasSelfIntersection()) {
+	  edges.push_back(diagram);
+	}
+  }
+  return edges;
 }

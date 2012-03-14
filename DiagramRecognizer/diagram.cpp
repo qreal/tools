@@ -2,7 +2,7 @@
 #include "stdlib.h"
 #include "QDebug"
 
-const int pointNum = 4;
+const int pointNum = 6;
 
 Diagram::Diagram()
 {
