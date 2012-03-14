@@ -134,6 +134,7 @@ QList<Diagram> FormSegmentator::getAllComponents()
 
 void FormSegmentator::uniteComponents()
 {
+  uniteCorners();
   bool wasUnited = true;
   while (wasUnited) {
 	bool isBeginDiagram1 = false;
@@ -199,4 +200,57 @@ QList<Diagram> FormSegmentator::getEdges()
 	}
   }
   return edges;
+}
+
+void FormSegmentator::uniteCorners()
+{
+  bool wasUnited = true;
+  while (wasUnited) {
+	bool isBeginDiagram1 = false;
+	bool isBeginDiagram2 = false;
+	int mergeDiagram1 = -1;
+	int mergeDiagram2 = -1;
+	for (int i = 0; i < mAllComponents.size(); i ++) {
+	  Diagram diagram = mAllComponents.at(i);
+	  if (diagram.back().dist(diagram.at(0)) > neighbourhoodRad) {
+		for (int j = 0; j <= 1; j ++) {
+			int pos = (j == 1) ? 0 : (diagram.size() - 1);
+			int numDiagram = neighbourNum(diagram.at(pos), i);
+			if (numDiagram >= 0) {
+			  mergeDiagram1 = i;
+			  mergeDiagram2 = numDiagram;
+			  isBeginDiagram1 = (j == 1);
+			  isBeginDiagram2 =
+				  diagram.at(pos).dist(mAllComponents.at(numDiagram).at(0)) <= neighbourhoodRad;
+			}
+		  }
+		}
+	  }
+	wasUnited = mergeDiagram1 >= 0 && mergeDiagram2 >= 0;
+	if (wasUnited) {
+	  Diagram currentDiagram1 = mAllComponents.at(mergeDiagram1);
+	  Diagram currentDiagram2 = mAllComponents.at(mergeDiagram2);
+	  mAllComponents.removeAt(std::min(mergeDiagram1, mergeDiagram2));
+	  mAllComponents.removeAt(std::max(mergeDiagram1, mergeDiagram2) - 1);
+	  currentDiagram1.insertDiagram(currentDiagram2, isBeginDiagram1, isBeginDiagram2);
+	  mAllComponents.push_back(currentDiagram1);
+	}
+  }
+}
+int  FormSegmentator::neighbourNum(const SquarePos &pos, int diagramNum)
+{
+  int num = -1;
+  for (int i = 0; i < mAllComponents.size(); i ++) {
+	Diagram diagram = mAllComponents.at(i);
+	if (i != diagramNum && (num >= 0 && (pos.dist(diagram.at(0)) <= neighbourhoodRad
+											 || pos.dist(diagram.back()) <= neighbourhoodRad))
+	  || (pos.dist(diagram.at(0)) <= neighbourhoodRad && pos.dist(diagram.back()) <= neighbourhoodRad)) {
+	  return -1;
+	}
+	if (diagramNum != i &&
+		(pos.dist(diagram.at(0)) <= neighbourhoodRad || pos.dist(diagram.back()) <= neighbourhoodRad)) {
+	  num = i;
+	}
+  }
+  return num;
 }

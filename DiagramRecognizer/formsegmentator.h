@@ -12,6 +12,8 @@ public:
   QList<Diagram> getEdges();
 
 private:
+  void uniteCorners();
+  int neighbourNum(const SquarePos &pos, int diagramNum);
   Diagram *mCurrentDiagram;
   Bitmap *mBitmap;
   void analyzeBitmap();
