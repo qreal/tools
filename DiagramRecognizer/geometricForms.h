@@ -34,6 +34,6 @@ public:
     }
 };
 
-const int hStep = 5;
-const int wStep = 5;
+const int hStep = 3;
+const int wStep = 3;
 const int neighbourhoodRad = 4;
