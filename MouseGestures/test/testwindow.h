@@ -2,7 +2,7 @@
 
 #include <QMainWindow>
 #include "abstractRecognizer.h"
-#include "NeuralNetwork/neuralNetwork.h"
+#include "NeuralNetwork/neuralnetwork.h"
 
 namespace Ui {
     class TestWindow;

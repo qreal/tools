@@ -5,34 +5,35 @@ QT += xml
 TARGET = MouseGestures
 TEMPLATE = app
 SOURCES += main.cpp \
-	mousegestures.cpp \
-	pathcorrector.cpp \
-	serializer.cpp \
-	validpathcreator.cpp \
-	adopter.cpp \
-	paintmanager.cpp \
+    mousegestures.cpp \
+    pathcorrector.cpp \
+    serializer.cpp \
+    validpathcreator.cpp \
+    adopter.cpp \
+    paintmanager.cpp \
     test/testwindow.cpp \
     test/xmlparser.cpp \
     multistrokeRecognizers/sumMultistrokeGesturesManager.cpp \
     multistrokeRecognizers/rectanglegesturesmanager.cpp \
     multistrokeRecognizers/nearestposgridgesturesmanager.cpp \
-    multistrokeRecognizers/mixedgesturesmanager.cpp
+    multistrokeRecognizers/mixedgesturesmanager.cpp #\
+    #integralrecognizer.cpp
 HEADERS += mousegestures.h \
-	pathcorrector.h \
-	serializer.h \
-	GeometricForms.h \
-	validpathcreator.h \
-	adopter.h \
-	paintmanager.h \
-	figures.h \
-	abstractRecognizer.h \
+    pathcorrector.h \
+    serializer.h \
+    GeometricForms.h \
+    validpathcreator.h \
+    adopter.h \
+    paintmanager.h \
+    figures.h \
+    abstractRecognizer.h \
     test/testwindow.h \
     test/xmlparser.h \
     multistrokeRecognizers/sorts.h \
     multistrokeRecognizers/distance.h \
     multistrokeRecognizers/curveKeyBuilder.h \
     multistrokeRecognizers/multistrokeGesturesManagers.h \
-    TrainingGesturesManager/TrainingGesturesManager.h \
+    #TrainingGesturesManager/TrainingGesturesManager.h \
     NeuralNetwork/neuralnetwork.h \
     test/testThread.h \
     multistrokeRecognizers/sumMultistrokeGesturesManager.h \
@@ -40,6 +41,7 @@ HEADERS += mousegestures.h \
     multistrokeRecognizers/rectanglegesturesmanager.h \
     multistrokeRecognizers/nearestposgridgesturesmanager.h \
     multistrokeRecognizers/rectangleClassifier.h \
-    multistrokeRecognizers/mixedgesturesmanager.h
+    multistrokeRecognizers/mixedgesturesmanager.h #\
+    #integralrecognizer.h
 FORMS += mousegestures.ui \
     test/testwindow.ui
