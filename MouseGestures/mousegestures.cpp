@@ -80,20 +80,20 @@ void MouseGestures::chooseTestAlgorithm()
     mTestWindow->show();
 }
 
-void MouseGestures::contextMenuEvent(QContextMenuEvent *event)
-{
-    QMenu menu(this);
-    QAction *rotate = new QAction("Rotate path", this);
-    connect(rotate, SIGNAL(triggered()), this, SLOT(rotatePath()));
-    menu.addAction(rotate);
-    QAction *increase = new QAction("Increase path", this);
-    connect(increase, SIGNAL(triggered()), this, SLOT(increasePath()));
-    menu.addAction(increase);
-    QAction *decrease = new QAction("Decrease path", this);
-    connect(decrease, SIGNAL(triggered()), this, SLOT(decreasePath()));
-    menu.addAction(decrease);
-    menu.exec(event->globalPos());
-}
+//void MouseGestures::contextMenuEvent(QContextMenuEvent *event)
+//{
+//    QMenu menu(this);
+//    QAction *rotate = new QAction("Rotate path", this);
+//    connect(rotate, SIGNAL(triggered()), this, SLOT(rotatePath()));
+//    menu.addAction(rotate);
+//    QAction *increase = new QAction("Increase path", this);
+//    connect(increase, SIGNAL(triggered()), this, SLOT(increasePath()));
+//    menu.addAction(increase);
+//    QAction *decrease = new QAction("Decrease path", this);
+//    connect(decrease, SIGNAL(triggered()), this, SLOT(decreasePath()));
+//    menu.addAction(decrease);
+//    menu.exec(event->globalPos());
+//}
 
 void MouseGestures::rotatePath()
 {
@@ -198,6 +198,18 @@ void MouseGestures::mouseReleaseEvent(QMouseEvent *event)
     //    QString object = mKeyObjectTable.getObject(mCorrectPath);
     //    ui->teObject->setText(object);
     mRecognizer->mouseRelease(event->pos());
+    if (event->button() == Qt::RightButton) {
+        QString object = mRecognizer->recognizeObject();
+        if (ui->twObjectPathTable->rowCount() != 0)
+        {
+            QTableWidgetItem * currentItem = ui->twObjectPathTable->currentItem();
+            if (currentItem != NULL)
+                mRecognizer->saveGesture(currentItem->text());
+        }
+        //showObjectsMenu(object);
+        //mCorrectPath = PathCorrector::correctPath(mMousePath);
+        ui->teObject->setText(object);
+    }
     this->update();
 }
 
