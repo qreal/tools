@@ -193,8 +193,10 @@ void MouseGestures::showTable()
 
 void MouseGestures::mouseMoveEvent(QMouseEvent * event)
 {
+  if (event->button() != Qt::RightButton) {
     mRecognizer->mouseMove(event->pos());
     this->update();
+  }
 }
 
 void MouseGestures::mouseReleaseEvent(QMouseEvent *event)
