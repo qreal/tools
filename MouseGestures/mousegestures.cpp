@@ -14,12 +14,16 @@ static const QString xmlDir = "../../unreal/trunk/qrxml";
 static const QString idealGesturesFile =
         "NeuralNetwork/learnGestures/ideal_gestures.xml";
 static const QString generatedGesturesFile = "NeuralNetwork/learnGestures/generated_gestures.xml";
-static const QString testGesturesFile = "multistrokeGestures.xml";
+static QString testGesturesFile = "multistrokeGestures.xml";
 
 MouseGestures::MouseGestures(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MouseGestures)
 {
     ui->setupUi(this);
+	if (!QFile::exists(testGesturesFile))
+	{
+	  testGesturesFile = "../" + testGesturesFile;
+	}
     connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(loadFile()));
     connect(ui->twObjectPathTable, SIGNAL
             (currentItemChanged(QTableWidgetItem*,QTableWidgetItem*)), this, SLOT(drawGesture()));
@@ -35,6 +39,7 @@ MouseGestures::MouseGestures(QWidget *parent)
 
 void MouseGestures::openTestGestures()
 {
+
     QMap<QString, UsersGestures> usersGestures = XmlParser::parseXml(testGesturesFile);
     mRecognizer = new AbstractRecognizer(mGesturesManager, usersGestures);
     showTable();
