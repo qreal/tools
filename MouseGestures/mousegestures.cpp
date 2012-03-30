@@ -255,7 +255,9 @@ void MouseGestures::addTestGesture(QAction * action)
 
 void MouseGestures::mousePressEvent(QMouseEvent * event)
 {
+  if (event->button() != Qt::RightButton) {
     mRecognizer->mousePress(event->pos());
+  }
     this->update();
 }
 
