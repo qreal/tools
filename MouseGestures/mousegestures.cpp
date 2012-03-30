@@ -197,7 +197,7 @@ void MouseGestures::mouseReleaseEvent(QMouseEvent *event)
     //    mCorrectPath = PathCorrector::correctPath(mMousePath);
     //    QString object = mKeyObjectTable.getObject(mCorrectPath);
     //    ui->teObject->setText(object);
-    mRecognizer->mouseRelease(event->pos());
+
     if (event->button() == Qt::RightButton) {
         QString object = mRecognizer->recognizeObject();
         if (ui->twObjectPathTable->rowCount() != 0)
@@ -210,6 +210,9 @@ void MouseGestures::mouseReleaseEvent(QMouseEvent *event)
         //mCorrectPath = PathCorrector::correctPath(mMousePath);
         ui->teObject->setText(object);
     }
+	else {
+	  mRecognizer->mouseRelease(event->pos());
+	}
     this->update();
 }
 
