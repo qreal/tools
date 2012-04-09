@@ -13,15 +13,23 @@ TEMPLATE = app
 SOURCES += main.cpp\
         diagramrecognizer.cpp \
     bitmap.cpp \
-    paintmanager.cpp \
     diagram.cpp \
-    formsegmentator.cpp
+    formsegmentator.cpp \
+    simpleformsinitializer.cpp \
+    recognizers/rectanglegesturesmanager.cpp \
+    recognizers/nearestposgridgesturesmanager.cpp \
+    recognizers/mixedgesturesmanager.cpp
 
 HEADERS  += diagramrecognizer.h \
     geometricForms.h \
     bitmap.h \
-    paintmanager.h \
     diagram.h \
-    formsegmentator.h
+    formsegmentator.h \
+    abstractRecognizer.h \
+    simpleformsinitializer.h \
+    recognizers/rectanglegesturesmanager.h \
+    recognizers/nearestposgridgesturesmanager.h \
+    recognizers/mixedgesturesmanager.h \
+    recognizers/curveKeyBuilder.h
 
 FORMS    += diagramrecognizer.ui

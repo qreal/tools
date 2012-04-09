@@ -5,29 +5,30 @@
 class Bitmap : public QList<QList<int> >
 {
 public:
-    Bitmap(PathVector const & diagram);
-    int width();
-    int height();
-    int xLeft();
-    int xRight();
-    int yUpper();
-    int yLower();
-    Diagram getRasterizedDiagram();
+	Bitmap(PathVector const & diagram);
+	int width() const;
+	int height()const;
+	int xLeft() const;
+	int xRight() const;
+	int yUpper() const;
+	int yLower() const;
+	Diagram rasterizedDiagram() const;
 
 private:
-    void rasterizeDiagram();
-    void rasterizeSegment(int x1, int y1, int x2, int y2);
-    int mLower;
-    int mUpper;
-    int mRight;
-    int mLeft;
-    PathVector mDiagram;
-    void setLower();
-    void setUpper();
-    void setRight();
-    void setLeft();
-    int sign(int a);
-    int mGridHeight;
-    int mGridWidth;
+	void rasterizeDiagram();
+	void rasterizeSegment(int x1, int y1, int x2, int y2);
+	void setLower();
+	void setUpper();
+	void setRight();
+	void setLeft();
+	int sign(int a) const;
+
+	int mLower;
+	int mUpper;
+	int mRight;
+	int mLeft;
+	PathVector mDiagram;
+	int mGridHeight;
+	int mGridWidth;
 };
 
