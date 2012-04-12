@@ -18,6 +18,7 @@ public:
 		bool isBegin1, bool isBegin2);
 	bool hasSelfIntersection() const;
 	PathVector figure(int xMin, int yMin) const;
+	bool isNegligible() const;
 
 private:
 	bool isNeighbours(SquarePos const & pos1, SquarePos const & pos2) const;

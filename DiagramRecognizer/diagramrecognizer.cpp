@@ -109,7 +109,7 @@ void DiagramRecognizer::paintEvent(QPaintEvent *paintEvent)
 void DiagramRecognizer::recognize()
 {
 	mBitmap = new Bitmap(mDiagram);
-	//  mRecognized = true;
+	//mRecognized = true;
 	mFormSegmentator = new FormSegmentator(mBitmap);
 	mFormSegmentator->uniteComponents();
 	QList<Diagram> objects = mFormSegmentator->objects();

@@ -2,7 +2,7 @@
 #include "stdlib.h"
 #include "QDebug"
 
-const int pointNum = 6;
+const int pointNum = 8;
 
 int Diagram::mNextID = 0;
 
@@ -133,4 +133,18 @@ PathVector Diagram::figure(int xMin, int yMin) const
 	}
 	figure.push_back(stroke);
 	return figure;
+}
+
+bool Diagram::isNegligible() const
+{
+	if (isEmpty()) {
+		return true;
+	}
+	SquarePos const firstPos = at(0);
+	foreach (SquarePos const &pos, *this) {
+		if (firstPos.dist(pos) > neighbourhoodRad) {
+			return false;
+		}
+	}
+	return true;
 }

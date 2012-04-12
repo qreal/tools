@@ -149,6 +149,15 @@ QList<Diagram> FormSegmentator::allComponents() const
 
 void FormSegmentator::uniteComponents()
 {
+	int i = 0;
+	while (i < mAllComponents.size()) {
+		if (mAllComponents.at(i).isNegligible()) {
+			mAllComponents.removeAt(i);
+		}
+		else {
+			i ++;
+		}
+	}
 	uniteCorners();
 	uniteSmoothFigure();
 }
