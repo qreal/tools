@@ -262,7 +262,7 @@ void FormSegmentator::uniteSmoothFigure()
 		bool isBeginDiagram2 = false;
 		int mergeDiagram1 = -1;
 		int mergeDiagram2 = -1;
-		double minDerDiff = 1.5;
+		double minDerDiff = 0.8;
 		for (int g = 0; g < mAllComponents.size() - 1; g++) {
 			Diagram diagram = mAllComponents.at(g);
 			for (int i = g + 1; i < mAllComponents.size(); i++) {

@@ -17,8 +17,8 @@ QMap<QString, PathVector> SimpleFormsInitializer::initialForms()
 	rhombusGesture << rhombus;
 	forms["rhombus"] = rhombusGesture;
 	PointVector triangle;
-	triangle << QPoint(-5, -5) << QPoint(0, 5)
-		<< QPoint(5, -5) << QPoint(-5, -5);
+	triangle << QPoint(-20, -20) << QPoint(0, 20)
+		<< QPoint(20, -20) << QPoint(-20, -20);
 	PathVector triangleGesture;
 	triangleGesture << triangle;
 	forms["triangle"] = triangleGesture;
