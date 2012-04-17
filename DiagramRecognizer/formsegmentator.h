@@ -14,6 +14,9 @@ public:
 private:
 	void uniteCorners();
 	void uniteSmoothFigure();
+	void uniteCornersWithEdges();
+	QList<QPair<int, bool> > findCycle(QList<QPair<int, bool> > const &polygon);
+	bool contains(QList<QPair<int, bool> > const &polygon, int i) const;
 	int neighbourPos(const SquarePos &pos, int diagramNum) const;
 	void analyzeBitmap();
 	void initComponent(int x, int y);

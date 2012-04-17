@@ -160,6 +160,7 @@ void FormSegmentator::uniteComponents()
 	}
 	uniteCorners();
 	uniteSmoothFigure();
+	uniteCornersWithEdges();
 }
 
 QList<Diagram> FormSegmentator::objects() const
@@ -295,4 +296,104 @@ void FormSegmentator::uniteSmoothFigure()
 		wasUnited = isMergedDiagrams(mergeDiagram1, mergeDiagram2,
 			isBeginDiagram1, isBeginDiagram2);
 	}
+}
+
+//todo:: make this method more smart, maybe it would be unite some components incorrectly
+void FormSegmentator::uniteCornersWithEdges()
+{
+	bool wasUnited = true;
+	while (wasUnited) {
+		wasUnited = false;
+		int i = 0;
+		while (i < mAllComponents.size() && !wasUnited) {
+			// unnecessary because off condition to cycle at findCycle method
+			if (mAllComponents.at(i).at(0).dist(mAllComponents.at(i).back())
+				<= neighbourhoodRad) {
+				i++;
+				continue;
+			}
+			QList<QPair<int, bool> > polygon;
+			polygon.push_back(QPair<int, bool>(i, true));
+			polygon = findCycle(polygon);
+			qDebug() << "found cycle" << polygon.size();
+			i ++;
+			if (!polygon.empty()) {
+				wasUnited = true;
+				while (polygon.size() > 1) {
+					//TODO:: add comments!!!
+					QPair<int, bool> firstMerge = polygon.at(0);
+					QPair<int, bool> secondMerge = polygon.at(1);
+					polygon.pop_front();
+					polygon.pop_front();
+					// !firstMerge.second = false
+					isMergedDiagrams(firstMerge.first, secondMerge.first,
+						!firstMerge.second, secondMerge.second);
+					for (int i = 0; i < polygon.size(); i ++) {
+						if (polygon.at(i).first >= firstMerge.first) {
+							polygon[i].first --;
+						}
+						if (polygon.at(i).first >= secondMerge.first) {
+							polygon[i].first --;
+						}
+					}
+					// push to polygon merged components, the first component always has true value
+					polygon.push_front(QPair<int, bool>(mAllComponents.size() - 1, true));
+				}
+			}
+		}
+	}
+}
+
+// true if diagram intersects previous diagram at the begin
+QList<QPair<int, bool> > FormSegmentator::findCycle(
+		QList<QPair<int, bool> > const &polygon)
+{
+	Diagram firstDiagram = mAllComponents.at(polygon.at(0).first);
+	Diagram lastDiagram = mAllComponents.at(polygon.back().first);
+	int posFirst = polygon.at(0).second ? 0 : firstDiagram.size() - 1;
+	int posLast = (!polygon.back().second) ? 0 : lastDiagram.size() - 1;
+	int maxCycleSize = mAllComponents.size();
+	QList<QPair<int, bool> > cycle;
+	if (firstDiagram.at(posFirst).dist(lastDiagram.at(posLast))
+		<= neighbourhoodRad)
+	{
+		return polygon;
+	}
+	for (int i = 0; i < mAllComponents.size(); i ++) {
+		Diagram diagram = mAllComponents.at(i);
+		if (diagram.back().dist(diagram.at(0)) <= neighbourhoodRad
+			|| contains(polygon, i))
+		{
+			continue;
+		}
+		if (diagram.at(0).dist(lastDiagram.at(posLast)) <= neighbourhoodRad) {
+			QList<QPair<int, bool> > newPolygon = polygon;
+			newPolygon.push_back(QPair<int, bool>(i, true));
+			newPolygon = findCycle(newPolygon);
+			if (newPolygon.size() > 1 && newPolygon.size() <= maxCycleSize) {
+				cycle = newPolygon;
+				maxCycleSize = newPolygon.size();
+			}
+		}
+		if (diagram.back().dist(lastDiagram.at(posLast)) <= neighbourhoodRad) {
+			QList<QPair<int, bool> > newPolygon = polygon;
+			newPolygon.push_back(QPair<int, bool>(i, false));
+			newPolygon = findCycle(newPolygon);
+			if (!newPolygon.empty() && newPolygon.size() <= maxCycleSize) {
+				cycle = newPolygon;
+				maxCycleSize = newPolygon.size();
+			}
+		}
+	}
+	return cycle;
+}
+
+bool FormSegmentator::contains(const QList<QPair<int, bool> > &polygon, int i) const
+{
+	for (int k = 0; k < polygon.size(); k ++) {
+		if (i == polygon.at(k).first) {
+			return true;
+		}
+	}
+	return false;
 }
