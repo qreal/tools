@@ -140,10 +140,25 @@ bool Diagram::isNegligible() const
 	if (isEmpty()) {
 		return true;
 	}
-	SquarePos const firstPos = at(0);
+	int minX = at(0).first;
+	int maxX = at(0).first;
+	int minY = at(0).second;
+	int maxY = at(0).second;
 	foreach (SquarePos const &pos, *this) {
-		if (firstPos.dist(pos) > neighbourhoodRad) {
-			return false;
+		if (pos.first > maxX) {
+			maxX = pos.first;
+		}
+		if (pos.first < minX) {
+		  minX = pos.first;
+		}
+		if (pos.second > maxY) {
+		  maxY = pos.second;
+		}
+		if (pos.second < minY) {
+		  minY = pos.second;
+		}
+		if (maxX - minX >= neighbourhoodRad || maxY - minY >= neighbourhoodRad) {
+		  return false;
 		}
 	}
 	return true;
