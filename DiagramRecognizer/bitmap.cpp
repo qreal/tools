@@ -1,5 +1,6 @@
 #include "bitmap.h"
 #include "stdlib.h"
+#include "QColor"
 
 Bitmap::Bitmap(PathVector const & diagram)
 {
@@ -8,8 +9,8 @@ Bitmap::Bitmap(PathVector const & diagram)
 	setLower();
 	setLeft();
 	setRight();
-	mGridHeight = height() / hStep;
-	mGridWidth = width() / wStep;
+	mGridHeight = height() / hStep + 1;
+	mGridWidth = width() / wStep + 1;
 	for (int i = 0; i < mGridWidth; i ++) {
 		QList<int> column;
 		for (int j = 0; j < mGridHeight; j ++) {
@@ -18,6 +19,33 @@ Bitmap::Bitmap(PathVector const & diagram)
 		push_back(column);
 	}
 	rasterizeDiagram();
+}
+
+Bitmap::Bitmap(const QImage &image)
+{
+   mUpper = 0;
+   mLeft = 0;
+   mRight = image.width() - 1;
+   mLower = image.height() - 1;
+   mGridHeight = height() / hStep + 1;
+   mGridWidth = width() / wStep + 1;
+   for (int i = 0; i < mGridWidth; i ++) {
+	   QList<int> column;
+	   for (int j = 0; j < mGridHeight; j ++) {
+		 //we lose some pixels on the right side?
+		 int color = 0;
+		 for (int k = i * wStep; k < (i + 1) * wStep; k ++) {
+		   for (int g = j * hStep; g < (j + 1) * hStep; g ++) {
+			 if (image.valid(k, g) && image.pixel(k, g) != QColor(Qt::white).rgb())
+			 {
+			   color = -1;
+			 }
+		   }
+		 }
+		 column.push_back(color);
+	   }
+	   push_back(column);
+   }
 }
 
 void Bitmap::setUpper()
@@ -174,12 +202,12 @@ int Bitmap::sign(int a) const
 
 int Bitmap::height() const
 {
-	return mLower - mUpper;
+	return mLower - mUpper + 1;
 }
 
 int Bitmap::width() const
 {
-	return mRight - mLeft;
+	return mRight - mLeft + 1;
 }
 
 int Bitmap::xLeft() const

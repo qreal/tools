@@ -7,6 +7,7 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QRect>
+#include <QFileDialog>
 
 DiagramRecognizer::DiagramRecognizer(QWidget *parent) :
 		QMainWindow(parent),
@@ -15,6 +16,7 @@ DiagramRecognizer::DiagramRecognizer(QWidget *parent) :
 	ui->setupUi(this);
 	connect(ui->clearButton, SIGNAL(clicked()), this, SLOT(clear()));
 	connect(ui->recognizeButton, SIGNAL(clicked()), this, SLOT(recognize()));
+	connect(ui->recognizeImageButton, SIGNAL(clicked()), this, SLOT(recognizeImage()));
 	mRecognized = false;
 	mLeftButtonPressed = false;
 	mComponentPoint.setX(-1000);
@@ -74,7 +76,18 @@ void DiagramRecognizer::paintEvent(QPaintEvent *paintEvent)
 	QPainter painter(this);
 	foreach(PointVector const &scetch, mDiagram) {
 		for (int i = 1; i < scetch.size(); i ++) {
-			painter.drawLine(scetch.at(i - 1), scetch.at(i));
+			QPen pen(Qt::black);
+			pen.setWidth(3);
+			if ((scetch.at(0) - scetch.back()).manhattanLength() <= 4) {
+				painter.setPen(pen);
+				painter.drawLine(scetch.at(i - 1), scetch.at(i));
+			}
+			else
+			{
+				pen.setColor(Qt::red);
+				painter.setPen(pen);
+				painter.drawLine(scetch.at(0), scetch.back());
+			}
 		}
 	}
 	if (!mRecognized) {
@@ -106,9 +119,24 @@ void DiagramRecognizer::paintEvent(QPaintEvent *paintEvent)
 	}
 }
 
+void DiagramRecognizer::recognizeImage()
+{
+	QString fileName = QFileDialog::QFileDialog::getOpenFileName(this,
+		tr("Recognize image"), ".",
+		tr("Png files (*.png)"));
+	mBitmap = new Bitmap(QImage(fileName));
+	recognizeDiagram();
+	
+}
+
 void DiagramRecognizer::recognize()
 {
 	mBitmap = new Bitmap(mDiagram);
+	recognizeDiagram();
+}
+
+void DiagramRecognizer::recognizeDiagram()
+{
 	//mRecognized = true;
 	mFormSegmentator = new FormSegmentator(mBitmap);
 	mFormSegmentator->uniteComponents();
@@ -129,6 +157,8 @@ void DiagramRecognizer::drawDiagram(const Diagram &component, const QColor &colo
 {
 	int xLeft = mBitmap->xLeft();
 	int yUpper = mBitmap->yUpper();
+	QPen pen(color);
+	pen.setWidth(4);
 	painter->setPen(color);
 	painter->setBrush(color);
 	foreach (SquarePos const &pos, component) {

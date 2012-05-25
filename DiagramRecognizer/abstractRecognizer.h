@@ -135,10 +135,24 @@ public:
 			return PathVector();
 		}
 		PathVector obj = mObjects[object];
-		QPoint centre((minX + maxX) / 2, (minY + maxY) / 2);
+		//TODO:: add method
+		int minX2 = INT_MAX;
+		int minY2 = INT_MAX;
+		int maxX2 = INT_MIN;
+		int maxY2 = INT_MIN;
+		foreach (PointVector const &stroke, obj) {
+			foreach (QPoint const &point, stroke) {
+				minX2 = std::min(minX2, point.x());
+				minY2 = std::min(minY2, point.y());
+				maxX2 = std::max(maxX2, point.x());
+				maxY2 = std::max(maxY2, point.y());
+			}
+		}
 		for (int i = 0; i < obj.size(); i ++) {
 			for (int j = 0; j < obj.at(i).size(); j ++) {
-				obj[i][j] = obj[i][j] + centre;
+				obj[i][j] = QPoint((obj.at(i).at(j).x() - minX2) * (maxX - minX) 
+				/ (maxX2 - minX2) +  minX, (obj.at(i).at(j).y() - minY2) 
+				*(maxY - minY) / (maxY2 - minY2) + minY);
 			}
 		}
 		return obj;

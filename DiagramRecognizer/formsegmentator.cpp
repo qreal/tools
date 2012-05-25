@@ -51,23 +51,24 @@ void FormSegmentator::initComponent(int x, int y)
 		cornerX = nextCornerX;
 		cornerY = nextCornerY;
 	}
-	if ((y == 0 || mBitmap->at(x).at(y - 1) == 0) &&
-		(y == gridHeight - 1 || mBitmap->at(x).at(y + 1) == 0) &&
-		(x == 0 || mBitmap->at(x - 1).at(y) == 0) &&
-		(x == gridWidth - 1 || mBitmap->at(x + 1).at(y) ==0))
-	{
-		//TODO:: new method
-		for (int i = std::max(0, y - 1);
-			i <= std::min(gridHeight - 1, y + 1); i ++)
-		{
-			for (int j = std::max(0, x - 1);
-				j <= std::min(gridWidth - 1, x + 1); j ++)
-			{
-				initComponent(j, i);
-			}
-		}
-		return;
-	}
+	//do we really need this condition?
+//	if ((y == 0 || mBitmap->at(x).at(y - 1) == 0) &&
+//		(y == gridHeight - 1 || mBitmap->at(x).at(y + 1) == 0) &&
+//		(x == 0 || mBitmap->at(x - 1).at(y) == 0) &&
+//		(x == gridWidth - 1 || mBitmap->at(x + 1).at(y) ==0))
+//	{
+//		//TODO:: new method
+//		for (int i = std::max(0, y - 1);
+//			i <= std::min(gridHeight - 1, y + 1); i ++)
+//		{
+//			for (int j = std::max(0, x - 1);
+//				j <= std::min(gridWidth - 1, x + 1); j ++)
+//			{
+//				initComponent(j, i);
+//			}
+//		}
+//		return;
+//	}
 	int neighbourX = 0;
 	int neighbourY = 1;
 	for (int i = 0; i < 4; i ++) {
@@ -316,31 +317,33 @@ void FormSegmentator::uniteCornersWithEdges()
 			polygon.push_back(QPair<int, bool>(i, true));
 			polygon = findCycle(polygon);
 			qDebug() << "found cycle" << polygon.size();
-			i ++;
-			if (!polygon.empty()) {
-				wasUnited = true;
-				while (polygon.size() > 1) {
-					//TODO:: add comments!!!
-					QPair<int, bool> firstMerge = polygon.at(0);
-					QPair<int, bool> secondMerge = polygon.at(1);
-					polygon.pop_front();
-					polygon.pop_front();
-					// !firstMerge.second = false
-					isMergedDiagrams(firstMerge.first, secondMerge.first,
-						!firstMerge.second, secondMerge.second);
-					for (int i = 0; i < polygon.size(); i ++) {
-						if (polygon.at(i).first >= firstMerge.first) {
-							polygon[i].first --;
-						}
-						if (polygon.at(i).first >= secondMerge.first) {
-							polygon[i].first --;
-						}
-					}
-					// push to polygon merged components, the first component always has true value
-					polygon.push_front(QPair<int, bool>(mAllComponents.size() - 1, true));
-				}
+			if (polygon.empty()) {
+				i++;
+				continue;
 			}
-		}
+			wasUnited = true;
+			while (polygon.size() > 1) {
+			  //TODO:: add comments!!!
+			  QPair<int, bool> firstMerge = polygon.at(0);
+			  QPair<int, bool> secondMerge = polygon.at(1);
+			  polygon.pop_front();
+			  polygon.pop_front();
+			  // !firstMerge.second = false
+			  isMergedDiagrams(firstMerge.first, secondMerge.first,
+							   !firstMerge.second, secondMerge.second);
+			  for (int j = 0; j < polygon.size(); j ++) {
+				if (polygon.at(j).first >= firstMerge.first) {
+				  polygon[j].first --;
+				}
+				if (polygon.at(j).first >= secondMerge.first) {
+				  polygon[j].first --;
+				}
+			  }
+			  // push to polygon merged components, the first component always has true value
+			  polygon.push_front(QPair<int, bool>(mAllComponents.size() - 1, true));
+			}
+		  }
+		
 	}
 }
 

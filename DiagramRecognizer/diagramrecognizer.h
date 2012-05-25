@@ -25,6 +25,7 @@ protected:
 private:
 	void drawDiagram(Diagram const &diagram, QColor const &color,
 		QPainter *painter);
+	void recognizeDiagram();
 	Ui::DiagramRecognizer *ui;
 	PathVector mDiagram;
 	Bitmap * mBitmap;
@@ -38,4 +39,5 @@ private:
 private slots:
 	void clear();
 	void recognize();
+	void recognizeImage();
 };

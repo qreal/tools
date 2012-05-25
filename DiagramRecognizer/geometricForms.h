@@ -48,6 +48,6 @@ public:
 
 typedef QList<SquarePos> Key;
 
-int const hStep = 3;
-int const wStep = 3;
-int const neighbourhoodRad = 4;
+int const hStep = 1;
+int const wStep = 1;
+int const neighbourhoodRad = 10;

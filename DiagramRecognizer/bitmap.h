@@ -1,11 +1,13 @@
 #pragma once
 #include "geometricForms.h"
 #include "diagram.h"
+#include "QImage"
 
 class Bitmap : public QList<QList<int> >
 {
 public:
 	Bitmap(PathVector const & diagram);
+	Bitmap(QImage const & image);
 	int width() const;
 	int height()const;
 	int xLeft() const;
