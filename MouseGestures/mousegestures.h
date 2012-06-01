@@ -14,46 +14,46 @@
 
 namespace Ui
 {
-	class MouseGestures;
+    class MouseGestures;
 }
 
 class MouseGestures : public QMainWindow
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	explicit MouseGestures(QWidget *parent = 0);
-	~MouseGestures();
+    explicit MouseGestures(QWidget *parent = 0);
+    ~MouseGestures();
 
 protected:
-	void contextMenuEvent(QContextMenuEvent *event);
-	void keyPressEvent(QKeyEvent *);
+    //void contextMenuEvent(QContextMenuEvent *event);
+    void keyPressEvent(QKeyEvent *);
 
 private:
-	Ui::MouseGestures *ui;
-	//MultistrokeGesturesManager * mKeyBulder;
-	void mouseMoveEvent(QMouseEvent *);
-	void mouseReleaseEvent(QMouseEvent *);
-	void mousePressEvent(QMouseEvent *);
-	void showTable();
+    Ui::MouseGestures *ui;
+    //MultistrokeGesturesManager * mKeyBulder;
+    void mouseMoveEvent(QMouseEvent *);
+    void mouseReleaseEvent(QMouseEvent *);
+    void mousePressEvent(QMouseEvent *);
+    void showTable();
         void showObjectsMenu(QString const & object);
-	void paintEvent(QPaintEvent *);
+    void paintEvent(QPaintEvent *);
 //	void addEntities(EntityVector const & entities);
-	QString mFileName;
-	PaintManager * mPaintManager;
-	void increasePath(double koef);
-	AbstractRecognizer * mRecognizer;
-	GesturesManager * mGesturesManager;
+    QString mFileName;
+    PaintManager * mPaintManager;
+    void increasePath(double koef);
+    AbstractRecognizer * mRecognizer;
+    GesturesManager * mGesturesManager;
         TestWindow * mTestWindow;
 
 private slots:
-	void rotatePath();
-	void increasePath();
-	void decreasePath();
-	void loadFile();
-	void changePath();
-	void drawGesture();
-	void save();
+    void rotatePath();
+    void increasePath();
+    void decreasePath();
+    void loadFile();
+    void changePath();
+    void drawGesture();
+    void save();
         void chooseTestAlgorithm();
         void generateGestures();
         void saveTestGestures();

@@ -22,17 +22,14 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <spacer name="horizontalSpacer">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
+     <widget class="QWidget" name="widget" native="true">
+      <property name="minimumSize">
        <size>
-        <width>486</width>
-        <height>298</height>
+        <width>0</width>
+        <height>300</height>
        </size>
       </property>
-     </spacer>
+     </widget>
     </item>
     <item>
      <widget class="QGroupBox" name="gbGestures">

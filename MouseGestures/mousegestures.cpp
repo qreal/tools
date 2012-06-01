@@ -14,12 +14,16 @@ static const QString xmlDir = "../../unreal/trunk/qrxml";
 static const QString idealGesturesFile =
         "NeuralNetwork/learnGestures/ideal_gestures.xml";
 static const QString generatedGesturesFile = "NeuralNetwork/learnGestures/generated_gestures.xml";
-static const QString testGesturesFile = "multistrokeGestures.xml";
+static QString testGesturesFile = "multistrokeGestures.xml";
 
 MouseGestures::MouseGestures(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MouseGestures)
 {
     ui->setupUi(this);
+	if (!QFile::exists(testGesturesFile))
+	{
+	  testGesturesFile = "../" + testGesturesFile;
+	}
     connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(loadFile()));
     connect(ui->twObjectPathTable, SIGNAL
             (currentItemChanged(QTableWidgetItem*,QTableWidgetItem*)), this, SLOT(drawGesture()));
@@ -35,6 +39,7 @@ MouseGestures::MouseGestures(QWidget *parent)
 
 void MouseGestures::openTestGestures()
 {
+
     QMap<QString, UsersGestures> usersGestures = XmlParser::parseXml(testGesturesFile);
     mRecognizer = new AbstractRecognizer(mGesturesManager, usersGestures);
     showTable();
@@ -80,20 +85,20 @@ void MouseGestures::chooseTestAlgorithm()
     mTestWindow->show();
 }
 
-void MouseGestures::contextMenuEvent(QContextMenuEvent *event)
-{
-    QMenu menu(this);
-    QAction *rotate = new QAction("Rotate path", this);
-    connect(rotate, SIGNAL(triggered()), this, SLOT(rotatePath()));
-    menu.addAction(rotate);
-    QAction *increase = new QAction("Increase path", this);
-    connect(increase, SIGNAL(triggered()), this, SLOT(increasePath()));
-    menu.addAction(increase);
-    QAction *decrease = new QAction("Decrease path", this);
-    connect(decrease, SIGNAL(triggered()), this, SLOT(decreasePath()));
-    menu.addAction(decrease);
-    menu.exec(event->globalPos());
-}
+//void MouseGestures::contextMenuEvent(QContextMenuEvent *event)
+//{
+//    QMenu menu(this);
+//    QAction *rotate = new QAction("Rotate path", this);
+//    connect(rotate, SIGNAL(triggered()), this, SLOT(rotatePath()));
+//    menu.addAction(rotate);
+//    QAction *increase = new QAction("Increase path", this);
+//    connect(increase, SIGNAL(triggered()), this, SLOT(increasePath()));
+//    menu.addAction(increase);
+//    QAction *decrease = new QAction("Decrease path", this);
+//    connect(decrease, SIGNAL(triggered()), this, SLOT(decreasePath()));
+//    menu.addAction(decrease);
+//    menu.exec(event->globalPos());
+//}
 
 void MouseGestures::rotatePath()
 {
@@ -188,8 +193,10 @@ void MouseGestures::showTable()
 
 void MouseGestures::mouseMoveEvent(QMouseEvent * event)
 {
+  if (event->button() != Qt::RightButton) {
     mRecognizer->mouseMove(event->pos());
     this->update();
+  }
 }
 
 void MouseGestures::mouseReleaseEvent(QMouseEvent *event)
@@ -197,7 +204,22 @@ void MouseGestures::mouseReleaseEvent(QMouseEvent *event)
     //    mCorrectPath = PathCorrector::correctPath(mMousePath);
     //    QString object = mKeyObjectTable.getObject(mCorrectPath);
     //    ui->teObject->setText(object);
-    mRecognizer->mouseRelease(event->pos());
+
+    if (event->button() == Qt::RightButton) {
+        QString object = mRecognizer->recognizeObject();
+        if (ui->twObjectPathTable->rowCount() != 0)
+        {
+            QTableWidgetItem * currentItem = ui->twObjectPathTable->currentItem();
+            if (currentItem != NULL)
+                mRecognizer->saveGesture(currentItem->text());
+        }
+        //showObjectsMenu(object);
+        //mCorrectPath = PathCorrector::correctPath(mMousePath);
+        ui->teObject->setText(object);
+    }
+	else {
+	  mRecognizer->mouseRelease(event->pos());
+	}
     this->update();
 }
 
@@ -240,7 +262,9 @@ void MouseGestures::addTestGesture(QAction * action)
 
 void MouseGestures::mousePressEvent(QMouseEvent * event)
 {
+  if (event->button() != Qt::RightButton) {
     mRecognizer->mousePress(event->pos());
+  }
     this->update();
 }
 
