@@ -2,12 +2,8 @@
 
 #include <QMainWindow>
 #include "abstractRecognizer.h"
-<<<<<<< HEAD
 #include "NeuralNetwork/neuralNetwork.h"
 #include "multistrokeRecognizers/adaBoostManager.h"
-=======
-#include "NeuralNetwork/neuralnetwork.h"
->>>>>>> 79b23c27011a8ba4e199eb1ae525a3ca72b995cc
 
 namespace Ui {
 	class TestWindow;
