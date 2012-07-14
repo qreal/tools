@@ -7,6 +7,8 @@ static const QString x1Key = "x1";
 static const QString x2Key = "x2";
 static const QString y1Key = "y1";
 static const QString y2Key = "y2";
+static const QString spanAngle = "spanAngle";
+static const QString startAngle = "startAngle";
 static const double pi = 3.141592;
 static const int pointsOnEllipse = 64;
 
@@ -75,8 +77,7 @@ public:
 		QList<QPoint> ellipse;
 		QPoint centre = (point1 + point2) / 2;
 		int diam = static_cast<int>(sqrt(pow(mX1 - mX2, 2) + pow(mY1 - mY2, 2)));
-		for (int i = 0; i < pointsOnEllipse; i++)
-		{
+		for (int i = 0; i < pointsOnEllipse; i++) {
 			int x = static_cast<int>(diam * cos(2 * pi * i / pointsOnEllipse) / 2);
 			int y = static_cast<int>(diam * sin(2 * pi * i / pointsOnEllipse) / 2);
 			ellipse.push_back(centre + QPoint(x, y));
@@ -84,4 +85,27 @@ public:
 		ellipse.push_back(QPoint(centre.x() + diam / 2, centre.y()));
 		return ellipse;
 	}
+};
+
+class Arc : Figure
+{
+public:
+	Arc(QDomElement const & object) : Figure(object)
+	{
+		bool isValid;
+		spacAngle = object.attribute(x1Key, "").toInt(&isValid, 10);
+		startAngle= ;
+		mX1 = object.attribute(x1Key, "").toInt(&isValid, 10);
+		mX2 = object.attribute(x2Key, "").toInt(&isValid, 10);
+		mY1 = object.attribute(y1Key, "").toInt(&isValid, 10);
+		mY2 = object.attribute(y2Key, "").toInt(&isValid, 10);
+	}
+
+	QList<QPoint> getCurve()
+	{
+	}
+
+private:
+	int spacAngle;
+	int startAngle;
 };

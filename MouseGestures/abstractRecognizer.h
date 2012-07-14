@@ -35,8 +35,7 @@ public:
 
 	void initIdealGestures(QMap<QString, PathVector> const & objects)
 	{
-		foreach (QString object, objects.keys())
-		{
+		foreach (QString object, objects.keys()) {
 			qDebug() << object;
 			TKey key = getKey(objects[object]);
 			mGestures.insert(object, key);

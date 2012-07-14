@@ -16,12 +16,13 @@ void PaintManager::drawPath(QPainter *painter, const PathVector &paths)
 {
 	foreach (QList<QPoint> path, paths)
 	{
-                QPoint previousPoint(minBoarder, minBoarder);
-		if (path.isEmpty())
+				QPoint previousPoint(minBoarder, minBoarder);
+		if (path.isEmpty()) {
 			return;
+		}
 		foreach (QPoint currentPoint, path)
 		{
-                        if (previousPoint.x() != minBoarder && previousPoint.y() != minBoarder)
+						if (previousPoint.x() != minBoarder && previousPoint.y() != minBoarder)
 				painter->drawLine(previousPoint, currentPoint);
 			else
 				painter->drawPoint(currentPoint);
@@ -33,15 +34,15 @@ void PaintManager::drawPath(QPainter *painter, const PathVector &paths)
 void PaintManager::drawGesture(const QList<QList<QPoint> > &gesture)
 {
 	mGestureScene->clear();
-	foreach (QList<QPoint> path, gesture)
-	{
-                QPoint previousPoint(minBoarder, minBoarder);
-		if (path.isEmpty())
+	foreach (QList<QPoint> path, gesture) {
+				QPoint previousPoint(minBoarder, minBoarder);
+		if (path.isEmpty()) {
 			return;
-		foreach (QPoint currentPoint, path)
-		{
-                        if (previousPoint.x() != minBoarder && previousPoint.y() != minBoarder)
+		}
+		foreach (QPoint currentPoint, path) {
+			if (previousPoint.x() != minBoarder && previousPoint.y() != minBoarder) {
 				mGestureScene->addLine(QLine(previousPoint, currentPoint));
+			}
 			previousPoint = currentPoint;
 		}
 	}
@@ -56,12 +57,12 @@ void PaintManager::drawGesture(QList<QPoint> const & path)
 
 void PaintManager::draw()
 {
-	if (mPath.isEmpty())
+	if (mPath.isEmpty()) {
 		return;
+	}
 	int verticeIndex = (mCurrentPointNumber / pointsAtSegment) % mPath.size();
 	int segmentNumber = mCurrentPointNumber % pointsAtSegment + 1;
-	if (verticeIndex == mPath.size() - 1)
-	{
+	if (verticeIndex == mPath.size() - 1) {
 		mGestureScene->clear();
 		mCurrentPointNumber = 0;
 		return;
