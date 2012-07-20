@@ -12,6 +12,7 @@ static const QString rectangleKey = "rectangle";
 static const QString nodeKey = "node";
 static const QString nodeNameKey = "name";
 static const QString pathKey = "path";
+static const QString arcKey = "arc";
 
 
 Serializer::Serializer(QString const & pathToFile)
@@ -49,7 +50,7 @@ Entity Serializer::parseNode(QDomElement const & domElement)
 {
 	QString name = domElement.attribute(nodeNameKey, "");
 	PathVector components;
-	QString path = domElement.attribute(pathKey, "");
+	//QString path = domElement.attribute(pathKey, "");
 	// убрать до елсе
 	/*if (!path.isEmpty())
 	{
@@ -78,13 +79,20 @@ Entity Serializer::parseNode(QDomElement const & domElement)
 			Rectangle rectangle(geometricElement);
 			components.push_back(rectangle.getCurve());
 		}
+		geometricElements = domElement.elementsByTagName(arcKey);
+		for (int i = 0; i < geometricElements.size(); i++)
+		{
+			QDomElement geometricElement = geometricElements.at(i).toElement();
+			Arc arc(geometricElement);
+			components.push_back(arc.getCurve());
+		}
+
 	//}
 	Entity entity;
 	entity.first = name;
 	entity.second = components;
 	return entity;
 }
-
 
 void Serializer::serialize(const Objects &objects)
 {

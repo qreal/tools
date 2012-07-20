@@ -73,8 +73,8 @@ public:
 		mGesturesManager = recognizer;
 	}
 
-	AbstractRecognizer(GesturesManager * recognizer,
-					   const QMap<QString, UsersGestures> & objects)
+	AbstractRecognizer(GesturesManager * recognizer
+			, const QMap<QString, UsersGestures> & objects)
 	{
 		mGesturesManager = recognizer;
 		this->mObjects = objects;

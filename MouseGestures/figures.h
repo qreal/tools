@@ -2,6 +2,7 @@
 #include <QList>
 #include <QPoint>
 #include <QDomElement>
+#include <QDebug>
 
 static const QString x1Key = "x1";
 static const QString x2Key = "x2";
@@ -11,6 +12,7 @@ static const QString spanAngKey = "spanAngle";
 static const QString startAngKey = "startAngle";
 static const double pi = 3.141592;
 static const int pointsOnEllipse = 64;
+static const int pointsOnArc = 360;
 
 class Figure
 {
@@ -70,19 +72,20 @@ class Ellipse : Figure
 public:
 	Ellipse(QDomElement const & object) : Figure(object) {}
 
+
 	QList<QPoint> getCurve()
 	{
 		QPoint point1(mX1, mY1);
 		QPoint point2(mX2, mY2);
 		QList<QPoint> ellipse;
 		QPoint centre = (point1 + point2) / 2;
-		int diam = static_cast<int>(sqrt(pow(mX1 - mX2, 2) + pow(mY1 - mY2, 2)));
+		int a = static_cast<int>(sqrt(pow(mX1 - mX2, 2)));
+		int b = static_cast<int>(sqrt(pow(mY1 - mY2, 2)));
 		for (int i = 0; i < pointsOnEllipse; i++) {
-			int x = static_cast<int>(diam * cos(2 * pi * i / pointsOnEllipse) / 2);
-			int y = static_cast<int>(diam * sin(2 * pi * i / pointsOnEllipse) / 2);
+			int x = static_cast<int>(a * cos(2 * pi * i / pointsOnEllipse) / 2);
+			int y = static_cast<int>(b * sin(2 * pi * i / pointsOnEllipse) / 2);
 			ellipse.push_back(centre + QPoint(x, y));
 		}
-		ellipse.push_back(QPoint(centre.x() + diam / 2, centre.y()));
 		return ellipse;
 	}
 };
@@ -103,20 +106,20 @@ public:
 		QPoint point2(mX2, mY2);
 		QList<QPoint> arc;
 		QPoint centre = (point1 + point2) / 2;
-		int diam = static_cast<int>(sqrt(pow(mX1 - mX2, 2) + pow(mY1 - mY2, 2)));
+		int a = static_cast<int>(sqrt(pow(mX1 - mX2, 2)));
+		int b = static_cast<int>(sqrt(pow(mY1 - mY2, 2)));
 		for (int i = points(startAngle); i < points(startAngle + spacAngle); i++) {
-			int x = static_cast<int>(diam * cos(2 * pi * i / pointsOnEllipse) / 2);
-			int y = static_cast<int>(diam * sin(2 * pi * i / pointsOnEllipse) / 2);
-			arc.push_back(centre + QPoint(x, y));
+			int x = static_cast<int>(a * cos(2 * pi * i / pointsOnEllipse) / 2);
+			int y = static_cast<int>(b * sin(2 * pi * i / pointsOnEllipse) / 2);
+			arc.push_back(centre + QPoint(x, - y));
 		}
-		arc.push_back(QPoint(centre.x() + diam / 2, centre.y()));
 		return arc;
 	}
 
 private:
 	static int points(int angle)
 	{
-		return pointsOnEllipse * angle / 2 / pi;
+		return pointsOnEllipse * angle / (2 * (pi * 1000));
 	}
 
 	int spacAngle;
