@@ -11,8 +11,7 @@
 
 
 static const QString xmlDir = "../../unreal/trunk/qrxml";
-static const QString idealGesturesFile =
-		"NeuralNetwork/learnGestures/ideal_gestures.xml";
+static const QString idealGesturesFile = "NeuralNetwork/learnGestures/ideal_gestures.xml";
 static const QString generatedGesturesFile = "NeuralNetwork/learnGestures/generated_gestures.xml";
 static QString testGesturesFile = "multistrokeGestures.xml";
 
@@ -20,13 +19,12 @@ MouseGestures::MouseGestures(QWidget *parent)
 	: QMainWindow(parent), ui(new Ui::MouseGestures)
 {
 	ui->setupUi(this);
-	if (!QFile::exists(testGesturesFile))
-	{
-	  testGesturesFile = "../" + testGesturesFile;
+	if (!QFile::exists(testGesturesFile)) {
+		testGesturesFile = "../" + testGesturesFile;
 	}
 	connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(loadFile()));
-	connect(ui->twObjectPathTable, SIGNAL
-			(currentItemChanged(QTableWidgetItem*,QTableWidgetItem*)), this, SLOT(drawGesture()));
+	connect(ui->twObjectPathTable, SIGNAL (currentItemChanged(QTableWidgetItem*,QTableWidgetItem*))
+			, this, SLOT(drawGesture()));
 	connect(ui->actionSave, SIGNAL(triggered()), this, SLOT(save()));
 	connect(ui->actionTest, SIGNAL(triggered()), this, SLOT(chooseTestAlgorithm()));
 	connect(ui->actionGenerate_gestures, SIGNAL(triggered()), this, SLOT(generateGestures()));
@@ -56,18 +54,14 @@ void MouseGestures::generateGestures()
 	//TODO:: change idealGestures
 	QMap<QString, UsersGestures> usersGestures = XmlParser::parseXml(idealGesturesFile);
 	QMap<QString, UsersGestures> generatedGestures;
-	foreach (QString object, usersGestures.keys())
-	{
+	foreach (QString const &object, usersGestures.keys()) {
 		const int maxAngle = 45;
 		const int angleDiff = 10;
 		PathVector idealGesture = usersGestures[object].first;
 		QList<QString> newGestures;
-		qDebug() << object;
-		for (int i = - maxAngle; i <= maxAngle; i += angleDiff)
-		{
+		for (int i = - maxAngle; i <= maxAngle; i += angleDiff) {
 			int maxSecondAngle = maxAngle - abs(i);
-			for (int j = - maxSecondAngle; j <= maxSecondAngle; j += angleDiff)
-			{
+			for (int j = - maxSecondAngle; j <= maxSecondAngle; j += angleDiff) {
 				PathVector gesture = PathCorrector::distortGesture(idealGesture, i, j);
 				//TODO:: change for incoherent gestures
 				newGestures.push_back(Parser::pathToString(gesture));
@@ -152,9 +146,7 @@ void MouseGestures::changePath()
 void MouseGestures::loadFile()
 {
 	//save();
-	mFileName = QFileDialog::getOpenFileName(this,
-											 tr("Open Xml"), xmlDir,
-											 tr("Xml files (*.xml)"));
+	mFileName = QFileDialog::getOpenFileName(this, tr("Open Xml"), xmlDir, tr("Xml files (*.xml)"));
 	int rowCount = ui->twObjectPathTable->rowCount();
 	for (int i = 0; i < rowCount; i++)
 	{
@@ -179,16 +171,15 @@ void MouseGestures::showTable()
 	{
 		ui->twObjectPathTable->removeRow(0);
 	}
-	foreach (QString object, mRecognizer->getObjects())
-	{
+	foreach (QString const &object, mRecognizer->getObjects()) {
 		rowCount = ui->twObjectPathTable->rowCount();
 		ui->twObjectPathTable->setRowCount(rowCount + 1);
 		QTableWidgetItem *item = new QTableWidgetItem(object);
 		ui->twObjectPathTable->setItem(rowCount, 0, item);
 	}
 	connect(ui->twObjectPathTable, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(changePath()));
-	connect(ui->twObjectPathTable, SIGNAL
-			(currentItemChanged(QTableWidgetItem*,QTableWidgetItem*)), this, SLOT(drawGesture()));
+	connect(ui->twObjectPathTable, SIGNAL (currentItemChanged(QTableWidgetItem*,QTableWidgetItem*))
+			, this, SLOT(drawGesture()));
 }
 
 void MouseGestures::mouseMoveEvent(QMouseEvent * event)
@@ -210,8 +201,9 @@ void MouseGestures::mouseReleaseEvent(QMouseEvent *event)
 		if (ui->twObjectPathTable->rowCount() != 0)
 		{
 			QTableWidgetItem * currentItem = ui->twObjectPathTable->currentItem();
-			if (currentItem != NULL)
+			if (currentItem != NULL) {
 				mRecognizer->saveGesture(currentItem->text());
+			}
 		}
 		//showObjectsMenu(object);
 		//mCorrectPath = PathCorrector::correctPath(mMousePath);
@@ -225,14 +217,16 @@ void MouseGestures::mouseReleaseEvent(QMouseEvent *event)
 
 void MouseGestures::keyPressEvent(QKeyEvent * event)
 {
-	if (event->key() != Qt::Key_Return)
+	if (event->key() != Qt::Key_Return) {
 		return;
+	}
 	QString object = mRecognizer->recognizeObject();
 	if (ui->twObjectPathTable->rowCount() != 0)
 	{
 		QTableWidgetItem * currentItem = ui->twObjectPathTable->currentItem();
-		if (currentItem != NULL)
+		if (currentItem != NULL) {
 			mRecognizer->saveGesture(currentItem->text());
+		}
 	}
 	//showObjectsMenu(object);
 	//mCorrectPath = PathCorrector::correctPath(mMousePath);
@@ -246,8 +240,7 @@ void MouseGestures::showObjectsMenu(QString const & object)
 	QList<QString> objects = mRecognizer->getObjects();
 	objects.removeAll(object);
 	objects.push_front(object);
-	foreach (QString object, objects)
-	{
+	foreach (QString const &object, objects) {
 		QAction * action = new QAction(object, this);
 		menu->addAction(action);
 	}

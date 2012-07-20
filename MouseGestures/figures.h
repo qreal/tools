@@ -12,7 +12,6 @@ static const QString spanAngKey = "spanAngle";
 static const QString startAngKey = "startAngle";
 static const double pi = 3.141592;
 static const int pointsOnEllipse = 64;
-static const int pointsOnArc = 360;
 
 class Figure
 {
