@@ -8,101 +8,121 @@ using System.Web.Mvc;
 using SbtReports.Models;
 
 namespace SbtReports.Controllers
-{ 
-    public class ObjectController : Controller
+{
+  public class ObjectController : Controller
+  {
+    private static List<DataObject> dataObjects = new List<DataObject>();
+    //
+    // GET: /Object/
+
+    public ViewResult Index()
     {
-        private DataObjectDBContext db = new DataObjectDBContext();
-
-        //
-        // GET: /Object/
-
-        public ViewResult Index()
-        {
-            return View(db.DataObjects.ToList());
-        }
-
-        //
-        // GET: /Object/Details/5
-
-        public ViewResult Details(int id)
-        {
-            DataObject dataobject = db.DataObjects.Find(id);
-            return View(dataobject);
-        }
-
-        //
-        // GET: /Object/Create
-
-        public ActionResult Create()
-        {
-            return View();
-        } 
-
-        //
-        // POST: /Object/Create
-
-        [HttpPost]
-        public ActionResult Create(DataObject dataobject)
-        {
-            if (ModelState.IsValid)
-            {
-                db.DataObjects.Add(dataobject);
-                db.SaveChanges();
-                return RedirectToAction("Index");  
-            }
-
-            return View(dataobject);
-        }
-        
-        //
-        // GET: /Object/Edit/5
- 
-        public ActionResult Edit(int id)
-        {
-            DataObject dataobject = db.DataObjects.Find(id);
-            return View(dataobject);
-        }
-
-        //
-        // POST: /Object/Edit/5
-
-        [HttpPost]
-        public ActionResult Edit(DataObject dataobject)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(dataobject).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(dataobject);
-        }
-
-        //
-        // GET: /Object/Delete/5
- 
-        public ActionResult Delete(int id)
-        {
-            DataObject dataobject = db.DataObjects.Find(id);
-            return View(dataobject);
-        }
-
-        //
-        // POST: /Object/Delete/5
-
-        [HttpPost, ActionName("Delete")]
-        public ActionResult DeleteConfirmed(int id)
-        {            
-            DataObject dataobject = db.DataObjects.Find(id);
-            db.DataObjects.Remove(dataobject);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            db.Dispose();
-            base.Dispose(disposing);
-        }
+      return View(dataObjects);
     }
+
+    //
+    // GET: /Object/Details/5
+
+    public ViewResult Details(int id)
+    {
+      DataObject returnObject = new DataObject();
+      foreach (DataObject dataObject in dataObjects)
+      {
+        if (dataObject.ID == id)
+        {
+          returnObject = dataObject;
+        }
+      }
+      return View(returnObject);
+    }
+
+    //
+    // GET: /Object/Create
+
+    public ActionResult Create()
+    {
+      return View();
+    }
+
+    //
+    // POST: /Object/Create
+
+    [HttpPost]
+    public ActionResult Create(DataObject dataobject)
+    {
+      if (ModelState.IsValid)
+      {
+        dataObjects.Add(dataobject);
+        return RedirectToAction("Index");
+      }
+      return View(dataobject);
+    }
+
+    //
+    // GET: /Object/Edit/5
+
+    public ActionResult Edit(int id)
+    {
+      DataObject returnObject = new DataObject();
+      foreach (DataObject dataObject in dataObjects)
+      {
+        if (dataObject.ID == id)
+        {
+          returnObject = dataObject;
+        }
+      }
+      return View(returnObject);
+    }
+
+    //
+    // POST: /Object/Edit/5
+
+    [HttpPost]
+    public ActionResult Edit(DataObject dataobject)
+    {
+      if (ModelState.IsValid)
+      {
+        foreach (DataObject dataObject in dataObjects)
+        {
+          if (dataobject.ID == dataObject.ID)
+          {
+            dataObjects.Remove(dataObject);
+            dataObjects.Add(dataobject);
+            return RedirectToAction("Index");
+          }
+        }
+      }
+      return View(dataobject);
+    }
+
+    //
+    // GET: /Object/Delete/5
+
+    public ActionResult Delete(int id)
+    {
+      return Edit(id);
+    }
+
+    //
+    // POST: /Object/Delete/5
+
+    [HttpPost, ActionName("Delete")]
+    public ActionResult DeleteConfirmed(int id)
+    {
+      foreach (DataObject dataObject in dataObjects)
+      {
+        if (dataObject.ID == id)
+        {
+          dataObjects.Remove(dataObject);
+          return RedirectToAction("Index");
+        }
+      }
+      return RedirectToAction("Index");
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+      base.Dispose(disposing);
+    }
+  }
 }

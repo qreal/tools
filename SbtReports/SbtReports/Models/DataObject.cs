@@ -8,12 +8,18 @@ namespace SbtReports.Models
 {
     public class DataObject
     {
-        public string Name { get; set; }
-        public int ID { get; set; }
+      public string Name { get; set; }
+      public int ID { get; set; }
+      private static int nextID = 0;
+      public DataObject()
+      {
+        ID = nextID;
+        nextID ++;
+      }
     }
 
-    public class DataObjectDBContext : DbContext
-    {
-        public DbSet<DataObject> DataObjects { get; set; }
-    }
+    //public class DataObjectDBContext : DbContext
+    //{
+    //    public DbSet<DataObject> DataObjects { get; set; }
+    //}
 }
