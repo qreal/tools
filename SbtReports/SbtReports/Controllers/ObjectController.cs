@@ -6,17 +6,25 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using SbtReports.Models;
+using Sbt.General;
 
 namespace SbtReports.Controllers
 {
   public class ObjectController : Controller
   {
     private static List<DataObject> dataObjects = new List<DataObject>();
+    private static bool fillList = false;
     //
     // GET: /Object/
 
     public ViewResult Index()
     {
+      if (!fillList)
+      {
+        dataObjects = Transformator.ExecuteQuery();
+        fillList = true;
+      }
+      //Integrator.GenerateReport(dataObjects);
       return View(dataObjects);
     }
 
