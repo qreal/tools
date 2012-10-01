@@ -41,6 +41,7 @@ QMap<QString, UsersGestures>
             gestures.insert(name, usersGestures);
         }
     }
+    qDebug()<< "gestures size" << gestures.count();
     return gestures;
 }
 
