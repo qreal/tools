@@ -95,8 +95,8 @@ public:
 	Arc(QDomElement const & object) : Figure(object)
 	{
 		bool isValid;
-		spacAngle = object.attribute(spanAngKey, "").toInt(&isValid, 10);
-		startAngle= object.attribute(startAngKey, "").toInt(&isValid, 10);;
+		mSpacAngle = object.attribute(spanAngKey, "").toInt(&isValid, 10);
+		mStartAngle= object.attribute(startAngKey, "").toInt(&isValid, 10);
 	}
 
 	QList<QPoint> getCurve()
@@ -107,7 +107,7 @@ public:
 		QPoint centre = (point1 + point2) / 2;
 		int a = static_cast<int>(sqrt(pow(mX1 - mX2, 2)));
 		int b = static_cast<int>(sqrt(pow(mY1 - mY2, 2)));
-		for (int i = points(startAngle); i < points(startAngle + spacAngle); i++) {
+		for (int i = points(mStartAngle); i < points(mStartAngle + mSpacAngle); i++) {
 			int x = static_cast<int>(a * cos(2 * pi * i / pointsOnEllipse) / 2);
 			int y = static_cast<int>(b * sin(2 * pi * i / pointsOnEllipse) / 2);
 			arc.push_back(centre + QPoint(x, - y));
@@ -121,6 +121,6 @@ private:
 		return pointsOnEllipse * angle / (2 * (pi * 1000));
 	}
 
-	int spacAngle;
-	int startAngle;
+	int mSpacAngle;
+	int mStartAngle;
 };
