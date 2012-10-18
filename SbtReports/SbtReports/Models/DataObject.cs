@@ -10,12 +10,13 @@ namespace SbtReports.Models
     {
       public string Name { get; set; }
       public int ID { get; set; }
-      private static int nextID = 0;
+      //private static int nextID = 0;
       public DataObject()
       {
-        ID = nextID;
-        nextID ++;
+      //  ID = nextID;
+      //  nextID ++;
       }
+
     }
 
     //public class DataObjectDBContext : DbContext
