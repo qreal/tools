@@ -1,43 +1,43 @@
-#include "diagram.h"
+#include "component.h"
 #include "stdlib.h"
 #include "QDebug"
 
 const int pointNum = 8;
 
-int Diagram::mNextID = 0;
+int Component::mNextID = 0;
 
-Diagram::Diagram()
+Component::Component()
 {
 	mDerivative1.first = 0;
 	mDerivative1.second = 0;
 	mDerivative2.first = 0;
 	mDerivative2.second = 0;
 	mHasSelfIntersection = false;
-	mID = mNextID;
-	mNextID ++;
+    mID = mNextID;//Destroy!!!
+    mNextID ++;//Destroy!!!
 }
 
-int Diagram::ID() const
+int Component::ID() const//Destroy!!!
 {
 	return mID;
-}
+}//for connected diagrams
 
-//for connected diagrams
-void Diagram::insertPos(const SquarePos &pos)
+
+void Component::insertPos(const SquarePos &pos)
 {
-	for (int i = 0; i < this->size() - 1; i ++) {
+    for (int i = 0; i < this->size() - 1; i ++) {
 		if (pos.distP1(at(i)) <= 1 && pos.distP1(at(i + 1)) <= 1) {
 			insert(i + 1, pos);
 			return;
-		}
+        }
 	}
 	if  (empty() || pos.dist(back()) <= 1){
 		push_back(pos);
-		return;
+        return;
 	}
 	if (pos.dist(at(0)) <= 1) {
 		push_front(pos);
-		return;
+        return;
 	}
 	qDebug() << "could not insert " << pos.first << pos.second << ID();
 	foreach (SquarePos position, *this) {
@@ -45,22 +45,22 @@ void Diagram::insertPos(const SquarePos &pos)
 	}
 }
 
-bool Diagram::isNeighbours(const SquarePos &pos1, const SquarePos &pos2) const
+bool Component::isNeighbours(const SquarePos &pos1, const SquarePos &pos2) const
 {
 	return pos1.dist(pos2) <= 1;
 }
 
 
-void Diagram::analyze()
+void Component::analyze()
 {
-	if (at(0).dist(back()) <= neighbourhoodRad) {
+    if (at(0).dist(back()) <= neighbourhoodRad) {
 		int i = 0;
 		while (!mHasSelfIntersection && i < size()) {
 			if (at(0).dist(at(i)) > neighbourhoodRad) {
 				mHasSelfIntersection = true;
 			}
 			i ++;
-		}
+        }
 	}
 	for (int i = 1; i <= std::min(pointNum, size() - 1); i++) {
 		mDerivative1.first += at(i).first - at(0).first;
@@ -76,22 +76,22 @@ void Diagram::analyze()
 	}
 }
 
-QPair<double, double> Diagram::derivativeBack()
+QPair<double, double> Component::derivativeBack()
 {
 	return mDerivative2;
 }
 
-QPair<double, double> Diagram::derivativeBegin()
+QPair<double, double> Component::derivativeBegin()
 {
 	return mDerivative1;
 }
 
-void Diagram::insertDiagram(const Diagram &diagram, bool isBegin1, bool isBegin2)
+void Component::insertDiagram(const Component &diagram, bool isBegin1, bool isBegin2)//объединяет две компоненты в одну
 {
-	mHasSelfIntersection = mHasSelfIntersection && diagram.hasSelfIntersection();
+    mHasSelfIntersection = mHasSelfIntersection && diagram.hasSelfIntersection();//это ж вроде бесполезно???
 	if (isBegin1 && !isBegin2) {
 		for (int i = diagram.size() - 1; i >= 0; i --) {
-			push_front(diagram.at(i));
+            push_front(diagram.at(i));//почему не написать prepend(diagram) как в следующем if?
 		}
 	}
 	else if (!isBegin1 && isBegin2) {
@@ -99,7 +99,7 @@ void Diagram::insertDiagram(const Diagram &diagram, bool isBegin1, bool isBegin2
 	}
 	else if (isBegin1 && isBegin2) {
 		foreach (SquarePos const &pos, diagram) {
-			push_front(pos);
+            push_front(pos);
 		}
 	}
 	else {
@@ -111,14 +111,14 @@ void Diagram::insertDiagram(const Diagram &diagram, bool isBegin1, bool isBegin2
 }
 
 
-bool Diagram::hasSelfIntersection() const
+bool Component::hasSelfIntersection() const//бредовая функция
 {
 	return mHasSelfIntersection;
 }
 
-PathVector Diagram::figure(int xMin, int yMin) const
+PathVector Component::figure(int xMin, int yMin) const//судя по всему создает фигуру состоящую не из точек, а из фрагментов, а вот фрагменты из точек
 {
-	SquarePos previous(-10, -10);
+    SquarePos previous(-10, -10);
 	PointVector stroke;
 	PathVector figure;
 	foreach (SquarePos const &pos, *this)
@@ -135,7 +135,7 @@ PathVector Diagram::figure(int xMin, int yMin) const
 	return figure;
 }
 
-bool Diagram::isNegligible() const
+bool Component::isNegligible() const//проверяет всякие закарючки(типа в одном месте куча перечеркнутых пикселей), потом мы их будем удалять
 {
 	if (isEmpty()) {
 		return true;

@@ -1,8 +1,8 @@
-#include "simpleformsinitializer.h"
+#include "simpleFormsInitializer.h"
 #include "QMap"
 #include "cmath"
 
-QMap<QString, PathVector> SimpleFormsInitializer::initialForms()
+QMap<QString, PathVector> SimpleFormsInitializer::initialForms()//насколько я понимаю это просто составляет базу данных базовых картинок
 {
 	QMap<QString, PathVector> forms;
 	PointVector square;
@@ -24,7 +24,7 @@ QMap<QString, PathVector> SimpleFormsInitializer::initialForms()
 	triangleGesture << triangle;
 	forms["triangle"] = triangleGesture;
 	PointVector circle;
-	double pi = 3.14;
+    double pi = 3.14159254;
 	for (int i = 0; i <= 16; i ++) {
 	  circle << QPoint(50 * cos(i * pi * 0.125), 50 * sin(i * pi * 0.125));
 	}

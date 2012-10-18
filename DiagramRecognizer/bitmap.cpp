@@ -2,14 +2,14 @@
 #include "stdlib.h"
 #include "QColor"
 
-Bitmap::Bitmap(PathVector const & diagram)
+Bitmap::Bitmap(PathVector const & diagram)//эта штука получает на вход уже вектор нераспознанной диаграмы. В результате она выдает "сетку" - массив - прямоугольник с нашей диграммой
 {
 	mDiagram = diagram;
 	setUpper();
 	setLower();
 	setLeft();
 	setRight();
-	mGridHeight = height() / hStep + 1;
+    mGridHeight = height() / hStep + 1;
 	mGridWidth = width() / wStep + 1;
 	for (int i = 0; i < mGridWidth; i ++) {
 		QList<int> column;
@@ -21,7 +21,7 @@ Bitmap::Bitmap(PathVector const & diagram)
 	rasterizeDiagram();
 }
 
-Bitmap::Bitmap(const QImage &image)
+Bitmap::Bitmap(const QImage &image)//тоже самое, что и предыдущий конструктор, но на вход подается изображение. Расчитано, что оно черно-белое. В результате получим такую же сетку, как и в предыдущем конструкторе
 {
    mUpper = 0;
    mLeft = 0;
@@ -48,7 +48,7 @@ Bitmap::Bitmap(const QImage &image)
    }
 }
 
-void Bitmap::setUpper()
+void Bitmap::setUpper()//по идее функция должна находить самую большую координату ординат(самую высокую точку)
 {
 	if (mDiagram.isEmpty()) {
 		return;
@@ -56,14 +56,14 @@ void Bitmap::setUpper()
 	mUpper = mDiagram.at(0).at(0).y();
 	foreach (PointVector const &path, mDiagram) {
 		foreach (QPoint const &pnt, path) {
-			if (pnt.y() < mUpper) {
+            if (pnt.y() < mUpper) {//но вот что-то мне кажется, что из-за этого неравенства найдет самую маленькую
 				mUpper = pnt.y();
 			}
 		}
 	}
 }
 
-void Bitmap::setLower()
+void Bitmap::setLower()//а вот эта должна найти самую маленькую координату ординат(самую нижнюю точку)
 {
 	if (mDiagram.isEmpty()) {
 		return;
@@ -71,14 +71,14 @@ void Bitmap::setLower()
 	mLower = mDiagram.at(0).at(0).y();
 	foreach (PointVector const &path, mDiagram) {
 		foreach (QPoint const &pnt, path) {
-			if (pnt.y() > mLower) {
+            if (pnt.y() > mLower) {//но найдет самую высокую
 				mLower = pnt.y();
 			}
 		}
 	}
 }
 
-void Bitmap::setLeft()
+void Bitmap::setLeft()//эта находит самую левую точку, то есть имеющюю самую маленькую координату абсцисс
 {
 	if (mDiagram.isEmpty()) {
 		return;
@@ -86,14 +86,14 @@ void Bitmap::setLeft()
 	mLeft = mDiagram.at(0).at(0).x();
 	foreach (PointVector const &path, mDiagram) {
 		foreach (QPoint const &pnt, path) {
-			if (pnt.x() < mLeft) {
+            if (pnt.x() < mLeft) {//и здесь уже все ок
 				mLeft = pnt.x();
 			}
 		}
 	}
 }
 
-void Bitmap::setRight()
+void Bitmap::setRight()//самую правую
 {
 	if (mDiagram.isEmpty()) {
 		return;
@@ -108,11 +108,11 @@ void Bitmap::setRight()
 	}
 }
 
-void Bitmap::rasterizeDiagram()
+void Bitmap::rasterizeDiagram()//нужна для первого конструктора. Заполняет сетку черными "пикселями", изначально сетка даже не инициализирована ноликами.
 {
 	for (int i = 0; i < mGridHeight; i++) {
 		for (int j = 0; j < mGridWidth; j++) {
-			operator[] (j)[i] = 0;
+            operator[] (j)[i] = 0;
 		}
 	}
 	foreach (PointVector const &path, mDiagram) {
@@ -150,7 +150,7 @@ void Bitmap::rasterizeDiagram()
 	}
 }
 
-void Bitmap::rasterizeSegment(int x1, int y1, int x2, int y2)
+void Bitmap::rasterizeSegment(int x1, int y1, int x2, int y2)//помощник функции растеризириующей все векторное изображение.
 {
 	operator [](x1)[y1] = -1;
 	int x = x1;
@@ -200,7 +200,7 @@ int Bitmap::sign(int a) const
 }
 
 
-int Bitmap::height() const
+int Bitmap::height() const//большая часть следующих функций бесполезна, ибо можно же напрямую элементы вызывать, а не создавать для этого функцию
 {
 	return mLower - mUpper + 1;
 }
@@ -230,9 +230,9 @@ int Bitmap::yLower() const
 	return mLower;
 }
 
-Diagram Bitmap::rasterizedDiagram() const
+Component Bitmap::rasterizedDiagram() const//создает пустую сеткe. Где это будет использоваться пока непонятно
 {
-	Diagram diagram;
+    Component diagram;
 	for (int i = 0; i < mGridWidth; i ++) {
 		for (int j = 0; j < mGridHeight; j ++) {
 			if (at(i)[j] != 0) {
