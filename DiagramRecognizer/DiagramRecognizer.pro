@@ -40,4 +40,5 @@ HEADERS  += \
 FORMS    +=
 
 OTHER_FILES += \
-    readme.txt
+    readme.txt \
+    Conception.jpg
