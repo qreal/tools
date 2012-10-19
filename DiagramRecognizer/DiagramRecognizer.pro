@@ -38,3 +38,6 @@ HEADERS  += \
     recognizers/rectangleGesturesManager.h
 
 FORMS    +=
+
+OTHER_FILES += \
+    readme.txt
