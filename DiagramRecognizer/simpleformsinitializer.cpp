@@ -2,7 +2,7 @@
 #include "QMap"
 #include "cmath"
 
-QMap<QString, PathVector> SimpleFormsInitializer::initialForms()//насколько я понимаю это просто составляет базу данных базовых картинок
+QMap<QString, PathVector> SimpleFormsInitializer::initialForms()
 {
 	QMap<QString, PathVector> forms;
 	PointVector square;

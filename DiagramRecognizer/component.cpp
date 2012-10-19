@@ -135,7 +135,7 @@ PathVector Component::figure(int xMin, int yMin) const//судя по всему создает фи
 	return figure;
 }
 
-bool Component::isNegligible() const//проверяет всякие закарючки(типа в одном месте куча перечеркнутых пикселей), потом мы их будем удалять
+bool Component::isNegligible() const
 {
 	if (isEmpty()) {
 		return true;
