@@ -13,15 +13,7 @@ Component::Component()
 	mDerivative2.first = 0;
 	mDerivative2.second = 0;
 	mHasSelfIntersection = false;
-    mID = mNextID;//Destroy!!!
-    mNextID ++;//Destroy!!!
 }
-
-int Component::ID() const//Destroy!!!
-{
-	return mID;
-}//for connected diagrams
-
 
 void Component::insertPos(const SquarePos &pos)
 {
@@ -86,12 +78,12 @@ QPair<double, double> Component::derivativeBegin()
 	return mDerivative1;
 }
 
-void Component::insertDiagram(const Component &diagram, bool isBegin1, bool isBegin2)//объединяет две компоненты в одну
+void Component::insertDiagram(const Component &diagram, bool isBegin1, bool isBegin2)
 {
-    mHasSelfIntersection = mHasSelfIntersection && diagram.hasSelfIntersection();//это ж вроде бесполезно???
+    mHasSelfIntersection = mHasSelfIntersection && diagram.hasSelfIntersection();
 	if (isBegin1 && !isBegin2) {
         for (int i = diagram.size() - 1; i >= 0; i --) {
-            push_front(diagram.at(i));//почему не написать prepend(diagram) как в следующем if?
+            push_front(diagram.at(i));
 		}
 	}
 	else if (!isBegin1 && isBegin2) {
@@ -111,12 +103,12 @@ void Component::insertDiagram(const Component &diagram, bool isBegin1, bool isBe
 }
 
 
-bool Component::hasSelfIntersection() const//бредовая функция
+bool Component::hasSelfIntersection() const
 {
 	return mHasSelfIntersection;
 }
 
-PathVector Component::figure(int xMin, int yMin) const//судя по всему создает фигуру состоящую не из точек, а из фрагментов, а вот фрагменты из точек
+PathVector Component::figure(int xMin, int yMin) const
 {
     SquarePos previous(-10, -10);
 	PointVector stroke;
