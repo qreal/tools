@@ -1,10 +1,9 @@
-#ifndef OUTPUT_H
-#define OUTPUT_H
+#pragma once
 
-#include <component.h>
+#include "component.h"
 #include <QMouseEvent>
-#include <bitmap.h>
-#include <formsegmentator.h>
+#include "bitmap.h"
+#include "formsegmentator.h"
 #include <QWidget>
 
  class Output : public QWidget
@@ -34,5 +33,3 @@
      FormSegmentator *mFormSegmentator;
      QPoint mComponentPoint;
  };
-
-#endif // OUTPUT_H

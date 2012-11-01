@@ -24,7 +24,7 @@ private:
     void analyzeBitmap();
     void initComponent(int x, int y);
     bool isMergedDiagrams(int i, int j,
-        bool isBeginDiagram1, bool isBeginDiagram2);
+                          bool isBeginDiagram1, bool isBeginDiagram2);
 
     Component *mCurrentDiagram;
     Bitmap *mBitmap;

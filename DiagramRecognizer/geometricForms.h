@@ -22,27 +22,27 @@ struct SquarePos
 {
 public:
     SquarePos(int x, int y)
-	{
-		first = x;
-		second = y;
-	}
+    {
+        first = x;
+        second = y;
+    }
 
-	int first;
-	int second;
+    int first;
+    int second;
 
     int dist(SquarePos const & pos) const
-	{
-		return std::max(abs(first - pos.first), abs(second - pos.second));
-	}
+    {
+        return std::max(abs(first - pos.first), abs(second - pos.second));
+    }
 
     int distP1(SquarePos const & pos) const
-	{
-		return abs(first - pos.first) + abs(second - pos.second);
-	}
+    {
+        return abs(first - pos.first) + abs(second - pos.second);
+    }
 
     bool operator == (SquarePos const & pos) const
-	{
-		return pos.first == first && pos.second == second;
+    {
+        return pos.first == first && pos.second == second;
     }
 };
 

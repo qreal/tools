@@ -10,7 +10,6 @@ public:
     Component();
     void insertPos(SquarePos const & pos);
     void analyze();
-    int ID() const;
     QPair<double, double> derivativeBegin();
     QPair<double, double> derivativeBack();
     void insertDiagram(const Component &diagram,
