@@ -90,7 +90,7 @@ void Component::insertDiagram(const Component &diagram, bool isBegin1, bool isBe
 {
     mHasSelfIntersection = mHasSelfIntersection && diagram.hasSelfIntersection();//это ж вроде бесполезно???
 	if (isBegin1 && !isBegin2) {
-		for (int i = diagram.size() - 1; i >= 0; i --) {
+        for (int i = diagram.size() - 1; i >= 0; i --) {
             push_front(diagram.at(i));//почему не написать prepend(diagram) как в следующем if?
 		}
 	}
