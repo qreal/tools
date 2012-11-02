@@ -13,11 +13,11 @@ public:
 	explicit DiagramRecognizer(QWidget *parent = 0);
 
 public slots:
-    void clear();
-    void recognize();
-    void recognizeImage();
+	void clear();
+	void recognize();
+	void recognizeImage();
 signals:
-    void print(PathVector mDiagram, Bitmap * mBitmap, FormSegmentator *mFormSegmentator);
+	void print(PathVector mDiagram, Bitmap * mBitmap, FormSegmentator *mFormSegmentator);
 
 private:
 	void recognizeDiagram();

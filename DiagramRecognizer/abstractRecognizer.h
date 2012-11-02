@@ -10,7 +10,7 @@ class GesturesManager
 {
 public:
 	virtual void initIdealGestures(
-		QMap<QString, PathVector> const & objects) = 0;
+			QMap<QString, PathVector> const & objects) = 0;
 	virtual void setKey(const PathVector & path) = 0;
 	virtual double maxDistance(QString const & object) const = 0;
 	virtual double distance(QString const & object) const = 0;
@@ -18,7 +18,7 @@ public:
 };
 
 template <typename TKey>
-		class GesturesRecognizer : public GesturesManager
+class GesturesRecognizer : public GesturesManager
 {
 public:
 	GesturesRecognizer(){}
@@ -55,7 +55,7 @@ class AbstractRecognizer
 {
 public:
 	AbstractRecognizer(GesturesManager * recognizer,
-		const QMap<QString, PathVector> & objects)
+					   const QMap<QString, PathVector> & objects)
 	{
 		mGesturesManager = recognizer;
 		this->mObjects = objects;
@@ -150,9 +150,9 @@ public:
 		}
 		for (int i = 0; i < obj.size(); i ++) {
 			for (int j = 0; j < obj.at(i).size(); j ++) {
-				obj[i][j] = QPoint((obj.at(i).at(j).x() - minX2) * (maxX - minX) 
-				/ (maxX2 - minX2) +  minX, (obj.at(i).at(j).y() - minY2) 
-				*(maxY - minY) / (maxY2 - minY2) + minY);
+				obj[i][j] = QPoint((obj.at(i).at(j).x() - minX2) * (maxX - minX)
+								   / (maxX2 - minX2) +  minX, (obj.at(i).at(j).y() - minY2)
+								   *(maxY - minY) / (maxY2 - minY2) + minY);
 			}
 		}
 		return obj;
