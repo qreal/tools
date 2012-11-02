@@ -1,29 +1,21 @@
-#include "diagram.h"
+#include "component.h"
 #include "stdlib.h"
 #include "QDebug"
 
 const int pointNum = 8;
 
-int Diagram::mNextID = 0;
+int Component::mNextID = 0;
 
-Diagram::Diagram()
+Component::Component()
 {
 	mDerivative1.first = 0;
 	mDerivative1.second = 0;
 	mDerivative2.first = 0;
 	mDerivative2.second = 0;
 	mHasSelfIntersection = false;
-	mID = mNextID;
-	mNextID ++;
 }
 
-int Diagram::ID() const
-{
-	return mID;
-}
-
-//for connected diagrams
-void Diagram::insertPos(const SquarePos &pos)
+void Component::insertPos(const SquarePos &pos)
 {
 	for (int i = 0; i < this->size() - 1; i ++) {
 		if (pos.distP1(at(i)) <= 1 && pos.distP1(at(i + 1)) <= 1) {
@@ -39,19 +31,19 @@ void Diagram::insertPos(const SquarePos &pos)
 		push_front(pos);
 		return;
 	}
-	qDebug() << "could not insert " << pos.first << pos.second << ID();
+	qDebug() << "could not insert " << pos.first << pos.second;
 	foreach (SquarePos position, *this) {
 		qDebug() << "inserted" << position.first << position.second;
 	}
 }
 
-bool Diagram::isNeighbours(const SquarePos &pos1, const SquarePos &pos2) const
+bool Component::isNeighbours(const SquarePos &pos1, const SquarePos &pos2) const
 {
 	return pos1.dist(pos2) <= 1;
 }
 
 
-void Diagram::analyze()
+void Component::analyze()
 {
 	if (at(0).dist(back()) <= neighbourhoodRad) {
 		int i = 0;
@@ -76,17 +68,17 @@ void Diagram::analyze()
 	}
 }
 
-QPair<double, double> Diagram::derivativeBack()
+QPair<double, double> Component::derivativeBack()
 {
 	return mDerivative2;
 }
 
-QPair<double, double> Diagram::derivativeBegin()
+QPair<double, double> Component::derivativeBegin()
 {
 	return mDerivative1;
 }
 
-void Diagram::insertDiagram(const Diagram &diagram, bool isBegin1, bool isBegin2)
+void Component::insertDiagram(const Component &diagram, bool isBegin1, bool isBegin2)
 {
 	mHasSelfIntersection = mHasSelfIntersection && diagram.hasSelfIntersection();
 	if (isBegin1 && !isBegin2) {
@@ -111,12 +103,12 @@ void Diagram::insertDiagram(const Diagram &diagram, bool isBegin1, bool isBegin2
 }
 
 
-bool Diagram::hasSelfIntersection() const
+bool Component::hasSelfIntersection() const
 {
 	return mHasSelfIntersection;
 }
 
-PathVector Diagram::figure(int xMin, int yMin) const
+PathVector Component::figure(int xMin, int yMin) const
 {
 	SquarePos previous(-10, -10);
 	PointVector stroke;
@@ -128,14 +120,14 @@ PathVector Diagram::figure(int xMin, int yMin) const
 			stroke.clear();
 		}
 		stroke.push_back(QPoint(pos.first * wStep + xMin,
-				pos.second * hStep + yMin));
+								pos.second * hStep + yMin));
 		previous = pos;
 	}
 	figure.push_back(stroke);
 	return figure;
 }
 
-bool Diagram::isNegligible() const
+bool Component::isNegligible() const
 {
 	if (isEmpty()) {
 		return true;
@@ -149,16 +141,16 @@ bool Diagram::isNegligible() const
 			maxX = pos.first;
 		}
 		if (pos.first < minX) {
-		  minX = pos.first;
+			minX = pos.first;
 		}
 		if (pos.second > maxY) {
-		  maxY = pos.second;
+			maxY = pos.second;
 		}
 		if (pos.second < minY) {
-		  minY = pos.second;
+			minY = pos.second;
 		}
 		if (maxX - minX >= neighbourhoodRad || maxY - minY >= neighbourhoodRad) {
-		  return false;
+			return false;
 		}
 	}
 	return true;

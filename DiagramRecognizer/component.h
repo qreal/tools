@@ -2,20 +2,18 @@
 #include "geometricForms.h"
 #include <QList>
 
+//const double infDerivative = 1000;
 
-const double infDerivative = 1000;
-
-class Diagram : public QList<SquarePos>
+class Component : public QList<SquarePos>
 {
 public:
-	Diagram();
+	Component();
 	void insertPos(SquarePos const & pos);
 	void analyze();
-	int ID() const;
 	QPair<double, double> derivativeBegin();
 	QPair<double, double> derivativeBack();
-	void insertDiagram(const Diagram &diagram,
-		bool isBegin1, bool isBegin2);
+	void insertDiagram(const Component &diagram,
+					   bool isBegin1, bool isBegin2);
 	bool hasSelfIntersection() const;
 	PathVector figure(int xMin, int yMin) const;
 	bool isNegligible() const;

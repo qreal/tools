@@ -1,4 +1,4 @@
-#include "rectanglegesturesmanager.h"
+#include "rectangleGesturesManager.h"
 #include "curveKeyBuilder.h"
 #include "QDebug"
 #include "cmath"

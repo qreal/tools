@@ -1,6 +1,6 @@
-#include "mixedgesturesmanager.h"
-#include "rectanglegesturesmanager.h"
-#include "nearestposgridgesturesmanager.h"
+#include "mixedGesturesManager.h"
+#include "rectangleGesturesManager.h"
+#include "nearestPosGridGesturesManager.h"
 #include "curveKeyBuilder.h"
 
 double const weight1 = 0.2;
