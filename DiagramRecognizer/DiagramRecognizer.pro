@@ -11,25 +11,34 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        diagramrecognizer.cpp \
     bitmap.cpp \
-    diagram.cpp \
-    formsegmentator.cpp \
-    simpleformsinitializer.cpp \
-    recognizers/rectanglegesturesmanager.cpp \
-    recognizers/nearestposgridgesturesmanager.cpp \
-    recognizers/mixedgesturesmanager.cpp
+    output.cpp \
+    component.cpp \
+    diagramRecognizer.cpp \
+    formSegmentator.cpp \
+    simpleFormsInitializer.cpp \
+    recognizers/mixedGesturesManager.cpp \
+    recognizers/nearestPosGridGesturesManager.cpp \
+    recognizers/rectangleGesturesManager.cpp
 
-HEADERS  += diagramrecognizer.h \
+HEADERS  += \
     geometricForms.h \
     bitmap.h \
-    diagram.h \
-    formsegmentator.h \
     abstractRecognizer.h \
-    simpleformsinitializer.h \
-    recognizers/rectanglegesturesmanager.h \
-    recognizers/nearestposgridgesturesmanager.h \
-    recognizers/mixedgesturesmanager.h \
-    recognizers/curveKeyBuilder.h
+    recognizers/curveKeyBuilder.h \
+    output.h \
+    component.h \
+    figure.h \
+    edge.h \
+    diagramRecognizer.h \
+    formSegmentator.h \
+    simpleFormsInitializer.h \
+    recognizers/mixedGesturesManager.h \
+    recognizers/nearestPosGridGesturesmanager.h \
+    recognizers/rectangleGesturesManager.h
 
-FORMS    += diagramrecognizer.ui
+FORMS    +=
+
+OTHER_FILES += \
+    readme.txt \
+    Conception.jpg

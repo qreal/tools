@@ -1,4 +1,4 @@
-#include "nearestposgridgesturesmanager.h"
+#include "nearestPosGridGesturesManager.h"
 #include "curveKeyBuilder.h"
 #include "stdlib.h"
 
