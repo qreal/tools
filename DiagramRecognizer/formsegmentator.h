@@ -4,12 +4,15 @@
 class FormSegmentator
 {
 public:
-	FormSegmentator(Bitmap *bimap);
-	Diagram component(QPoint const &point) const;
-	QList<Diagram> allComponents() const;
+	FormSegmentator(Bitmap *bitmap);
+
+	//further follows new methods
+	void analyze(QList<Component> &objects, QList<Component> &edges);
 	void uniteComponents();
-	QList<Diagram> objects() const;
-	QList<Diagram> edges() const;
+	QList<Component> getAllComponents() const;
+	QList<Component> getObjects() const;
+	QList<Component> getEdges() const;
+	Component component(QPoint const &point) const;
 
 private:
 	void uniteCorners();
@@ -21,11 +24,9 @@ private:
 	void analyzeBitmap();
 	void initComponent(int x, int y);
 	bool isMergedDiagrams(int i, int j,
-		bool isBeginDiagram1, bool isBeginDiagram2);
+						  bool isBeginDiagram1, bool isBeginDiagram2);
 
-	Diagram *mCurrentDiagram;
+	Component *mCurrentDiagram;
 	Bitmap *mBitmap;
-	QList<Diagram> mAllComponents;
+	QList<Component> mAllComponents;
 };
-
-

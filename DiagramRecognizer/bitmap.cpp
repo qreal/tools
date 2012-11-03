@@ -23,29 +23,29 @@ Bitmap::Bitmap(PathVector const & diagram)
 
 Bitmap::Bitmap(const QImage &image)
 {
-   mUpper = 0;
-   mLeft = 0;
-   mRight = image.width() - 1;
-   mLower = image.height() - 1;
-   mGridHeight = height() / hStep + 1;
-   mGridWidth = width() / wStep + 1;
-   for (int i = 0; i < mGridWidth; i ++) {
-	   QList<int> column;
-	   for (int j = 0; j < mGridHeight; j ++) {
-		 //we lose some pixels on the right side?
-		 int color = 0;
-		 for (int k = i * wStep; k < (i + 1) * wStep; k ++) {
-		   for (int g = j * hStep; g < (j + 1) * hStep; g ++) {
-			 if (image.valid(k, g) && image.pixel(k, g) != QColor(Qt::white).rgb())
-			 {
-			   color = -1;
-			 }
-		   }
-		 }
-		 column.push_back(color);
-	   }
-	   push_back(column);
-   }
+	mUpper = 0;
+	mLeft = 0;
+	mRight = image.width() - 1;
+	mLower = image.height() - 1;
+	mGridHeight = height() / hStep + 1;
+	mGridWidth = width() / wStep + 1;
+	for (int i = 0; i < mGridWidth; i ++) {
+		QList<int> column;
+		for (int j = 0; j < mGridHeight; j ++) {
+			//we lose some pixels on the right side?
+			int color = 0;
+			for (int k = i * wStep; k < (i + 1) * wStep; k ++) {
+				for (int g = j * hStep; g < (j + 1) * hStep; g ++) {
+					if (image.valid(k, g) && image.pixel(k, g) != QColor(Qt::white).rgb())
+					{
+						color = -1;
+					}
+				}
+			}
+			column.push_back(color);
+		}
+		push_back(column);
+	}
 }
 
 void Bitmap::setUpper()
@@ -230,9 +230,9 @@ int Bitmap::yLower() const
 	return mLower;
 }
 
-Diagram Bitmap::rasterizedDiagram() const
+Component Bitmap::rasterizedDiagram() const
 {
-	Diagram diagram;
+	Component diagram;
 	for (int i = 0; i < mGridWidth; i ++) {
 		for (int j = 0; j < mGridHeight; j ++) {
 			if (at(i)[j] != 0) {

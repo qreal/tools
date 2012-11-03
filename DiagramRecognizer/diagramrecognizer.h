@@ -2,42 +2,30 @@
 #include "bitmap.h"
 #include "formsegmentator.h"
 #include "abstractRecognizer.h"
-#include <QMainWindow>
+#include <QApplication>
 
-namespace Ui {
-	class DiagramRecognizer;
-}
 
-class DiagramRecognizer : public QMainWindow
+class DiagramRecognizer : public QWidget
 {
 	Q_OBJECT
 
 public:
 	explicit DiagramRecognizer(QWidget *parent = 0);
-	~DiagramRecognizer();
 
-protected:
-	void mousePressEvent(QMouseEvent *);
-	void mouseReleaseEvent(QMouseEvent *);
-	void mouseMoveEvent(QMouseEvent *);
-	void paintEvent(QPaintEvent *);
+public slots:
+	void clear();
+	void recognize();
+	void recognizeImage();
+signals:
+	void print(PathVector mDiagram, Bitmap * mBitmap, FormSegmentator *mFormSegmentator);
 
 private:
-	void drawDiagram(Diagram const &diagram, QColor const &color,
-		QPainter *painter);
 	void recognizeDiagram();
-	Ui::DiagramRecognizer *ui;
 	PathVector mDiagram;
 	Bitmap * mBitmap;
 	FormSegmentator *mFormSegmentator;
 	bool mRecognized;
-	bool mLeftButtonPressed;
 	QPoint mComponentPoint;
 	GesturesManager *mGesturesManager;
 	AbstractRecognizer *mAbstractRecognizer;
-
-private slots:
-	void clear();
-	void recognize();
-	void recognizeImage();
 };

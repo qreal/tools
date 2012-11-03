@@ -1,6 +1,6 @@
 #pragma once
 #include "geometricForms.h"
-#include "diagram.h"
+#include "component.h"
 #include "QImage"
 
 class Bitmap : public QList<QList<int> >
@@ -14,7 +14,7 @@ public:
 	int xRight() const;
 	int yUpper() const;
 	int yLower() const;
-	Diagram rasterizedDiagram() const;
+	Component rasterizedDiagram() const;
 
 private:
 	void rasterizeDiagram();
