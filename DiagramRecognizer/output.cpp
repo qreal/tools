@@ -1,4 +1,3 @@
-
 #include <QPainter>
 
 #include "output.h"
@@ -12,6 +11,11 @@ Output::Output(QWidget *parent)
 	mLeftButtonPressed = false;
 	mRecognized = false;
 }
+
+//void Output::showBitmap()
+//{
+//	addItem(*mBitmap);
+//}
 
 void Output::draw(PathVector RecognizedDiagram, Bitmap *newBitmap, FormSegmentator *newFormSegmentator)
 {

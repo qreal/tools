@@ -1,4 +1,6 @@
-#include "diagramRecognizer.h"
+#include "mainWindow.h"
+#include "ui_mainWindow.h"
+
 #include "bitmap.h"
 #include "formSegmentator.h"
 #include "simpleFormsInitializer.h"
@@ -13,31 +15,29 @@
 #include <QGridLayout>
 #include <QPushButton>
 
-DiagramRecognizer::DiagramRecognizer(QWidget *parent) :
-	QWidget(parent)
+mainWindow::mainWindow(QWidget *parent) :
+	QMainWindow(parent),
+	ui(new Ui::mainWindow)
 {
-	QPushButton *clearButton = new QPushButton(tr("Clear"));
-	clearButton->setFont(QFont("Times", 18, QFont::Bold));
-	QPushButton *recognizeButton = new QPushButton(tr("Recognize"));
-	recognizeButton->setFont(QFont("Times", 18, QFont::Bold));
-	QPushButton *recognizeImageButton = new QPushButton(tr("Recognize Image"));
-	recognizeImageButton->setFont(QFont("Times", 18, QFont::Bold));
+	ui->setupUi(this);
 
-	Output *PrintedDiagram = new Output;
+	printedDiagram = new Output;
+	scene = new QGraphicsScene;
+	scene->addWidget(printedDiagram);
+	ui->outputView->setScene(scene);
+	ui->outputView->setFrameStyle(0);
+	ui->outputView->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+	ui->outputView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	ui->outputView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	ui->stages->setCurrentIndex(4);
 
-	connect(clearButton, SIGNAL(clicked()), this, SLOT(clear()));
-	connect(recognizeButton, SIGNAL(clicked()), this, SLOT(recognize()));
-	connect(recognizeImageButton, SIGNAL(clicked()), this, SLOT(recognizeImage()));
+	connect(ui->exitButton, SIGNAL(clicked()), this, SLOT(close()));
+	connect(ui->clearButton, SIGNAL(clicked()), this, SLOT(clear()));
+	connect(ui->recButton, SIGNAL(clicked()), this, SLOT(recognize()));
+	connect(ui->recImButton, SIGNAL(clicked()), this, SLOT(recognizeImage()));
+	connect(ui->stages, SIGNAL(activated(0)), this, SLOT(showInput()));
 
-	connect(this, SIGNAL(print(PathVector, Bitmap *, FormSegmentator *)), PrintedDiagram, SLOT(draw(PathVector, Bitmap *, FormSegmentator *)));
-
-//	QGridLayout *gridLayout = new QGridLayout;
-//	gridLayout->addWidget(clearButton, 0, 0);
-//	gridLayout->addWidget(recognizeButton, 1, 0);
-//	gridLayout->addWidget(recognizeImageButton, 2, 0);
-//	gridLayout->addWidget(PrintedDiagram, 1, 1, 3, 1);
-//	gridLayout->setColumnStretch(1, 10);
-//	setLayout(gridLayout);
+	connect(this, SIGNAL(print(PathVector, Bitmap *, FormSegmentator *)), printedDiagram, SLOT(draw(PathVector, Bitmap *, FormSegmentator *)));
 
 	mRecognized = false;
 	mComponentPoint.setX(-1000);
@@ -45,9 +45,11 @@ DiagramRecognizer::DiagramRecognizer(QWidget *parent) :
 	mGesturesManager = new MixedGesturesManager();
 	mAbstractRecognizer = new AbstractRecognizer(mGesturesManager,
 												 SimpleFormsInitializer::initialForms());
+
+	this->showFullScreen();
 }
 
-void DiagramRecognizer::clear()//чистит все
+void mainWindow::clear()
 {
 	mDiagram.clear();
 	mRecognized = false;
@@ -56,7 +58,7 @@ void DiagramRecognizer::clear()//чистит все
 	emit print(mDiagram, mBitmap, mFormSegmentator);
 }
 
-void DiagramRecognizer::recognizeImage()
+void mainWindow::recognizeImage()
 {
 	QString fileName = QFileDialog::QFileDialog::getOpenFileName(this,
 																 tr("Recognize image"), ".",
@@ -66,13 +68,13 @@ void DiagramRecognizer::recognizeImage()
 
 }
 
-void DiagramRecognizer::recognize()
+void mainWindow::recognize()
 {
 	mBitmap = new Bitmap(mDiagram);
 	recognizeDiagram();
 }
 
-void DiagramRecognizer::recognizeDiagram()
+void mainWindow::recognizeDiagram()
 {
 	//mRecognized = true;
 	mFormSegmentator = new FormSegmentator(mBitmap);
@@ -90,3 +92,13 @@ void DiagramRecognizer::recognizeDiagram()
 	emit print(mDiagram, mBitmap, mFormSegmentator);
 }
 
+
+void mainWindow::showInput()
+{
+	ui->
+}
+
+mainWindow::~mainWindow()
+{
+	delete ui;
+}

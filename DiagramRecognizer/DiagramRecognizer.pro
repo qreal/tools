@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     simpleFormsInitializer.cpp \
     recognizers/mixedGesturesManager.cpp \
     recognizers/nearestPosGridGesturesManager.cpp \
-    recognizers/rectangleGesturesManager.cpp
+    recognizers/rectangleGesturesManager.cpp \
+    mainWindow.cpp
 
 HEADERS  += \
     geometricForms.h \
@@ -35,9 +36,11 @@ HEADERS  += \
     simpleFormsInitializer.h \
     recognizers/mixedGesturesManager.h \
     recognizers/nearestPosGridGesturesmanager.h \
-    recognizers/rectangleGesturesManager.h
+    recognizers/rectangleGesturesManager.h \
+    mainWindow.h
 
-FORMS    +=
+FORMS    += \
+    mainWindow.ui
 
 OTHER_FILES += \
     readme.txt \

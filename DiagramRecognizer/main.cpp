@@ -1,12 +1,11 @@
 #include <QtGui/QApplication>
-#include "diagramrecognizer.h"
+#include "mainWindow.h"
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    DiagramRecognizer widget;
-    widget.setGeometry(100, 100, 500, 355);
-    widget.show();
+	QApplication a(argc, argv);
+	mainWindow w;
+	w.show();
 
-    return a.exec();
+	return a.exec();
 }
