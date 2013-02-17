@@ -14,7 +14,6 @@ SOURCES += main.cpp\
     bitmap.cpp \
     output.cpp \
     component.cpp \
-    diagramRecognizer.cpp \
     formSegmentator.cpp \
     simpleFormsInitializer.cpp \
     recognizers/mixedGesturesManager.cpp \
@@ -31,7 +30,6 @@ HEADERS  += \
     component.h \
     figure.h \
     edge.h \
-    diagramRecognizer.h \
     formSegmentator.h \
     simpleFormsInitializer.h \
     recognizers/mixedGesturesManager.h \
