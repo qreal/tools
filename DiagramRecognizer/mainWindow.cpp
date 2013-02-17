@@ -36,7 +36,7 @@ mainWindow::mainWindow(QWidget *parent) :
 	connect(ui->recImButton, SIGNAL(clicked()), this, SLOT(recognizeImage()));
 	connect(ui->stages, SIGNAL(activated(int)), this, SLOT(showStage(int)));
 
-	connect(this, SIGNAL(print(PathVector, Bitmap *, FormSegmentator *)), printedDiagram, SLOT(draw(PathVector, Bitmap *, FormSegmentator *)));
+	connect(this, SIGNAL(print(PathVector, Bitmap *, FormSegmentator *, int)), printedDiagram, SLOT(draw(PathVector, Bitmap *, FormSegmentator *, int)));
 
 	mRecognized = false;
 	mComponentPoint.setX(-1000);
@@ -50,11 +50,11 @@ mainWindow::mainWindow(QWidget *parent) :
 
 void mainWindow::clear()
 {
-	mDiagram.clear();
+	clearScene();
 	mRecognized = false;
 	mComponentPoint.setX(-10000);
 	mComponentPoint.setY(-10000);
-	emit print(mDiagram, mBitmap, mFormSegmentator);
+	emit print(mDiagram, mBitmap, mFormSegmentator, 4);
 }
 
 void mainWindow::recognizeImage()
@@ -91,7 +91,7 @@ void mainWindow::recognizeDiagram()
 	foreach (Component const &edge, mFormSegmentator->getEdges()) {
 		mDiagram.append(edge.figure(mBitmap->xLeft(), mBitmap->yUpper()));
 	}
-	emit print(mDiagram, mBitmap, mFormSegmentator);
+	emit print(mDiagram, mBitmap, mFormSegmentator, 4);
 
 	scene->addItem(inputImage);
 	scene->addWidget(printedDiagram);
@@ -109,14 +109,11 @@ void mainWindow::showStage(int index)
 	case 1:
 		showBitmap();
 		break;
-//	case 2:
-//		b=10;
-//		break;
-//	case 3:
-//		b=11;
-//		break;
-	case 4:
-		showRecStage();
+	case 2:
+		showComponents();
+		break;
+	case 3:
+		showUniStage();
 		break;
 	}
 
@@ -126,33 +123,27 @@ void mainWindow::showInput()
 {
 	clearScene();
 	inputImage->setVisible(true);
-	emit print(mDiagram, mBitmap, mFormSegmentator);
 }
 
-void mainWindow::showRecStage()
+void mainWindow::showUniStage()
 {
 	clearScene();
+	emit print(mDiagram, mBitmap, mFormSegmentator, 4);
 	printedDiagram->setVisible(true);
 }
 
 void mainWindow::showBitmap()
-{/*
-	scene->clear();
-	//scene->addWidget(printedDiagram);
-	//emit clear();
-	QPainter painter(ui->outputView);
-	painter.begin(ui->outputView);
-	painter.isActive()
-	QPen pen(QColor(100,100,100));
-	pen.setWidth(1);
-	painter.setPen(QColor(100,100,100));
-	painter.setBrush(QColor(100,100,100));
-	for(int i = 0; i<10; i++)
-		for(int j = 0; j<5; j++)
-		{
-			painter.drawPoint(i,j);
-		}*/
+{
+	clearScene();
+	emit print(mDiagram, mBitmap, mFormSegmentator, 2);
+	printedDiagram->setVisible(true);
+}
 
+void mainWindow::showComponents()
+{
+	clearScene();
+	emit print(mDiagram, mBitmap, mFormSegmentator, 3);
+	printedDiagram->setVisible(true);
 }
 
 void mainWindow::clearScene()

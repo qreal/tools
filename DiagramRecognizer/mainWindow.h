@@ -26,14 +26,16 @@ public slots:
 	void recognizeImage();
 	void showStage(int);
 signals:
-	void print(PathVector mDiagram, Bitmap * mBitmap, FormSegmentator *mFormSegmentator);
+	void print(PathVector mDiagram, Bitmap * mBitmap, FormSegmentator *mFormSegmentator, int stageNum);
 
 private:
 	void showInput();
-	void showRecStage();
+	void showUniStage();
 	void showBitmap();
+	void showComponents();
 	void clearScene();
-	Output *printedDiagram;
+	QGraphicsPixmapItem *inputImage;
+	Output *printedDiagram, ;
 	Ui::mainWindow *ui;
 	void recognizeDiagram();
 	PathVector mDiagram;
@@ -44,5 +46,4 @@ private:
 	GesturesManager *mGesturesManager;
 	AbstractRecognizer *mAbstractRecognizer;
 	QGraphicsScene *scene;
-	QGraphicsPixmapItem *inputImage;
 };
