@@ -64,7 +64,6 @@ void mainWindow::recognizeImage()
 																 tr("Png files (*.png)"));
 	inputImage = new QGraphicsPixmapItem(QPixmap::fromImage(QImage(fileName)));
 	mBitmap = new Bitmap(QImage(fileName));
-	mBitmap2 = new Bitmap(QImage(fileName));
 	recognizeDiagram();
 
 }
@@ -72,7 +71,6 @@ void mainWindow::recognizeImage()
 void mainWindow::recognize()
 {
 	mBitmap = new Bitmap(mDiagram);
-	mBitmap2 = new Bitmap(mDiagram);
 	recognizeDiagram();
 }
 

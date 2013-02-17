@@ -35,11 +35,11 @@ private:
 	void showComponents();
 	void clearScene();
 	QGraphicsPixmapItem *inputImage;
-	Output *printedDiagram, ;
+	Output *printedDiagram;
 	Ui::mainWindow *ui;
 	void recognizeDiagram();
 	PathVector mDiagram;
-	Bitmap * mBitmap, * mBitmap2;
+	Bitmap * mBitmap;
 	FormSegmentator *mFormSegmentator;
 	bool mRecognized;
 	QPoint mComponentPoint;

@@ -12,11 +12,6 @@ Output::Output(QWidget *parent)
 	mRecognized = false;
 }
 
-//void Output::showBitmap()
-//{
-//	addItem(*mBitmap);
-//}
-
 void Output::draw(PathVector RecognizedDiagram, Bitmap *newBitmap, FormSegmentator *newFormSegmentator, int stageNum)
 {
 	mBitmap = newBitmap;
@@ -61,7 +56,7 @@ void Output::paintEvent(QPaintEvent *paintEvent)
 {
 	QPainter painter(this);
 	QTime time = QTime::currentTime();
-	qsrand((uint)time.msec()); //for showing components
+	qsrand((uint)time.msec()); //for random colours generation
 	foreach(PointVector const &scetch, mDiagram) {
 		for (int i = 1; i < scetch.size(); i ++) {
 			QPen pen(Qt::black);
@@ -87,7 +82,7 @@ void Output::paintEvent(QPaintEvent *paintEvent)
 			}
 		}
 	}
-	/*if (!mRecognized) {
+	if (!mRecognized) {
 		return;
 	}
 	int xLeft = mBitmap->xLeft();
@@ -113,12 +108,12 @@ void Output::paintEvent(QPaintEvent *paintEvent)
 	for (int j = 1 ; j < width / wStep; j++) {
 		painter.drawLine(xLeft + j * wStep, yUpper,
 						 xLeft + j * wStep, yUpper + height);
-	}*/
+	}
 }
 
 void Output::drawDiagram(const Component &component, const QColor &color, QPainter *painter)
 {
-	/*int xLeft = mBitmap->xLeft();
+	int xLeft = mBitmap->xLeft();
 	int yUpper = mBitmap->yUpper();
 	QPen pen(color);
 	pen.setWidth(4);
@@ -129,7 +124,7 @@ void Output::drawDiagram(const Component &component, const QColor &color, QPaint
 				   yUpper + pos.second * hStep,
 				   wStep, hStep);
 		painter->drawRect(rect);
-	}*/
+	}
 }
 
 int Output::randInt(int low, int high)
