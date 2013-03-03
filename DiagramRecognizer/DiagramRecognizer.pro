@@ -28,8 +28,6 @@ HEADERS  += \
     recognizers/curveKeyBuilder.h \
     output.h \
     component.h \
-    figure.h \
-    edge.h \
     diagramRecognizer.h \
     formSegmentator.h \
     simpleFormsInitializer.h \

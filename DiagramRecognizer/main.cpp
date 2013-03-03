@@ -1,5 +1,5 @@
 #include <QtGui/QApplication>
-#include "diagramrecognizer.h"
+#include "diagramRecognizer.h"
 
 int main(int argc, char *argv[])
 {
