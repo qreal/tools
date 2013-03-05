@@ -17,8 +17,14 @@ public:
 	bool hasSelfIntersection() const;
 	PathVector figure(int xMin, int yMin) const;
 	bool isNegligible() const;
+	bool getIsFixed() const;
+	bool setIsFixed(bool value);
+	static QList < Component *> *prioritetSort(QList < Component *> *comps);
+	static bool intersects(Component *comp1, Component *comp2);
+	static bool areClosed(Component *comp1, Component *comp2);
 
 private:
+	bool isFixed;
 	bool isNeighbours(SquarePos const & pos1, SquarePos const & pos2) const;
 	static int mNextID;
 	bool mHasSelfIntersection;

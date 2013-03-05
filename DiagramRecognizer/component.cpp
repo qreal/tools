@@ -155,3 +155,29 @@ bool Component::isNegligible() const
 	}
 	return true;
 }
+
+bool Component::intersects(Component *comp1, Component *comp2)
+{
+	Component::Iterator itr1, itr2;
+	for (itr1 = comp1->begin(); itr1 != comp1->end(); itr1++)
+	{
+		for (itr2 = comp2->begin(); itr2 != comp2->end(); itr2++)
+		{
+			if (*itr1 == *itr2)
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+bool Component::getIsFixed() const { return isFixed; }
+bool Component::setIsFixed(bool value) { isFixed = value; }
+bool Component::areClosed(Component *comp1, Component *comp2)
+{
+	return true;
+}
+QList < Component *> *Component::prioritetSort(QList < Component *> *comps)
+{
+	return new QList < Component *>();
+}
