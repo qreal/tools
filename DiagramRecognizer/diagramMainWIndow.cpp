@@ -1,4 +1,4 @@
-#include "mainWindow.h"
+#include "diagramMainWindow.h"
 #include "ui_mainWindow.h"
 
 #include "bitmap.h"

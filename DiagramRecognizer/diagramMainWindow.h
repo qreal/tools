@@ -2,7 +2,7 @@
 
 #include <QMainWindow>
 #include "bitmap.h"
-#include "formsegmentator.h"
+#include "formSegmentator.h"
 #include "abstractRecognizer.h"
 #include "output.h"
 #include <QGraphicsScene>

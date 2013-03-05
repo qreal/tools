@@ -19,7 +19,7 @@ SOURCES += main.cpp\
     recognizers/mixedGesturesManager.cpp \
     recognizers/nearestPosGridGesturesManager.cpp \
     recognizers/rectangleGesturesManager.cpp \
-    mainWindow.cpp
+    diagramMainWIndow.cpp
 
 HEADERS  += \
     geometricForms.h \
@@ -35,7 +35,7 @@ HEADERS  += \
     recognizers/mixedGesturesManager.h \
     recognizers/nearestPosGridGesturesmanager.h \
     recognizers/rectangleGesturesManager.h \
-    mainWindow.h
+    diagramMainWindow.h
 
 FORMS    += \
     mainWindow.ui
