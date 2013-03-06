@@ -125,7 +125,7 @@ private:
 
 class Figure
 {
-	QList< EItem *> *items;
+	//QList< EItem *> *items;
 
 };
 
@@ -186,7 +186,7 @@ public:
 	{
 		mComps->push_front(newComponent);
 	}
-	QList < Component *> *getComponents() { return mComps; }
+	QList < Component *> *getComponents() const { return mComps; }
 private:
 	QList < Component *> *mComps;
 };

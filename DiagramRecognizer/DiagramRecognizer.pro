@@ -20,7 +20,11 @@ SOURCES += main.cpp\
     recognizers/mixedGesturesManager.cpp \
     recognizers/nearestPosGridGesturesManager.cpp \
     recognizers/rectangleGesturesManager.cpp \
-    newfigure.cpp
+    newfigure.cpp \
+    eItems.cpp \
+    segmentator.cpp \
+    connectedComponent.cpp \
+    graph.cpp
 
 HEADERS  += \
     geometricForms.h \
@@ -34,7 +38,11 @@ HEADERS  += \
     simpleFormsInitializer.h \
     recognizers/mixedGesturesManager.h \
     recognizers/nearestPosGridGesturesmanager.h \
-    recognizers/rectangleGesturesManager.h
+    recognizers/rectangleGesturesManager.h \
+    eItems.h \
+    segmentator.h \
+    connectedComponent.h \
+    graph.h
 
 FORMS    +=
 
