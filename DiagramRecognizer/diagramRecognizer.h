@@ -3,7 +3,7 @@
 #include "formSegmentator.h"
 #include "abstractRecognizer.h"
 #include <QApplication>
-
+#include <field.h>
 
 class DiagramRecognizer : public QWidget
 {

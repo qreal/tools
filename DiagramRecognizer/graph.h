@@ -2,6 +2,9 @@
 #include <eItems.h>
 #include <connectedComponent.h>
 
+typedef std::map < Component *, QList < Component *> *> InterList;
+typedef std::map <std::pair< Component *, Component *>, bool> IMatrix;
+
 class Graph
 {
 public:

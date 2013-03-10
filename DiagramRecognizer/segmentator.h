@@ -1,5 +1,6 @@
 #pragma once;
-#include <eItems.h>
+#include <figure.h>
+#include <link.h>
 #include <graph.h>
 #include <connectedComponent.h>
 #include <set>
