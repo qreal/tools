@@ -42,13 +42,10 @@ Graph::Graph(QList < Component *> *comps)
 QList < CComponent *> *Graph::cSegmentation(QList < Component *> *comps)  //splits all components into connected components
 {
 	int len = comps->size();
-	std::vector<bool> marked(len);
+	std::vector<bool> marked;
+	marked.assign(len, false);
 	QList < CComponent *> *cSegments = new QList <CComponent *>();  //list of connected components
 	CComponent *cComp;  //current connected component
-	for (int i = 0; i < len; i++)
-	{
-		marked[i] = false;
-	}
 	for (int i = 0; i < len; i++)
 	{
 		if (!marked[i])
@@ -79,17 +76,20 @@ IMatrix *Graph::getMatrix() const { return mMatrix; }
 InterList *Graph::getInterList() const { return mInterList; }
 void Graph::initGraph(QList < Component *> *comps)
 {
-	mInterList = new std::map < Component *, QList < Component *> *>();
+	mInterList = new InterList();
 	//mMatrix = new std::map<pair< Component *, Component * >, bool>();
 	mMatrix = new IMatrix();
-	QList < Component *> *curList = new QList < Component *>();
 	for (QList < Component *>::iterator i = comps->begin(); i != comps->end(); i++)
 	{
+		QList < Component *> *curList = new QList < Component *>();
 		for (QList < Component *>::iterator itr = comps->begin(); itr != comps->end(); itr++)
 		{
 			if (Component::intersects(*i, *itr))
 			{
-				curList->push_front(*itr);
+				if (*itr != *i)
+				{
+					curList->push_front(*itr);
+				}
 				//std::pair p1 = std::pair<Component *, Component *>(*i, *itr);
 				mMatrix->insert(std::pair<std::pair<Component *, Component *>, bool>(std::pair<Component *, Component *>(*i, *itr), true));
 			}

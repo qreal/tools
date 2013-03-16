@@ -7,6 +7,7 @@
 class Component : public QList<SquarePos>
 {
 public:
+	int num;
 	Component();
 	void insertPos(SquarePos const & pos);
 	void analyze();

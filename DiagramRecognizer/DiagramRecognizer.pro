@@ -58,4 +58,5 @@ FORMS    +=
 
 OTHER_FILES += \
     readme.txt \
-    Conception.jpg
+    Conception.jpg \
+    test1.txt
