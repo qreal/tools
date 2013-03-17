@@ -15,6 +15,7 @@ public:
 	bool intersects(Component *comp1, Component *comp2) const;
 	IMatrix *getMatrix() const ;
 	InterList *getInterList() const;
+	QList < Component *> *getInterList(Component *component) const;
 
 private:
 	void initGraph(QList < Component *> *comps);

@@ -14,6 +14,8 @@ public:
 	Segmentator(QList < Component *> *components);
 	~Segmentator();
 	void makeSegmentation(QList < Figure *> *&figures, QList < Link *> *&links);
+	Graph *getGraph() const;
+	QList < Component *> *getComponents() const;
 	class ESegmentator
 	{
 	public:
@@ -50,8 +52,11 @@ public:
 	};
 
 private:
-	static QList < Component *> *getOuterShell(QList < Component *> *comps);
-	static QList < Component *> *getInnerShell(QList < Component *> *comps);
+	static int dist(Component *comp, SquarePos point);
+public:
+	static QList < Component *> *getOuterShell(QList < Component *> *comps, Graph *graph);
+private:
+	static QList < Component *> *getInnerShell(QList < Component *> *comps, Graph *graph);
 	QList < Component *> *mComps;  //list of all components
 	Graph *mGraph;
 };

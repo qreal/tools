@@ -42,7 +42,15 @@ int main(int argc, char *argv[])
 
 	Graph g(comps);
 	QList < CComponent *> *cComps = g.cSegmentation(comps);
-	Segmentator::ESegmentator *segm = new Segmentator::ESegmentator();
+	Segmentator s(comps);
+	SquarePos q = Component::center(comps);
+	cout << q.first << " " << q.second << endl;
+	Segmentator::getOuterShell(comps, s.getGraph());
+	//Segmentator::ESegmentator *segm = new Segmentator::ESegmentator(*(cComps->begin()));
+	//segm->eSegmentation();
+
+	//Segmentator::ESegmentator *segm = new Segmentator::ESegmentator();
+	//cout << cComps->size() << endl;
 	int x = 0;
 	int y = 10;
 	y = x + y;

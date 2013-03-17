@@ -27,11 +27,76 @@ void Segmentator::makeSegmentation(QList < Figure *> *&figures, QList < Link *> 
 	delete eSegmentator;
 	delete aSegmentator;
 }
-QList < Component *> *Segmentator::getOuterShell(QList < Component *> *comps)  //comps are connected
+QList < Component *> *Segmentator::getComponents() const
 {
-	/*  here follows some actions  */
+	return mComps;
 }
-QList < Component *> *Segmentator::getInnerShell(QList < Component *> *comps)  //comps are connected
+Graph *Segmentator::getGraph() const
+{
+	return mGraph;
+}
+int Segmentator::dist(Component *comp, SquarePos point)
+{
+	int sum = 0;
+	int dx, dy;
+	for (Component::const_iterator i = comp->begin(); i != comp->end(); i++)
+	{
+		dx = (*i).first - point.first;
+		dy = (*i).second - point.second;
+		sum += dx*dx + dy*dy;
+	}
+	return sum;
+}
+
+QList < Component *> *Segmentator::getOuterShell(QList < Component *> *comps, Graph *graph)  //comps are connected
+{
+	std::set<Component *> *set1 = new std::set < Component *>();
+	//std::set<Component *> *set2 = new std::set < Component *>();
+	for (QList < Component *>::const_iterator i = comps->begin(); i != comps->end(); i++)
+	{
+		set1->insert(*i);
+	}
+	QList < Component *> *res = new QList < Component *>();
+	int maxDist = -1;
+	int curDist;
+	SquarePos center = Component::center(comps);
+	QList < Component *> *curList;
+	QList < Component *>::iterator resItr = res->begin();
+
+	QList < Component *>::const_iterator beg = Component::getOuterComponent(comps);
+	QList < Component *>::const_iterator itr = beg;
+	res->push_front(*itr);
+	set1->erase(*itr);
+	while (true)
+	{
+		maxDist = -1;
+		curList = graph->getInterList(*itr);
+		for (QList < Component *>::const_iterator i = curList->begin(); i != curList->end(); i++)
+		{
+			if (set1->find(*i) != set1->end())
+			{
+				curDist = Segmentator::dist(*i, center);
+				if (curDist > maxDist)
+				{
+					maxDist = curDist;
+					itr = i;
+				}
+			}
+		}
+		if (maxDist == -1)
+		{
+			res->push_front(*resItr);
+			resItr--;
+		}
+		res->push_front(*itr);
+		resItr++;
+		set1->erase(*itr);
+		if (*beg == *itr) { break; }
+	}
+	res->erase(res->begin());
+	return res;
+}
+QList < Component *> *Segmentator::getInnerShell(QList < Component *> *comps, Graph *graph)  //comps are connected
 {
 	/*  here follows some actions  */
 }
@@ -125,7 +190,7 @@ void Segmentator::ESegmentator::segmentateSections(EFigure *figure, QList < Comp
 	QList < Component *> *shell = new QList < Component *>(*(figure->getShell()));
 	while (allComps->size() != 0)
 	{
-		QList < Component *> *inner = Segmentator::getInnerShell(allComps);
+		QList < Component *> *inner = Segmentator::getInnerShell(allComps, mGraph);
 		figure->addSection(inner);
 		for (QList < Component *>::iterator itr = inner->begin(); itr != inner->end(); itr++)
 		{
@@ -166,7 +231,7 @@ bool Segmentator::ESegmentator::makeESegmentation(CComponent *cComp)
 	CComponent *copyComp = new CComponent(*cComp);
 	CComponent *shell;
 	std::set < Component *> *links = new std::set < Component *>();
-	shell = new CComponent(Segmentator::getOuterShell(cComp->getComponents()));
+	shell = new CComponent(Segmentator::getOuterShell(cComp->getComponents(), mGraph));
 	shell = filter(shell);
 	int type = Recognizer::getType(shell->getComponents());  //trying to recognise figure
 	if (type!=0)  //some elementary figure was recognized

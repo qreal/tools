@@ -177,6 +177,78 @@ bool Component::areClosed(Component *comp1, Component *comp2)
 {
 	return true;
 }
+SquarePos Component::center() const
+{
+	SquarePos res(0, 0);
+	int x = 0;
+	int y = 0;
+	int len = 0;
+	for (Component::const_iterator i = this->begin(); i != this->end(); i++)
+	{
+		x += (*i).first;
+		y += (*i).second;
+		len++;
+	}
+	res.first= x / len;
+	res.second = y / len;
+	return res;
+}
+SquarePos Component::center(QList < Component *> *comps)
+{
+	SquarePos res(0, 0);
+	int x = 0;
+	int y = 0;
+	int len = 0;
+	for (QList < Component *>::const_iterator itr = comps->begin(); itr != comps->end(); itr++)
+	{
+		for (Component::const_iterator i = (*itr)->begin(); i != (*itr)->end(); i++)
+		{
+			x += (*i).first;
+			y += (*i).second;
+			len++;
+		}
+	}
+	res.first= x / len;
+	res.second = y / len;
+	return res;
+}
+
+QList < Component *>::iterator Component::getOuterComponent(QList < Component *> *comps)
+{
+	Component *cur;
+	int minX, minY;
+	int globMinX, globMinY;
+	QList < Component *>::iterator res;
+	globMinX = (*((*(comps->begin()))->begin())).first;
+	globMinY = (*((*(comps->begin()))->begin())).second;
+	for (QList < Component *>::iterator i = comps->begin(); i != comps->end(); i++)
+	{
+		cur = *i;
+		minX = (*(cur->begin())).first;
+		minY = (*(cur->begin())).second;
+		for (Component::const_iterator itr = cur->begin(); itr != cur->end(); itr++)
+		{
+			minX = (minX < (*itr).first) ? minX : (*itr).first;
+			minY = (minY < (*itr).second) ? minY : (*itr).second;
+		}
+		if (minX < globMinX)
+		{
+			globMinX = minX;
+			globMinY = minY;
+			res = i;
+		}
+		else
+		{
+			if (minY < globMinY)
+			{
+				globMinX = minX;
+				globMinY = minY;
+				res = i;
+			}
+		}
+	}
+	return res;
+}
 QList < Component *> *Component::prioritetSort(QList < Component *> *comps)
 {
 	return new QList < Component *>();
