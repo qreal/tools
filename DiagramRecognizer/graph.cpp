@@ -1,6 +1,8 @@
 #pragma once;
 #include <graph.h>
 #include <vector>
+#include <stack>
+#include <set>
 
 Graph::Graph()
 {
@@ -39,41 +41,57 @@ Graph::Graph(QList < Component *> *comps)
 	delete s;
 	return res;
 }*/
+
 QList < CComponent *> *Graph::cSegmentation(QList < Component *> *comps)  //splits all components into connected components
 {
-	int len = comps->size();
-	std::vector<bool> marked;
-	marked.assign(len, false);
-	QList < CComponent *> *cSegments = new QList <CComponent *>();  //list of connected components
-	CComponent *cComp;  //current connected component
-	for (int i = 0; i < len; i++)
+	std::set<Component *> *setComps = new std::set<Component *>();
+	for (QList < Component *>::iterator itr = comps->begin(); itr != comps->end(); itr++)
 	{
-		if (!marked[i])
+		setComps->insert(*itr);
+	}
+	QList < CComponent *> *cComps = new QList < CComponent *>();
+	QList < Component *> *curCComp;
+	QList < Component *> *curList;
+	std::stack<Component *> st;
+	while (!setComps->empty())
+	{
+		st.push(*(setComps->begin()));
+		setComps->erase(setComps->begin());
+		curCComp = new QList < Component *>();
+		while (!st.empty())
 		{
-			cComp = new CComponent();
-			for (int j = i; j < len; j++)
+			Component *top = st.top();
+			curList = getInterList(top);
+			for (QList < Component *>::iterator itr = curList->begin(); itr != curList->end(); itr++)
 			{
-				if (!marked[j])
+				std::set<Component *>::iterator element = setComps->find(*itr);
+				if (element != setComps->end())
 				{
-					if (intersects(comps->at(i), comps->at(j)))
-					{
-						marked[j] = true;
-						cComp->addComponent(comps->at(j));  //change: was mComps->at(j)
-					}
+					st.push(*element);
+					setComps->erase(element);
 				}
 			}
-			cSegments->push_back(cComp);  //adds current connected component to the std::set
+			if (top == st.top())
+			{
+				curCComp->push_front(st.top());
+				st.pop();
+			}
 		}
-		marked[i] = true;
+		cComps->push_front(new CComponent(curCComp));
 	}
-	return cSegments;
+	return cComps;
 }
+
 bool Graph::intersects(Component *comp1, Component *comp2) const
 {
 	return mMatrix->at(std::pair<Component *, Component *>(comp1, comp2));
 }
 IMatrix *Graph::getMatrix() const { return mMatrix; }
 InterList *Graph::getInterList() const { return mInterList; }
+QList < Component *> *Graph::getInterList(Component *component) const
+{
+	return mInterList->at(component);
+}
 void Graph::initGraph(QList < Component *> *comps)
 {
 	mInterList = new InterList();
