@@ -16,6 +16,7 @@ public:
 	IMatrix *getMatrix() const ;
 	InterList *getInterList() const;
 	QList < Component *> *getInterList(Component *component) const;
+	SquarePos intersectsAt(Component *comp1, Component *comp2) const;
 
 private:
 	void initGraph(QList < Component *> *comps);

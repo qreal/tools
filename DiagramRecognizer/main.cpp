@@ -12,7 +12,7 @@ class Read
 public:
 	static void readFile(QList < Component *> *comps)
 	{
-		FILE *f = fopen("test1.txt", "r");
+		FILE *f = fopen("test2.txt", "r");
 		if (f == 0) { return; }
 		int num, n;
 		while (true)
@@ -39,13 +39,22 @@ int main(int argc, char *argv[])
 	//widget.show();
 	QList < Component *> *comps = new QList < Component *>();
 	Read::readFile(comps);
+	QList < Component *>::iterator i = comps->begin();
+	/*i++; i++; i++; i++; i++;
+	comps->erase(i);
+	i++; i++;
+	comps->erase(i);*/
 
 	Graph g(comps);
 	QList < CComponent *> *cComps = g.cSegmentation(comps);
 	Segmentator s(comps);
 	SquarePos q = Component::center(comps);
 	cout << q.first << " " << q.second << endl;
-	Segmentator::getOuterShell(comps, s.getGraph());
+	QList < Component *> *shell = Segmentator::getOuterShell(cComps->first()->getComponents(), s.getGraph());
+	for (QList < Component *>::const_iterator i = shell->begin(); i != shell->end(); i++)
+	{
+		cout << (*i)->num << " ";
+	}
 	//Segmentator::ESegmentator *segm = new Segmentator::ESegmentator(*(cComps->begin()));
 	//segm->eSegmentation();
 

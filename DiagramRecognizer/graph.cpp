@@ -92,6 +92,14 @@ QList < Component *> *Graph::getInterList(Component *component) const
 {
 	return mInterList->at(component);
 }
+SquarePos Graph::intersectsAt(Component *comp1, Component *comp2) const
+{
+	if (!intersects(comp1, comp2)) { return SquarePos(-1, -1); }
+	if (comp1->first() == comp2->first()) { return comp1->first(); }
+	if (comp1->first() == comp2->last()) { return comp1->first(); }
+	if (comp1->last() == comp2->first()) { return comp1->last(); }
+	if (comp1->last() == comp2->last()) { return comp1->last(); }
+}
 void Graph::initGraph(QList < Component *> *comps)
 {
 	mInterList = new InterList();

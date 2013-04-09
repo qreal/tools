@@ -51,7 +51,7 @@ int Segmentator::dist(Component *comp, SquarePos point)
 QList < Component *> *Segmentator::getOuterShell(QList < Component *> *comps, Graph *graph)  //comps are connected
 {
 	std::set<Component *> *set1 = new std::set < Component *>();
-	//std::set<Component *> *set2 = new std::set < Component *>();
+	std::set<Component *> *set2 = new std::set < Component *>();
 	for (QList < Component *>::const_iterator i = comps->begin(); i != comps->end(); i++)
 	{
 		set1->insert(*i);
@@ -65,8 +65,38 @@ QList < Component *> *Segmentator::getOuterShell(QList < Component *> *comps, Gr
 
 	QList < Component *>::const_iterator beg = Component::getOuterComponent(comps);
 	QList < Component *>::const_iterator itr = beg;
+	SquarePos s1 = (*itr)->first();
+	SquarePos s2 = (*itr)->last();
 	res->push_front(*itr);
 	set1->erase(*itr);
+	maxDist = -1;
+	curList = graph->getInterList(*itr);
+	for (QList < Component *>::const_iterator i = curList->begin(); i != curList->end(); i++)
+	{
+		if (set1->find(*i) != set1->end())  //if found
+		{
+			curDist = Segmentator::dist(*i, center);
+			if (curDist > maxDist)
+			{
+				maxDist = curDist;
+				itr = i;
+			}
+		}
+	}
+	if (maxDist == -1)
+	{
+		return res;
+	}
+	res->push_front(*itr);
+	set2->insert(*itr);
+	resItr++;
+	set1->erase(*itr);
+	SquarePos tmp1 = (*itr)->first();
+	SquarePos tmp2 = (*itr)->last();
+	if ((s1 == tmp1) || (s1 == tmp2))
+	{
+		s1 = s2;
+	}
 	while (true)
 	{
 		maxDist = -1;
@@ -85,15 +115,32 @@ QList < Component *> *Segmentator::getOuterShell(QList < Component *> *comps, Gr
 		}
 		if (maxDist == -1)
 		{
-			res->push_front(*resItr);
-			resItr--;
+			for (QList < Component *>::const_iterator i = curList->begin(); i != curList->end(); i++)
+			{
+				if (set2->find(*i) != set2->end())
+				{
+					curDist = Segmentator::dist(*i, center);
+					if (curDist > maxDist)
+					{
+						maxDist = curDist;
+						itr = i;
+					}
+				}
+			}
 		}
 		res->push_front(*itr);
+		set2->insert(*itr);
 		resItr++;
 		set1->erase(*itr);
-		if (*beg == *itr) { break; }
+		SquarePos d1 = (*itr)->first();
+		SquarePos d2 = (*itr)->last();
+		if ((d1 == s1) || (d2 == s1))
+		{
+			break;
+		}
+		if (*beg == *itr) { break; }  //not needed; better delete
 	}
-	res->erase(res->begin());
+	//res->erase(res->begin());
 	return res;
 }
 QList < Component *> *Segmentator::getInnerShell(QList < Component *> *comps, Graph *graph)  //comps are connected
