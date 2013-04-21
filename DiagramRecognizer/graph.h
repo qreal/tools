@@ -1,9 +1,12 @@
 #pragma once;
 #include <eItems.h>
 #include <connectedComponent.h>
+#include <set>
+#include <geometricForms.h>
 
 typedef std::map < Component *, QList < Component *> *> InterList;
 typedef std::map <std::pair< Component *, Component *>, bool> IMatrix;
+typedef std::map <SquarePos, std::set < Component * > *> IList;
 
 class Graph
 {
@@ -16,10 +19,15 @@ public:
 	IMatrix *getMatrix() const ;
 	InterList *getInterList() const;
 	QList < Component *> *getInterList(Component *component) const;
+	std::set < Component * > *getIList(SquarePos const & node) const;
 	SquarePos intersectsAt(Component *comp1, Component *comp2) const;
+
 
 private:
 	void initGraph(QList < Component *> *comps);
 	IMatrix *mMatrix;
 	InterList *mInterList;
+	IList *mIList;
+	std::set<SquarePos> *mNodes;
+
 };

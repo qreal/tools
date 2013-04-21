@@ -54,8 +54,9 @@ public:
 private:
 	static int dist(Component *comp, SquarePos point);
 public:
-	static QList < Component *> *getOuterShell(QList < Component *> *comps, Graph *graph);
+	static QList < Component *> *getOuterShell(QList < Component *> *comps, Graph graph);
 private:
+	void buildCycle(Graph & graph, std::set < SquarePos > & finalNodes);
 	static QList < Component *> *getInnerShell(QList < Component *> *comps, Graph *graph);
 	QList < Component *> *mComps;  //list of all components
 	Graph *mGraph;

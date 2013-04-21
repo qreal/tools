@@ -1,5 +1,6 @@
 #pragma once;
 #include <segmentator.h>
+#include <stack>
 
 Segmentator::Segmentator()
 {
@@ -48,7 +49,7 @@ int Segmentator::dist(Component *comp, SquarePos point)
 	return sum;
 }
 
-QList < Component *> *Segmentator::getOuterShell(QList < Component *> *comps, Graph *graph)  //comps are connected
+/*QList < Component *> *Segmentator::getOuterShell(QList < Component *> *comps, Graph *graph)  //comps are connected
 {
 	std::set<Component *> *set1 = new std::set < Component *>();
 	std::set<Component *> *set2 = new std::set < Component *>();
@@ -142,7 +143,65 @@ QList < Component *> *Segmentator::getOuterShell(QList < Component *> *comps, Gr
 	}
 	//res->erase(res->begin());
 	return res;
+}*/
+
+QList < Component *> *Segmentator::getOuterShell(QList < Component *> *comps, Graph graph)  //comps are connected
+{
+	std::set < SquarePos > finalNodes;
+	std::set < SquarePos > finalEdges;
+	finalNodes.insert(*(*(comps->begin()))->begin());  //added any point (node)
+
+
 }
+void Segmentator::buildCycle(Graph & graph, std::set < SquarePos > & finalNodes)
+{
+	std::stack<SquarePos> s;
+	QList <Component *> *curEdges = new QList <Component *>();
+	QList < SquarePos > *curNodes = new QList < SquarePos >();
+	std::set<Component *> *markedEdges = new std::set<Component *>();
+	//adding element to stack s
+	for (std::set < SquarePos >::iterator i = finalNodes.begin(); i != finalNodes.end(); i++)
+	{
+		if (!((graph.getIList(*i))->empty()))
+		{
+			s.push(*i);
+			break;
+		}
+	}
+	//at this moment stack s is not empty
+	bool wereIn = false;
+	bool finishWhile = false;
+	while (!s.empty())
+	{
+		std::set<Component *> *edges = graph.getIList(s.top());
+		for (std::set<Component *>::iterator i = edges->begin(); i != edges->end(); i++)
+		{
+			if (wereIn) { break; }
+			if (markedEdges->find(*i) != markedEdges->end()) { continue; }
+			wereIn = true;
+			SquarePos anotherSide = (*i)->getAnotherSide(s.top());
+			std::set<SquarePos>::iterator itr = finalNodes.find(anotherSide);
+			if (!(itr == finalNodes.end()))
+			{
+				curEdges->push_front(*i);
+				finishWhile = true;
+				break;
+			}
+			s.push(anotherSide);
+			curEdges->push_front(*i);
+			curNodes->push_front(anotherSide);
+			markedEdges->insert(*i);
+		}
+		if (finishWhile) { break; }
+		if (!wereIn)
+		{
+			curEdges->push_front(*(curEdges->begin()));
+			curNodes->push_front(s.top());
+			s.pop();
+		}
+	}
+}
+
 QList < Component *> *Segmentator::getInnerShell(QList < Component *> *comps, Graph *graph)  //comps are connected
 {
 	/*  here follows some actions  */

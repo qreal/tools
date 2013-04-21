@@ -35,6 +35,11 @@ public:
 		return std::max(abs(first - pos.first), abs(second - pos.second));
 	}
 
+	int length() const
+	{
+		return first*first + second*second;
+	}
+
 	int distP1(SquarePos const & pos) const
 	{
 		return abs(first - pos.first) + abs(second - pos.second);
@@ -43,6 +48,16 @@ public:
 	bool operator == (SquarePos const & pos) const
 	{
 		return pos.first == first && pos.second == second;
+	}
+
+	bool operator < (SquarePos const & pos) const
+	{
+		return this->length() < pos.length();
+	}
+
+	bool operator > (SquarePos const & pos) const
+	{
+		return this->length() > pos.length();
 	}
 };
 

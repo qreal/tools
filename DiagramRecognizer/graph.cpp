@@ -92,6 +92,10 @@ QList < Component *> *Graph::getInterList(Component *component) const
 {
 	return mInterList->at(component);
 }
+std::set < Component * > *Graph::getIList(SquarePos const & node) const
+{
+	return mIList->at(node);
+}
 SquarePos Graph::intersectsAt(Component *comp1, Component *comp2) const
 {
 	if (!intersects(comp1, comp2)) { return SquarePos(-1, -1); }
@@ -105,16 +109,20 @@ void Graph::initGraph(QList < Component *> *comps)
 	mInterList = new InterList();
 	//mMatrix = new std::map<pair< Component *, Component * >, bool>();
 	mMatrix = new IMatrix();
+	std::set < SquarePos > *nodes = new std::set < SquarePos >();
 	for (QList < Component *>::iterator i = comps->begin(); i != comps->end(); i++)
 	{
 		QList < Component *> *curList = new QList < Component *>();
 		for (QList < Component *>::iterator itr = comps->begin(); itr != comps->end(); itr++)
 		{
-			if (Component::intersects(*i, *itr))
+			SquarePos point = Component::intersectsAt(*i, *itr);
+			//if (Component::intersects(*i, *itr))
+			if (!(point == SquarePos(-1, -1)))
 			{
 				if (*itr != *i)
 				{
 					curList->push_front(*itr);
+					nodes->insert(point);
 				}
 				//std::pair p1 = std::pair<Component *, Component *>(*i, *itr);
 				mMatrix->insert(std::pair<std::pair<Component *, Component *>, bool>(std::pair<Component *, Component *>(*i, *itr), true));
@@ -125,5 +133,20 @@ void Graph::initGraph(QList < Component *> *comps)
 			}
 		}
 		mInterList->insert(std::pair<Component *, QList < Component *> *>(*i, curList));
+	}
+	mNodes = nodes;
+	for (std::set<SquarePos>::iterator curNode = nodes->begin(); curNode != nodes->end(); curNode++)
+	{
+		std::set<Component *> *newList = new std::set<Component *>();
+		for (QList<Component *>::const_iterator i = comps->begin(); i != comps->end(); i++)
+		{
+			Component::const_iterator begin = (*i)->begin();
+			Component::const_iterator end = (*i)->end();
+			if ((*begin == *curNode) || (*end == *curNode))
+			{
+				newList->insert(*i);
+			}
+		}
+		mIList->insert(std::pair<SquarePos, std::set<Component *> * >(*curNode, newList));
 	}
 }

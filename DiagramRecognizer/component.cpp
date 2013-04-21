@@ -171,6 +171,20 @@ bool Component::intersects(Component *comp1, Component *comp2)
 	}
 	return false;
 }
+SquarePos Component::intersectsAt(Component *comp1, Component *comp2)
+{
+	for (Component::Iterator i = comp1->begin(); i != comp1->end(); i++)
+	{
+		for (Component::Iterator itr = comp2->begin(); itr != comp2->end(); itr++)
+		{
+			if (*i == *itr)
+			{
+				return *i;
+			}
+		}
+	}
+	return SquarePos(-1, -1);  //such point does't exist
+}
 bool Component::getIsFixed() const { return isFixed; }
 bool Component::setIsFixed(bool value) { isFixed = value; }
 bool Component::areClosed(Component *comp1, Component *comp2)
@@ -192,6 +206,14 @@ SquarePos Component::center() const
 	res.first= x / len;
 	res.second = y / len;
 	return res;
+}
+SquarePos Component::getAnotherSide(SquarePos const & point) const
+{
+	SquarePos begin = *(this->begin());
+	SquarePos end = (*this->end());
+	if (begin == point) { return end; }
+	else if (end == point) { return begin; }
+	else { return SquarePos(-1, -1); }
 }
 SquarePos Component::center(QList < Component *> *comps)
 {
