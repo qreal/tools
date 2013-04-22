@@ -42,7 +42,7 @@ HEADERS  += \
     formSegmentator.h \
     simpleFormsInitializer.h \
     recognizers/mixedGesturesManager.h \
-    recognizers/nearestPosGridGesturesmanager.h \
+	recognizers/nearestPosGridGesturesManager.h \
     recognizers/rectangleGesturesManager.h \
     segmentator.h \
     connectedComponent.h \
