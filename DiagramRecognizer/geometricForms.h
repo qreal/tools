@@ -27,6 +27,12 @@ public:
 		second = y;
 	}
 
+	SquarePos(SquarePos const & pos)
+	{
+		first = pos.first;
+		second = pos.second;
+	}
+
 	int first;
 	int second;
 

@@ -337,7 +337,8 @@ bool Segmentator::ESegmentator::makeESegmentation(CComponent *cComp)
 	CComponent *copyComp = new CComponent(*cComp);
 	CComponent *shell;
 	std::set < Component *> *links = new std::set < Component *>();
-	shell = new CComponent(Segmentator::getOuterShell(cComp->getComponents(), mGraph));
+	//the followin line MUST NOT BE COMMENTED
+	//shell = new CComponent(Segmentator::getOuterShell(cComp->getComponents(), mGraph));
 	shell = filter(shell);
 	int type = Recognizer::getType(shell->getComponents());  //trying to recognise figure
 	if (type!=0)  //some elementary figure was recognized

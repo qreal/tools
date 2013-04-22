@@ -11,6 +11,8 @@ public:
 	QList < Figure *> *getFigures() const;
 	QList < Link *> *getLinks() const;
 	QList < Component *> *getComponents() const;
+	static bool pointInContur(SquarePos & point, QList < Component *> *comps);
+	static bool compInContur(Component *comp, QList < Component *> *comps);
 
 private:
 	QList < Figure *> *mFigures;

@@ -45,21 +45,23 @@ int main(int argc, char *argv[])
 	i++; i++;
 	comps->erase(i);*/
 
-	Graph g(comps);
-	QList < CComponent *> *cComps = g.cSegmentation(comps);
-	Segmentator s(comps);
-	SquarePos q = Component::center(comps);
-	cout << q.first << " " << q.second << endl;
-	QList < Component *> *shell = Segmentator::getOuterShell(cComps->first()->getComponents(), s.getGraph());
-	for (QList < Component *>::const_iterator i = shell->begin(); i != shell->end(); i++)
-	{
-		cout << (*i)->num << " ";
-	}
+	//Graph g(comps);
+	//QList < CComponent *> *cComps = g.cSegmentation(comps);
+	//Segmentator s(comps);
+	//SquarePos q = Component::center(comps);
+	//cout << q.first << " " << q.second << endl;
+	//QList < Component *> *shell = Segmentator::getOuterShell(cComps->first()->getComponents(), s.getGraph());
+	//for (QList < Component *>::const_iterator i = shell->begin(); i != shell->end(); i++)
+	//{
+	//	cout << (*i)->num << " ";
+	//}
 	//Segmentator::ESegmentator *segm = new Segmentator::ESegmentator(*(cComps->begin()));
 	//segm->eSegmentation();
 
 	//Segmentator::ESegmentator *segm = new Segmentator::ESegmentator();
 	//cout << cComps->size() << endl;
+	SquarePos point = SquarePos(2, 2);
+	cout << Field::pointInContur(point, comps);
 	int x = 0;
 	int y = 10;
 	y = x + y;
