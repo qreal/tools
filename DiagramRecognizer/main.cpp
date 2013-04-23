@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
 
 	//Segmentator::ESegmentator *segm = new Segmentator::ESegmentator();
 	//cout << cComps->size() << endl;
-	SquarePos point = SquarePos(2, 2);
+	SquarePos point = SquarePos(4, 4);
 	cout << Field::pointInContur(point, comps);
 	int x = 0;
 	int y = 10;

@@ -58,12 +58,18 @@ public:
 
 	bool operator < (SquarePos const & pos) const
 	{
-		return this->length() < pos.length();
+		if (first < pos.first) { return true; }
+		else if (first > pos.first) { return false; }
+		else
+		{
+			if (second < pos.second) { return true; }
+			else { return false; }
+		}
 	}
 
 	bool operator > (SquarePos const & pos) const
 	{
-		return this->length() > pos.length();
+		return !((operator ==(pos)) && (operator <(pos)));
 	}
 };
 

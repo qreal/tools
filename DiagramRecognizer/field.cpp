@@ -3,7 +3,7 @@
 #include <figure.h>
 #include <field.h>
 #include <segmentator.h>
-
+#include <iostream>
 Field::Field()
 {
 	mFigures = new QList < Figure *>();
@@ -26,7 +26,7 @@ Field::~Field()
 bool Field::pointInContur(SquarePos & point, QList < Component *> *comps)
 {
 	std::set < SquarePos> border;
-	SquarePos up(*(*(comps->begin())->begin()));  //any SquarePos; for instance the first one
+	SquarePos up = (*((*(comps->begin()))->begin()));  //any SquarePos; for instance the first one
 	SquarePos down(up);
 	SquarePos left(up);
 	SquarePos right(up);
@@ -45,31 +45,29 @@ bool Field::pointInContur(SquarePos & point, QList < Component *> *comps)
 	std::set < SquarePos > black;
 	std::set < SquarePos > gray;
 	gray.insert(point);
+	if (border.find(point) != border.end()) { return true; }
 	int delta[3] = { -1, 0, 1};
 	while(!gray.empty())
 	{
-		for (std::set < SquarePos >::iterator itr = gray.begin(); itr != gray.end(); itr++)
+		SquarePos curPos = *(gray.begin());
+		for (int i = 0; i < 3; i++)
 		{
-			SquarePos curPos(*itr);
-			for (int i = 0; i < 3; i++)
+			for (int j = 0; j < 3; j++)
 			{
-				for (int j = 0; j < 3; j++)
+				if (i == 1 && j == 1) { continue; }
+				SquarePos newPos(curPos.first + delta[i], curPos.second + delta[j]);
+				if ((border.find(newPos) == border.end()) && (black.find(newPos) == black.end()))
 				{
-					if (i == 1 && j == 1) { continue; }
-					SquarePos newPos(curPos.first + delta[i], curPos.second + delta[j]);
-					if ((border.find(newPos) == border.end()) && (black.find(newPos) == black.end()))
+					if ((newPos.first <= up.first) || (newPos.first >= down.first) || (newPos.second <= left.second) || (newPos.second >= right.second))
 					{
-						if ((newPos.first <= up.first) || (newPos.first >= down.first) || (newPos.second >= left.second) || (newPos.second <= right.second))
-						{
-							return false;
-						}
-						gray.insert(newPos);
+						return false;
 					}
+					gray.insert(newPos);
 				}
 			}
-			gray.erase(curPos);
-			black.insert(curPos);
 		}
+		gray.erase(curPos);
+		black.insert(curPos);
 	}
 	return true;
 }
