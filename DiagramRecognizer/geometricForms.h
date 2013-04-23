@@ -56,6 +56,11 @@ public:
 		return pos.first == first && pos.second == second;
 	}
 
+	bool operator != (SquarePos const & pos) const
+	{
+		return ! operator == (pos);
+	}
+
 	bool operator < (SquarePos const & pos) const
 	{
 		if (first < pos.first) { return true; }

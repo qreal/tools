@@ -173,17 +173,15 @@ bool Component::intersects(Component *comp1, Component *comp2)
 }
 SquarePos Component::intersectsAt(Component *comp1, Component *comp2)
 {
-	for (Component::Iterator i = comp1->begin(); i != comp1->end(); i++)
-	{
-		for (Component::Iterator itr = comp2->begin(); itr != comp2->end(); itr++)
-		{
-			if (*i == *itr)
-			{
-				return *i;
-			}
-		}
-	}
-	return SquarePos(-1, -1);  //such point does't exist
+	SquarePos beg1 = comp1->first();
+	SquarePos beg2 = comp2->first();
+	SquarePos end1 = comp1->last();
+	SquarePos end2 = comp2->last();
+	if (beg1 == beg2) { return beg1; }
+	if (beg1 == end2) { return beg1; }
+	if (end1 == beg2) { return end1; }
+	if (end1 == end2) { return end1; }
+	return SquarePos(-1, -1);  //such point does't exist; no intersection
 }
 bool Component::getIsFixed() const { return isFixed; }
 bool Component::setIsFixed(bool value) { isFixed = value; }

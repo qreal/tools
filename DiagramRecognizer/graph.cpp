@@ -117,7 +117,7 @@ void Graph::initGraph(QList < Component *> *comps)
 		{
 			SquarePos point = Component::intersectsAt(*i, *itr);
 			//if (Component::intersects(*i, *itr))
-			if (!(point == SquarePos(-1, -1)))
+			if (point != SquarePos(-1, -1))
 			{
 				if (*itr != *i)
 				{
@@ -135,14 +135,14 @@ void Graph::initGraph(QList < Component *> *comps)
 		mInterList->insert(std::pair<Component *, QList < Component *> *>(*i, curList));
 	}
 	mNodes = nodes;
-	for (std::set<SquarePos>::iterator curNode = nodes->begin(); curNode != nodes->end(); curNode++)
+	for (std::set<SquarePos>::iterator curNode = mNodes->begin(); curNode != mNodes->end(); curNode++)
 	{
-		std::set<Component *> *newList = new std::set<Component *>();
-		for (QList<Component *>::const_iterator i = comps->begin(); i != comps->end(); i++)
+		std::set < Component *> *newList = new std::set < Component *>();
+		for (QList < Component *>::iterator i = comps->begin(); i != comps->end(); i++)
 		{
-			Component::const_iterator begin = (*i)->begin();
-			Component::const_iterator end = (*i)->end();
-			if ((*begin == *curNode) || (*end == *curNode))
+			SquarePos begin = (*i)->first();
+			SquarePos end = (*i)->last();
+			if ((begin == *curNode) || (end == *curNode))
 			{
 				newList->insert(*i);
 			}

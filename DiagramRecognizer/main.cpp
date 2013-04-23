@@ -39,29 +39,13 @@ int main(int argc, char *argv[])
 	//widget.show();
 	QList < Component *> *comps = new QList < Component *>();
 	Read::readFile(comps);
-	QList < Component *>::iterator i = comps->begin();
-	/*i++; i++; i++; i++; i++;
-	comps->erase(i);
-	i++; i++;
-	comps->erase(i);*/
-
-	//Graph g(comps);
-	//QList < CComponent *> *cComps = g.cSegmentation(comps);
-	//Segmentator s(comps);
-	//SquarePos q = Component::center(comps);
-	//cout << q.first << " " << q.second << endl;
-	//QList < Component *> *shell = Segmentator::getOuterShell(cComps->first()->getComponents(), s.getGraph());
-	//for (QList < Component *>::const_iterator i = shell->begin(); i != shell->end(); i++)
-	//{
-	//	cout << (*i)->num << " ";
-	//}
-	//Segmentator::ESegmentator *segm = new Segmentator::ESegmentator(*(cComps->begin()));
-	//segm->eSegmentation();
-
-	//Segmentator::ESegmentator *segm = new Segmentator::ESegmentator();
-	//cout << cComps->size() << endl;
-	SquarePos point = SquarePos(4, 4);
-	cout << Field::pointInContur(point, comps);
+	Graph g(comps);
+	std::set < Component *> *list = g.getIList(SquarePos(3, 4));
+	cout << list->size() << endl;
+	for (std::set < Component *>::iterator i = list->begin(); i != list->end(); i++)
+	{
+		cout << (*i)->num << endl;
+	}
 	int x = 0;
 	int y = 10;
 	y = x + y;
