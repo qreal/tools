@@ -1,6 +1,7 @@
 #pragma once;
 #include <segmentator.h>
 #include <stack>
+#include <field.h>
 
 Segmentator::Segmentator()
 {
@@ -149,11 +150,24 @@ QList < Component *> *Segmentator::getOuterShell(QList < Component *> *comps, Gr
 {
 	std::set < SquarePos > finalNodes;
 	std::set < SquarePos > finalEdges;
-	finalNodes.insert(*(*(comps->begin()))->begin());  //added any point (node)
+	std::set < Component *> *newEdges;
+	std::set < SquarePos > innerNodes;
+	finalNodes.insert(comps->first()->first()); //added any point (node)
+	//buildCycle(graph, finalNodes, newEdges);
+	/*foreach (Component *comp, newEdges)
+	{
+		finalEdges.insert(comp);
+	}
+	foreach (SquarePos node, graph.getNodes())
+	{
+		if (Field::pointInContur(node, newEdges))
+		{
 
+		}
+	}*/
 
 }
-void Segmentator::buildCycle(Graph & graph, std::set < SquarePos > & finalNodes)
+void Segmentator::buildCycle(Graph & graph, std::set < SquarePos > & finalNodes, QList < Component *> *&newEdges)
 {
 	std::stack<SquarePos> s;
 	QList <Component *> *curEdges = new QList <Component *>();
@@ -200,6 +214,11 @@ void Segmentator::buildCycle(Graph & graph, std::set < SquarePos > & finalNodes)
 			s.pop();
 		}
 	}
+	newEdges = curEdges;
+	/*foreach (SquarePos node, curNodes)
+	{
+		finalNodes.insert(node);
+	}*/
 }
 
 QList < Component *> *Segmentator::getInnerShell(QList < Component *> *comps, Graph *graph)  //comps are connected

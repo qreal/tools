@@ -56,7 +56,7 @@ private:
 public:
 	static QList < Component *> *getOuterShell(QList < Component *> *comps, Graph graph);
 private:
-	void buildCycle(Graph & graph, std::set < SquarePos > & finalNodes);
+	void buildCycle(Graph & graph, std::set < SquarePos > & finalNodes, QList < Component *> *&newEdges);
 	static QList < Component *> *getInnerShell(QList < Component *> *comps, Graph *graph);
 	QList < Component *> *mComps;  //list of all components
 	Graph *mGraph;

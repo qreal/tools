@@ -40,12 +40,12 @@ int main(int argc, char *argv[])
 	QList < Component *> *comps = new QList < Component *>();
 	Read::readFile(comps);
 	Graph g(comps);
-	std::set < Component *> *list = g.getIList(SquarePos(3, 4));
+	/*std::set < Component *> *list = g.getIList(SquarePos(3, 4));
 	cout << list->size() << endl;
 	for (std::set < Component *>::iterator i = list->begin(); i != list->end(); i++)
 	{
 		cout << (*i)->num << endl;
-	}
+	}*/
 	int x = 0;
 	int y = 10;
 	y = x + y;

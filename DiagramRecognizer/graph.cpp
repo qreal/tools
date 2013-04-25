@@ -3,6 +3,7 @@
 #include <vector>
 #include <stack>
 #include <set>
+#include <QDebug>
 
 Graph::Graph()
 {
@@ -96,6 +97,10 @@ std::set < Component * > *Graph::getIList(SquarePos const & node) const
 {
 	return mIList->at(node);
 }
+std::set < SquarePos > *Graph::getNodes() const
+{
+	return mNodes;
+}
 SquarePos Graph::intersectsAt(Component *comp1, Component *comp2) const
 {
 	if (!intersects(comp1, comp2)) { return SquarePos(-1, -1); }
@@ -106,6 +111,8 @@ SquarePos Graph::intersectsAt(Component *comp1, Component *comp2) const
 }
 void Graph::initGraph(QList < Component *> *comps)
 {
+	qDebug() << "init graph" << comps->count();
+	mIList = new IList();
 	mInterList = new InterList();
 	//mMatrix = new std::map<pair< Component *, Component * >, bool>();
 	mMatrix = new IMatrix();
@@ -149,4 +156,23 @@ void Graph::initGraph(QList < Component *> *comps)
 		}
 		mIList->insert(std::pair<SquarePos, std::set<Component *> * >(*curNode, newList));
 	}
+	for (IList::const_iterator i = mIList->begin(); i != mIList->end(); i++)
+	{
+		qDebug() << "Node: " << (*i).first.first << " " << (*i).first.second;
+		std::set<Component *> *list = (*i).second;
+		for (std::set < Component *>::const_iterator i = list->begin(); i != list->end(); i++)
+		{
+			qDebug() << (*i)->num;
+		}
+	}
+	qDebug() << "finish init";
+}
+bool Graph::mIListIsEmpty() const
+{
+	//foreach (std::pair<SquarePos, std::set<Component *> * > item, iList)
+	/*for (IList::const_iterator i = mIList->begin(); i != mIList->end(); i++)
+	{
+		if (!((*i)->second.empty())) { return false; }
+	}
+	*/	return true;
 }

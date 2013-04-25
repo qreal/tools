@@ -20,7 +20,9 @@ public:
 	InterList *getInterList() const;
 	QList < Component *> *getInterList(Component *component) const;
 	std::set < Component * > *getIList(SquarePos const & node) const;
+	std::set < SquarePos > *getNodes() const;
 	SquarePos intersectsAt(Component *comp1, Component *comp2) const;
+	bool mIListIsEmpty() const;
 
 
 private:
