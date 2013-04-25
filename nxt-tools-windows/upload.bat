@@ -1,0 +1,1 @@
+"./cygwin/bin/bash" -c "./upload.sh"
