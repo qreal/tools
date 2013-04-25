@@ -14,6 +14,21 @@ Graph::Graph(QList < Component *> *comps)
 {
 	initGraph(comps);
 }
+Graph::Graph(Graph &graph)
+{
+	mMatrix = new IMatrix(*(graph.getMatrix()));
+	mInterList = new InterList(*(graph.getInterList()));
+	mIList = new IList(*(graph.getIList()));
+	mNodes = new std::set<SquarePos>(*(graph.getNodes()));
+}
+Graph::Graph(Graph *graph)
+{
+	mMatrix = new IMatrix(*(graph->getMatrix()));
+	mInterList = new InterList(*(graph->getInterList()));
+	mIList = new IList(*(graph->getIList()));
+	mNodes = new std::set<SquarePos>(*(graph->getNodes()));
+}
+
 /*QList < Component *> *Graph::depthSearch(Component *component)
 {
 	std::stack < Component *> *s = new std::stack < Component *>();
@@ -97,6 +112,10 @@ std::set < Component * > *Graph::getIList(SquarePos const & node) const
 {
 	return mIList->at(node);
 }
+IList *Graph::getIList() const
+{
+	return mIList;
+}
 std::set < SquarePos > *Graph::getNodes() const
 {
 	return mNodes;
@@ -156,7 +175,7 @@ void Graph::initGraph(QList < Component *> *comps)
 		}
 		mIList->insert(std::pair<SquarePos, std::set<Component *> * >(*curNode, newList));
 	}
-	for (IList::const_iterator i = mIList->begin(); i != mIList->end(); i++)
+	/*for (IList::const_iterator i = mIList->begin(); i != mIList->end(); i++)
 	{
 		qDebug() << "Node: " << (*i).first.first << " " << (*i).first.second;
 		std::set<Component *> *list = (*i).second;
@@ -164,15 +183,14 @@ void Graph::initGraph(QList < Component *> *comps)
 		{
 			qDebug() << (*i)->num;
 		}
-	}
-	qDebug() << "finish init";
+	}*/
 }
 bool Graph::mIListIsEmpty() const
 {
-	//foreach (std::pair<SquarePos, std::set<Component *> * > item, iList)
-	/*for (IList::const_iterator i = mIList->begin(); i != mIList->end(); i++)
+	for (IList::const_iterator i = mIList->begin(); i != mIList->end(); i++)
 	{
-		if (!((*i)->second.empty())) { return false; }
+		std::set < Component * > *list = (*i).second;
+		if (!list->empty()) { return false; }
 	}
-	*/	return true;
+	return true;
 }

@@ -207,8 +207,8 @@ SquarePos Component::center() const
 }
 SquarePos Component::getAnotherSide(SquarePos const & point) const
 {
-	SquarePos begin = *(this->begin());
-	SquarePos end = (*this->end());
+	SquarePos begin = this->first();
+	SquarePos end = this->last();
 	if (begin == point) { return end; }
 	else if (end == point) { return begin; }
 	else { return SquarePos(-1, -1); }

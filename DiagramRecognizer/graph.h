@@ -13,6 +13,8 @@ class Graph
 public:
 	Graph();
 	Graph(QList < Component *> *comps);
+	Graph(Graph & graph);  //copies
+	Graph(Graph *graph);  //copies
 	//QList < Component *> *depthSearch(Component *component);
 	QList < CComponent *> *cSegmentation(QList < Component *> *comps);  //splits all components into connected components
 	bool intersects(Component *comp1, Component *comp2) const;
@@ -20,6 +22,7 @@ public:
 	InterList *getInterList() const;
 	QList < Component *> *getInterList(Component *component) const;
 	std::set < Component * > *getIList(SquarePos const & node) const;
+	IList *getIList() const;
 	std::set < SquarePos > *getNodes() const;
 	SquarePos intersectsAt(Component *comp1, Component *comp2) const;
 	bool mIListIsEmpty() const;

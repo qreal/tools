@@ -146,27 +146,50 @@ int Segmentator::dist(Component *comp, SquarePos point)
 	return res;
 }*/
 
-QList < Component *> *Segmentator::getOuterShell(QList < Component *> *comps, Graph graph)  //comps are connected
+QList < Component *> *Segmentator::getOuterShell(QList < Component *> *comps, Graph & graph)  //comps are connected
 {
 	std::set < SquarePos > finalNodes;
 	std::set < SquarePos > finalEdges;
-	std::set < Component *> *newEdges;
+	QList < Component *> *resEdges = new QList < Component *>();
+	QList < Component *> *newEdges;
 	std::set < SquarePos > innerNodes;
 	finalNodes.insert(comps->first()->first()); //added any point (node)
-	//buildCycle(graph, finalNodes, newEdges);
-	/*foreach (Component *comp, newEdges)
+	while (!graph.mIListIsEmpty())
 	{
-		finalEdges.insert(comp);
-	}
-	foreach (SquarePos node, graph.getNodes())
-	{
-		if (Field::pointInContur(node, newEdges))
+		Segmentator::buildCycle(graph, finalNodes, newEdges);
+		for (QList < Component *>::iterator i = newEdges->begin(); i != newEdges->end(); i++)
 		{
-
+			resEdges->push_back(*i);
 		}
-	}*/
-
+		Segmentator::clearInnerEdges(resEdges, graph);
+	}
+	return resEdges;
 }
+void Segmentator::clearInnerEdges(QList<Component *> *edges, Graph & graph)
+{
+	std::set < SquarePos> border;
+	for (QList<Component *>::const_iterator i = edges->begin(); i != edges->end(); i++)
+	{
+		border.insert((*i)->first());
+		border.insert((*i)->last());
+	}
+	IList *map = graph.getIList();
+	for (IList::iterator i = map->begin(); i != map->end(); i++)
+	{
+		std::set < Component * > *list = (*i).second;
+		for (std::set < Component * >::iterator itr = list->begin(); itr != list->end(); itr++)
+		{
+			if (Field::compInContur(*itr, edges))
+			{
+				list->erase(itr);
+			}
+		}
+		SquarePos pos = (*i).first;
+		map->erase(i);
+		map->insert(std::pair<SquarePos, std::set<Component *> *>(pos, list));
+	}
+}
+
 void Segmentator::buildCycle(Graph & graph, std::set < SquarePos > & finalNodes, QList < Component *> *&newEdges)
 {
 	std::stack<SquarePos> s;
@@ -188,6 +211,7 @@ void Segmentator::buildCycle(Graph & graph, std::set < SquarePos > & finalNodes,
 	while (!s.empty())
 	{
 		std::set<Component *> *edges = graph.getIList(s.top());
+		wereIn = false;
 		for (std::set<Component *>::iterator i = edges->begin(); i != edges->end(); i++)
 		{
 			if (wereIn) { break; }
