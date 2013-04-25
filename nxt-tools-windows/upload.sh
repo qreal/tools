@@ -6,4 +6,5 @@ make all
 echo Executing NeXTTool to upload example0_OSEK.rxe...
  ../nexttool/NeXTTool.exe /COM=usb -download=example0_OSEK.rxe
  ../nexttool/NeXTTool.exe /COM=usb -listfiles=example0_OSEK.rxe
+echo "NeXTTool is terminated"
 echo "Done"
