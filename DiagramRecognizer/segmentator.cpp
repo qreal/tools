@@ -2,6 +2,7 @@
 #include <segmentator.h>
 #include <stack>
 #include <field.h>
+#include <iostream>
 
 Segmentator::Segmentator()
 {
@@ -146,24 +147,57 @@ int Segmentator::dist(Component *comp, SquarePos point)
 	return res;
 }*/
 
-QList < Component *> *Segmentator::getOuterShell(QList < Component *> *comps, Graph & graph)  //comps are connected
+QList < Component *> *Segmentator::getOuterShell(QList < Component *> *components, Graph & graph)  //comps are connected
 {
-	std::set < SquarePos > finalNodes;
-	std::set < SquarePos > finalEdges;
-	QList < Component *> *resEdges = new QList < Component *>();
-	QList < Component *> *newEdges;
-	std::set < SquarePos > innerNodes;
-	finalNodes.insert(comps->first()->first()); //added any point (node)
-	while (!graph.mIListIsEmpty())
+	std::set<Component *> *comps = new std::set<Component *>();
+	for (QList < Component *>::iterator i = components->begin(); i != components->end(); i++)
 	{
-		Segmentator::buildCycle(graph, finalNodes, newEdges);
-		for (QList < Component *>::iterator i = newEdges->begin(); i != newEdges->end(); i++)
-		{
-			resEdges->push_back(*i);
-		}
-		Segmentator::clearInnerEdges(resEdges, graph);
+		comps->insert(*i);
 	}
-	return resEdges;
+	for (std::set<Component *>::iterator i = comps->begin(); i != comps->end(); i++)
+	{
+		Component *curComp = *i;
+		comps->erase(i);
+		if (!Field::compInContur(curComp, comps))
+		{
+			comps->insert(curComp);
+		}
+	}
+	std::stack<SquarePos> s;
+	s.push((*(comps->begin()))->first());
+	SquarePos start = s.top();
+	std::set<Component *> markedEdges;
+	QList < Component *> *result = new QList < Component *>();
+	while(true)
+	{
+		bool wereInFor = false;
+		std::set < Component *> *list = graph.getIList(s.top());
+		for (std::set < Component *>::iterator i = list->begin(); i != list->end(); i++)
+		{
+			if (wereInFor) { break; }
+			Component *curEdge = *i;
+			if (markedEdges.find(curEdge) != markedEdges.end()) { continue; }
+			if (comps->find(curEdge) == comps->end()) { continue; }
+			wereInFor = true;
+			SquarePos anotherSide = curEdge->getAnotherSide(s.top());
+			s.push(anotherSide);
+			result->push_back(curEdge);
+			markedEdges.insert(curEdge);
+			comps->erase(curEdge);
+		}
+		if (!wereInFor)
+		{
+			s.pop();
+			result->push_back(result->last());
+		}
+		if (s.empty() || start == s.top()) { break; }
+	}
+	for (std::set<Component *>::iterator i = comps->begin(); i != comps->end(); i++)
+	{
+		result->push_back(*i);
+	}
+	delete comps;
+	return result;
 }
 void Segmentator::clearInnerEdges(QList<Component *> *edges, Graph & graph)
 {

@@ -130,7 +130,6 @@ SquarePos Graph::intersectsAt(Component *comp1, Component *comp2) const
 }
 void Graph::initGraph(QList < Component *> *comps)
 {
-	qDebug() << "init graph" << comps->count();
 	mIList = new IList();
 	mInterList = new InterList();
 	//mMatrix = new std::map<pair< Component *, Component * >, bool>();
@@ -141,6 +140,8 @@ void Graph::initGraph(QList < Component *> *comps)
 		QList < Component *> *curList = new QList < Component *>();
 		for (QList < Component *>::iterator itr = comps->begin(); itr != comps->end(); itr++)
 		{
+			nodes->insert((*itr)->first());
+			nodes->insert((*itr)->last());
 			SquarePos point = Component::intersectsAt(*i, *itr);
 			//if (Component::intersects(*i, *itr))
 			if (point != SquarePos(-1, -1))
@@ -148,7 +149,7 @@ void Graph::initGraph(QList < Component *> *comps)
 				if (*itr != *i)
 				{
 					curList->push_front(*itr);
-					nodes->insert(point);
+					//nodes->insert(point);
 				}
 				//std::pair p1 = std::pair<Component *, Component *>(*i, *itr);
 				mMatrix->insert(std::pair<std::pair<Component *, Component *>, bool>(std::pair<Component *, Component *>(*i, *itr), true));

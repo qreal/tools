@@ -25,6 +25,7 @@ Field::~Field()
 }
 bool Field::pointInContur(SquarePos & point, QList < Component *> *comps)
 {
+	if (comps->empty()) { return false; }
 	std::set < SquarePos> border;
 	SquarePos up = (*((*(comps->begin()))->begin()));  //any SquarePos; for instance the first one
 	SquarePos down(up);
@@ -75,6 +76,19 @@ bool Field::compInContur(Component *comp, QList < Component *> *comps)
 {
 	SquarePos point(comp->at(comp->size() / 2));
 	return Field::pointInContur(point, comps);
+}
+
+bool Field::compInContur(Component *comp, std::set<Component *> *comps)
+{
+	SquarePos point(comp->at(comp->size() / 2));
+	QList < Component *> *compList = new QList < Component *>();
+	for (std::set<Component *>::iterator i = comps->begin(); i != comps->end(); i++)
+	{
+		compList->push_back(*i);
+	}
+	bool res =  Field::pointInContur(point, compList);
+	delete compList;
+	return res;
 }
 
 QList < Component *> *Field::getComponents() const

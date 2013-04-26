@@ -1,6 +1,7 @@
 #pragma once;
 #include <link.h>
 #include <figure.h>
+#include <set>
 
 class Field
 {
@@ -13,6 +14,7 @@ public:
 	QList < Component *> *getComponents() const;
 	static bool pointInContur(SquarePos & point, QList < Component *> *comps);
 	static bool compInContur(Component *comp, QList < Component *> *comps);
+	static bool compInContur(Component *comp, std::set<Component *> *comps);
 
 private:
 	QList < Figure *> *mFigures;

@@ -40,7 +40,22 @@ int main(int argc, char *argv[])
 	QList < Component *> *comps = new QList < Component *>();
 	Read::readFile(comps);
 	Graph g(comps);
-	Segmentator::getOuterShell(comps, g);
+	/*QList < Component *>::iterator i = comps->begin();
+	i++; i++;
+	while (i != comps->end())
+	{
+		std::cout << *i << std::endl;
+		comps->erase(i);
+		std::cout << *i << std::endl;
+		i++;
+	}*/
+	//comps->erase(comps->end()--);
+
+	QList < Component *> *shell = Segmentator::getOuterShell(comps, g);
+	for (QList < Component *>::const_iterator i = shell->begin(); i != shell->end(); i++)
+	{
+		std::cout << (*i)->num << std::endl;
+	}
 	/*std::set < Component *> *list = g.getIList(SquarePos(3, 4));
 	cout << list->size() << endl;
 	for (std::set < Component *>::iterator i = list->begin(); i != list->end(); i++)
