@@ -202,7 +202,7 @@ std::set < Component *> *Segmentator::extractBridge(std::set < Component *> *com
 	return result;
 }
 
-QList < Component *> *Segmentator::getOuterShell(QList < Component *> *components, Graph & graph)  //comps are connected
+std::set<Component *> *Segmentator::getOuterShell(QList < Component *> *components, Graph & graph)  //comps are connected
 {
 	std::set<Component *> *comps = new std::set<Component *>();
 	for (QList < Component *>::iterator i = components->begin(); i != components->end(); i++)
@@ -218,7 +218,8 @@ QList < Component *> *Segmentator::getOuterShell(QList < Component *> *component
 			comps->insert(curComp);
 		}
 	}
-	std::stack<SquarePos> s;
+	return comps;
+	/*std::stack<SquarePos> s;
 	s.push((*(comps->begin()))->first());
 	SquarePos start = s.top();
 	std::set<Component *> markedEdges;
@@ -252,7 +253,7 @@ QList < Component *> *Segmentator::getOuterShell(QList < Component *> *component
 		result->push_back(*i);
 	}
 	delete comps;
-	return result;
+	return result;*/
 }
 void Segmentator::clearInnerEdges(QList<Component *> *edges, Graph & graph)
 {
@@ -463,7 +464,7 @@ CComponent *Segmentator::ESegmentator::filter(CComponent *comps)  //filters fixe
 	delete comps;
 	return res;
 }
-bool Segmentator::ESegmentator::makeESegmentation(CComponent *cComp)
+bool Segmentator::ESegmentator::makeESegmentation(CComponent *cComp)  //
 {
 	if (cComp->size() == 0) { return false; }
 	CComponent *copyComp = new CComponent(*cComp);

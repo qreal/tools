@@ -51,14 +51,14 @@ int main(int argc, char *argv[])
 	}*/
 	//comps->erase(comps->end()--);
 	std::set < Component *> *newComps = new std::set < Component *>();
-	QList < Component *> *shell = Segmentator::getOuterShell(comps, g);
-	for (QList < Component *>::const_iterator i = shell->begin(); i != shell->end(); i++)
+	std::set<Component *> *shell = Segmentator::getOuterShell(comps, g);
+	for (std::set<Component *>::const_iterator i = shell->begin(); i != shell->end(); i++)
 	{
 		std::cout << (*i)->num << std::endl;
 		newComps->insert(*i);
 	}
 	std::cout << "Lol" << std::endl;
-	std::set<Component *> *comp = Segmentator::extractBridge(newComps, g);
+	std::set<Component *> *comp = Segmentator::extractBridge(shell, g);
 	for (std::set<Component *>::const_iterator i = comp->begin(); i != comp->end(); i++)
 	{
 		std::cout << (*i)->num << std::endl;
