@@ -505,7 +505,27 @@ bool Segmentator::ESegmentator::makeESegmentation(QList < Component *> *comps, Q
 {
 	QList < EFigure *> newFigures;
 	QList < ELink *> newLinks;
-
+	QList < QList < Component *> *> *connComps = Graph::cSegmentation(comps, graph);
+	if (connComps->size() > 0)
+	{
+		bool res;
+		for (QList < QList < Component *> *>::const_iterator i = connComps->begin(); i != connComps->end(); i++)
+		{
+			Graph newGraph(*i);
+			res = makeESegmentation(*i, newFigures, newLinks, newGraph);
+			if (!res)
+			{
+				for (QList < QList < Component *> *>::const_iterator itr = connComps->begin(); itr != connComps->end(); itr++)
+				{
+					delete *itr;
+				}
+				delete connComps;
+				return false;
+			}
+			figures += newFigures;
+		}
+		return true;
+	}
 	QList < Component *> *shell = Segmentator::getOuterShell(comps, graph);
 	std::set<Component *> *shellSet = Segmentator::QListToSet(comps);
 	int type = Recognizer::getType(shell);
