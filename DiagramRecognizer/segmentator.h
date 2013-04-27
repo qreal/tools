@@ -16,6 +16,8 @@ public:
 	void makeSegmentation(QList < Figure *> *&figures, QList < Link *> *&links);
 	Graph *getGraph() const;
 	QList < Component *> *getComponents() const;
+	static bool areConnected(std::set<Component *> *comps, Graph & graph);  //should be private
+	static std::set<Component *> *extractBridge(std::set < Component *> *comps, Graph & graph);  //should be private
 	class ESegmentator
 	{
 	public:

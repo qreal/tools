@@ -12,7 +12,7 @@ class Read
 public:
 	static void readFile(QList < Component *> *comps)
 	{
-		FILE *f = fopen("test2.txt", "r");
+		FILE *f = fopen("test3.txt", "r");
 		if (f == 0) { return; }
 		int num, n;
 		while (true)
@@ -50,9 +50,16 @@ int main(int argc, char *argv[])
 		i++;
 	}*/
 	//comps->erase(comps->end()--);
-
+	std::set < Component *> *newComps = new std::set < Component *>();
 	QList < Component *> *shell = Segmentator::getOuterShell(comps, g);
 	for (QList < Component *>::const_iterator i = shell->begin(); i != shell->end(); i++)
+	{
+		std::cout << (*i)->num << std::endl;
+		newComps->insert(*i);
+	}
+	std::cout << "Lol" << std::endl;
+	std::set<Component *> *comp = Segmentator::extractBridge(newComps, g);
+	for (std::set<Component *>::const_iterator i = comp->begin(); i != comp->end(); i++)
 	{
 		std::cout << (*i)->num << std::endl;
 	}

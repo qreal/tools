@@ -146,6 +146,61 @@ int Segmentator::dist(Component *comp, SquarePos point)
 	//res->erase(res->begin());
 	return res;
 }*/
+bool Segmentator::areConnected(std::set <Component *> *comps, Graph & graph)
+{
+	std::stack<Component *> s;
+	s.push(*(comps->begin()));
+	std::set<Component *> marked;
+	marked.insert(s.top());
+	while (!s.empty())
+	{
+		bool wereInFor = false;
+		QList < Component *> *list = graph.getInterList(s.top());
+		for (QList < Component *>::iterator i = list->begin(); i != list->end(); i++)
+		{
+			if (wereInFor) { break; }
+			Component *cur = *i;
+			if (comps->find(cur) == comps->end()) { continue; }
+			if (marked.find(cur) != marked.end()) { continue; }
+			wereInFor = true;
+			s.push(cur);
+			marked.insert(cur);
+		}
+		if (!wereInFor)
+		{
+			s.pop();
+		}
+	}
+	return comps->size() == marked.size();
+}
+
+std::set < Component *> *Segmentator::extractBridge(std::set < Component *> *comps, Graph &graph)
+{
+	std::set<Component *> *result = new std::set<Component *>();
+	std::set<Component *> *copy = new std::set<Component *>(*comps);
+	for (std::set < Component *>::iterator i = comps->begin(); i != comps->end(); i++)
+	{
+		Component *cur = *i;
+		copy->erase(cur);
+		SquarePos beg = cur->first();
+		SquarePos end = cur->last();
+		std::set<Component *> *list1 = graph.getIList(beg);
+		std::set<Component *> *list2 = graph.getIList(end);
+		if (list1->size() == 1 || list2->size() == 1)
+		{
+			result->insert(cur);
+			copy->insert(cur);
+			continue;
+		}
+		if (!Segmentator::areConnected(copy, graph))
+		{
+			result->insert(cur);
+		}
+		copy->insert(cur);
+	}
+	delete copy;
+	return result;
+}
 
 QList < Component *> *Segmentator::getOuterShell(QList < Component *> *components, Graph & graph)  //comps are connected
 {
