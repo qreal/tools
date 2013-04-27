@@ -2,7 +2,7 @@
 #include <section.h>
 
 Recognizer::Recognizer() { }
-int Recognizer::getType(QList < Component *> *shell) { return 0; }
+int Recognizer::getType(QList<Component *> *shell) { return 0; }
 
 Section::Section()
 {

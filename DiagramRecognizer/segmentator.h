@@ -22,7 +22,7 @@ public:
 	{
 	public:
 		ESegmentator();
-		ESegmentator(CComponent *cComp);
+		ESegmentator(QList<Component *> *cComp);
 		void eSegmentation();
 		void makeSectionSegmentation();
 		QList < Component *> *getCComp() const;
@@ -30,13 +30,13 @@ public:
 		std::set < ELink *> *getLinks() const;
 		Graph *getGraph() const;
 	private:
-		CComponent *mCComp;  //inner connected component
+		QList < Component *> *mComps; //inner connected components
 		QList < EFigure *> *mFigures;  //elementary figures
 		std::set < ELink *> *mLinks;  //elementary links
 		Graph *mGraph;
 		void segmentateSections(EFigure *figure, QList < Component *> *innerComps);
 		CComponent *filter(CComponent *comps);
-		bool makeESegmentation(CComponent *cComp);
+		bool makeESegmentation(QList<Component *> *comps, QList<EFigure *> &figures, QList<ELink *> &links, Graph &graph);
 	};
 	class ASegmentator
 	{
@@ -56,11 +56,15 @@ public:
 private:
 	static int dist(Component *comp, SquarePos point);
 public:
-	static std::set<Component *> *getOuterShell(QList < Component *> *comps, Graph &graph);
+	static QList<Component *> *getOuterShell(QList < Component *> *comps, Graph &graph);
 private:
 	static void buildCycle(Graph & graph, std::set < SquarePos > & finalNodes, QList < Component *> *&newEdges);
 	static void clearInnerEdges(QList < Component *> *edges, Graph & graph);
 	static QList < Component *> *getInnerShell(QList < Component *> *comps, Graph *graph);
+	static std::set<Component *> *QListToSet(QList < Component *> *comps);
+	static QList < Component *> *SetToQList(std::set<Component *> *comps);
+	static QList<Component *> *priorSort(QList<Component *> *comps);
+	//static Component *chooseLink(std::set<Component *> &comps, Graph &graph);
 	QList < Component *> *mComps;  //list of all components
 	Graph *mGraph;
 };

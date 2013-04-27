@@ -12,7 +12,7 @@ class Read
 public:
 	static void readFile(QList < Component *> *comps)
 	{
-		FILE *f = fopen("test3.txt", "r");
+		FILE *f = fopen("test.txt", "r");
 		if (f == 0) { return; }
 		int num, n;
 		while (true)
@@ -31,7 +31,7 @@ public:
 		}
 	}
 };
-int main(int argc, char *argv[])
+int main()
 {
 	//QApplication a(argc, argv);
 	//DiagramRecognizer widget;
@@ -40,37 +40,30 @@ int main(int argc, char *argv[])
 	QList < Component *> *comps = new QList < Component *>();
 	Read::readFile(comps);
 	Graph g(comps);
-	/*QList < Component *>::iterator i = comps->begin();
-	i++; i++;
-	while (i != comps->end())
+	QList < QList < Component *> *> *segm = g.cSegmentation(comps, g);
+	for (QList < QList < Component *> *>::iterator i = segm->begin(); i != segm->end(); i++)
 	{
-		std::cout << *i << std::endl;
-		comps->erase(i);
-		std::cout << *i << std::endl;
-		i++;
-	}*/
-	//comps->erase(comps->end()--);
-	std::set < Component *> *newComps = new std::set < Component *>();
-	std::set<Component *> *shell = Segmentator::getOuterShell(comps, g);
-	for (std::set<Component *>::const_iterator i = shell->begin(); i != shell->end(); i++)
-	{
-		std::cout << (*i)->num << std::endl;
-		newComps->insert(*i);
+		QList < Component *> *list = *i;
+		for (QList < Component *>::iterator itr = list->begin(); itr != list->end(); itr++)
+		{
+			cout << (*itr)->num << " ";
+		}
+		cout << endl;
 	}
-	std::cout << "Lol" << std::endl;
-	std::set<Component *> *comp = Segmentator::extractBridge(shell, g);
-	for (std::set<Component *>::const_iterator i = comp->begin(); i != comp->end(); i++)
+	//Component *cur = comps->first();
+	//Field f(comps);
+	//g.eraseEdge(cur);
+	/*InterList *iList = g.getInterList();
+	for (InterList::iterator i = iList->begin(); i != iList->end(); i++)
 	{
-		std::cout << (*i)->num << std::endl;
-	}
-	/*std::set < Component *> *list = g.getIList(SquarePos(3, 4));
-	cout << list->size() << endl;
-	for (std::set < Component *>::iterator i = list->begin(); i != list->end(); i++)
-	{
-		cout << (*i)->num << endl;
+		Component *cur = (*i).first;
+		cout << (*i).first->num << ": ";
+		QList < Component *> *list = (*i).second;
+		for (QList < Component *>::iterator p = list->begin(); p != list->end(); p++)
+		{
+			cout << (*p)->num << " ";
+		}
+		cout << endl;
 	}*/
-	int x = 0;
-	int y = 10;
-	y = x + y;
 	return 0;
 }

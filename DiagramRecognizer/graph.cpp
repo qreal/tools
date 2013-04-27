@@ -28,6 +28,10 @@ Graph::Graph(Graph *graph)
 	mIList = new IList(*(graph->getIList()));
 	mNodes = new std::set<SquarePos>(*(graph->getNodes()));
 }
+Graph::~Graph()
+{
+
+}
 
 /*QList < Component *> *Graph::depthSearch(Component *component)
 {
@@ -58,44 +62,46 @@ Graph::Graph(Graph *graph)
 	return res;
 }*/
 
-QList < CComponent *> *Graph::cSegmentation(QList < Component *> *comps)  //splits all components into connected components
+QList < QList < Component *> *> *Graph::cSegmentation(QList < Component *> *comps, Graph &graph)  //splits all components into connected components
 {
-	std::set<Component *> *setComps = new std::set<Component *>();
-	for (QList < Component *>::iterator itr = comps->begin(); itr != comps->end(); itr++)
-	{
-		setComps->insert(*itr);
-	}
-	QList < CComponent *> *cComps = new QList < CComponent *>();
-	QList < Component *> *curCComp;
+	std::stack<Component *> s;
+	QList < QList < Component *> *> *res = new QList < QList < Component *> *>();
+	QList < Component *> *copy = new QList < Component *> (*comps);
+	Component *cur;
+	std::set<Component *> marked;
 	QList < Component *> *curList;
-	std::stack<Component *> st;
-	while (!setComps->empty())
+	while (!copy->empty())
 	{
-		st.push(*(setComps->begin()));
-		setComps->erase(setComps->begin());
-		curCComp = new QList < Component *>();
-		while (!st.empty())
+		curList = new QList < Component *>();
+		s.push(copy->first());
+		copy->removeFirst();
+		curList->clear();
+		//marked.clear();
+		marked.insert(s.top());
+		curList->push_back(s.top());
+		while (!s.empty())
 		{
-			Component *top = st.top();
-			curList = getInterList(top);
-			for (QList < Component *>::iterator itr = curList->begin(); itr != curList->end(); itr++)
+			QList < Component *> *list = graph.getInterList(s.top());
+			bool wereIn = false;
+			for (QList < Component *>::iterator i = list->begin(); i != list->end(); i++)
 			{
-				std::set<Component *>::iterator element = setComps->find(*itr);
-				if (element != setComps->end())
-				{
-					st.push(*element);
-					setComps->erase(element);
-				}
+				if (marked.find(*i) != marked.end()) { continue; }
+				wereIn = true;
+				s.push(*i);
+				curList->push_back(*i);
+				int index = copy->indexOf(*i);
+				copy->removeAt(index);
+				marked.insert(*i);
 			}
-			if (top == st.top())
+			if (!wereIn)
 			{
-				curCComp->push_front(st.top());
-				st.pop();
+				s.pop();
 			}
 		}
-		cComps->push_front(new CComponent(curCComp));
+		res->push_back(curList);
 	}
-	return cComps;
+	delete copy;
+	return res;
 }
 
 bool Graph::intersects(Component *comp1, Component *comp2) const
@@ -194,4 +200,40 @@ bool Graph::mIListIsEmpty() const
 		if (!list->empty()) { return false; }
 	}
 	return true;
+}
+void Graph::eraseEdge(Component *edge)  //works only for the first graph type
+{
+	QList < Component *> *list = getInterList(edge);
+	//mInterList->erase(std::pair<Component *, QList < Component *> *>(edge, list));
+	mInterList->erase(edge);
+	for (QList < Component *>::iterator i = list->begin(); i != list->end(); i++)
+	{
+		QList < Component *> *list2 = getInterList(*i);
+		for (QList < Component *>::iterator itr = list2->begin(); itr != list2->end(); itr++)
+		{
+			if (*itr == edge)
+			{
+				list2->erase(itr);
+				break;
+			}
+		}
+	}
+	IMatrix *matrix = getMatrix();
+	for (QList < Component *>::iterator i = list->begin(); i != list->end(); i++)
+	{
+		/*matrix->erase(std::pair<std::pair<Component *, Component *>, bool>(std::pair<Component *, Component *>(*i, edge), true));
+		matrix->erase(std::pair<std::pair<Component *, Component *>, bool>(std::pair<Component *, Component *>(edge, *i), true));
+		matrix->insert(std::pair<std::pair<Component *, Component *>, bool>(std::pair<Component *, Component *>(edge, *i), false));
+		matrix->insert(std::pair<std::pair<Component *, Component *>, bool>(std::pair<Component *, Component *>(*i, edge), false));*/
+		matrix->erase(std::pair<Component *, Component *>(*i, edge));
+		matrix->erase(std::pair<Component *, Component *>(edge, *i));
+		matrix->insert(std::pair<std::pair<Component *, Component *>, bool>(std::pair<Component *, Component *>(edge, *i), false));
+		matrix->insert(std::pair<std::pair<Component *, Component *>, bool>(std::pair<Component *, Component *>(*i, edge), false));
+	}
+	SquarePos beg = edge->first();
+	SquarePos end = edge->last();
+	std::set<Component *> *set = getIList(beg);
+	set->erase(edge);
+	set = getIList(end);
+	set->erase(edge);
 }

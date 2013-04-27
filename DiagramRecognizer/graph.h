@@ -15,8 +15,9 @@ public:
 	Graph(QList < Component *> *comps);
 	Graph(Graph & graph);  //copies
 	Graph(Graph *graph);  //copies
+	~Graph();
 	//QList < Component *> *depthSearch(Component *component);
-	QList < CComponent *> *cSegmentation(QList < Component *> *comps);  //splits all components into connected components
+	//QList < CComponent *> *cSegmentation(QList < Component *> *comps);  //splits all components into connected components
 	bool intersects(Component *comp1, Component *comp2) const;
 	IMatrix *getMatrix() const ;
 	InterList *getInterList() const;
@@ -26,6 +27,8 @@ public:
 	std::set < SquarePos > *getNodes() const;
 	SquarePos intersectsAt(Component *comp1, Component *comp2) const;
 	bool mIListIsEmpty() const;
+	void eraseEdge(Component *edge);
+	static QList < QList < Component *> *> *cSegmentation(QList<Component *> *comps, Graph &graph);
 
 
 private:

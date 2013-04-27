@@ -1,11 +1,12 @@
 #pragma once;
 #include <component.h>
+#include <set>
 
 class Recognizer  //doesn't exist here; somewhere else
 {
 public:
 	Recognizer();
-	static int getType(QList < Component *> *shell);
+	static int getType(QList <Component *> *shell);
 };
 
 class Section
