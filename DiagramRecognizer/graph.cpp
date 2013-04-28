@@ -9,6 +9,9 @@ Graph::Graph()
 {
 	mMatrix = new IMatrix();
 	mInterList = new InterList();
+	mIList = new IList();
+	mNodes = new std::set<SquarePos>();
+	mEdges = new std::set<Component *>();
 }
 Graph::Graph(QList < Component *> *comps)
 {
@@ -20,6 +23,7 @@ Graph::Graph(Graph &graph)
 	mInterList = new InterList(*(graph.getInterList()));
 	mIList = new IList(*(graph.getIList()));
 	mNodes = new std::set<SquarePos>(*(graph.getNodes()));
+	mEdges = new std::set<Component *>(*graph.getEdges());
 }
 Graph::Graph(Graph *graph)
 {
@@ -27,6 +31,7 @@ Graph::Graph(Graph *graph)
 	mInterList = new InterList(*(graph->getInterList()));
 	mIList = new IList(*(graph->getIList()));
 	mNodes = new std::set<SquarePos>(*(graph->getNodes()));
+	mEdges = new std::set<Component *>(*graph->getEdges());
 }
 Graph::~Graph()
 {
@@ -117,6 +122,7 @@ QList < Component *> *Graph::getInterList(Component *component) const
 }
 std::set < Component * > *Graph::getIList(SquarePos const & node) const
 {
+	if (mIList->find(node) == mIList->end()) { return 0; }
 	return mIList->at(node);
 }
 IList *Graph::getIList() const
@@ -126,6 +132,10 @@ IList *Graph::getIList() const
 std::set < SquarePos > *Graph::getNodes() const
 {
 	return mNodes;
+}
+std::set < Component *> *Graph::getEdges() const
+{
+	return mEdges;
 }
 SquarePos Graph::intersectsAt(Component *comp1, Component *comp2) const
 {
@@ -141,9 +151,11 @@ void Graph::initGraph(QList < Component *> *comps)
 	mInterList = new InterList();
 	//mMatrix = new std::map<pair< Component *, Component * >, bool>();
 	mMatrix = new IMatrix();
+	mEdges = new std::set<Component *>();
 	std::set < SquarePos > *nodes = new std::set < SquarePos >();
 	for (QList < Component *>::iterator i = comps->begin(); i != comps->end(); i++)
 	{
+		mEdges->insert(*i);
 		QList < Component *> *curList = new QList < Component *>();
 		for (QList < Component *>::iterator itr = comps->begin(); itr != comps->end(); itr++)
 		{
@@ -202,11 +214,21 @@ bool Graph::mIListIsEmpty() const
 	}
 	return true;
 }
+bool Graph::mInterListIsEmpty() const
+{
+	for (InterList::const_iterator i = mInterList->begin(); i != mInterList->end(); i++)
+	{
+		QList < Component * > *list = (*i).second;
+		if (!list->empty()) { return false; }
+	}
+	return true;
+}
 void Graph::eraseEdge(Component *edge)  //works only for the first graph type
 {
 	IMatrix *matrix = getMatrix();
 	QList < Component *> *list = getInterList(edge);
 	if (list == 0) { return; }
+	mEdges->erase(edge);
 	//mInterList->erase(std::pair<Component *, QList < Component *> *>(edge, list));
 	mInterList->erase(edge);
 	for (QList < Component *>::iterator i = list->begin(); i != list->end(); i++)
@@ -238,4 +260,71 @@ void Graph::eraseEdge(Component *edge)  //works only for the first graph type
 	set->erase(edge);
 	set = getIList(end);
 	set->erase(edge);
+}
+void Graph::operator =(Graph &graph)
+{
+	delete mIList;
+	delete mInterList;
+	delete mNodes;
+	delete mEdges;
+	delete mMatrix;
+	mMatrix = new IMatrix(*(graph.getMatrix()));
+	mInterList = new InterList(*(graph.getInterList()));
+	mIList = new IList(*(graph.getIList()));
+	mNodes = new std::set<SquarePos>(*(graph.getNodes()));
+	mEdges = new std::set<Component *>(*graph.getEdges());
+}
+
+void Graph::insertEdge(Component *edge)
+{
+	InterList *intList = getInterList();
+	QList < Component *> *newList = new QList < Component *>();
+	mEdges->insert(edge);
+	mNodes->insert(edge->first());
+	mNodes->insert(edge->last());
+	bool finish;
+	for (std::set<Component *>::iterator i = mEdges->begin(); i != mEdges->end(); i++)
+	{
+		finish = false;
+		Component *cur = *i;
+		SquarePos pos = Component::intersectsAt(cur, edge);
+		if (pos == SquarePos(-1, -1)) { finish = true; }
+		mMatrix->insert(std::pair<std::pair<Component *, Component *>, bool>(std::pair<Component *, Component *>(edge, cur), !finish));
+		mMatrix->insert(std::pair<std::pair<Component *, Component *>, bool>(std::pair<Component *, Component *>(cur, edge), !finish));
+		if (finish) { continue; }
+		if (cur == edge) { continue; }
+		QList < Component *> *list = getInterList(cur);
+		list->push_back(edge);
+		newList->push_back(cur);
+	}
+	for (std::set<Component *>::iterator i = mEdges->begin(); i != mEdges->end(); i++)
+	{
+		SquarePos beg = edge->first();
+		SquarePos end = edge->last();
+		std::set<Component *> *sList = getIList(beg);
+		if (sList == 0)
+		{
+			std::set<Component *> *newSet = new std::set<Component *>();
+			newSet->insert(edge);
+			mIList->insert(std::pair<SquarePos, std::set<Component *> *>(beg, newSet));
+		}
+		else
+		{
+			sList->insert(edge);
+			//mIList->insert(std::pair<SquarePos, std::set<Component *> *>(beg, sList));
+		}
+		sList = getIList(end);
+		if (sList == 0)
+		{
+			std::set<Component *> *newSet = new std::set<Component *>();
+			newSet->insert(edge);
+			mIList->insert(std::pair<SquarePos, std::set<Component *> *>(end, newSet));
+		}
+		else
+		{
+			sList->insert(edge);
+			//mIList->insert(std::pair<SquarePos, std::set<Component *> *>(beg, sList));
+		}
+	}
+	intList->insert(std::pair<Component *, QList < Component *> *>(edge, newList));
 }

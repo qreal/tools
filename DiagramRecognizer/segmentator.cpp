@@ -289,6 +289,7 @@ void Segmentator::clearInnerEdges(QList<Component *> *edges, Graph & graph)
 void Segmentator::buildCycle(Component *comp, Graph & graph, QList < Component *> &newEdges)
 {
 	newEdges.clear();
+	if (graph.mInterListIsEmpty()) { return; }
 	std::stack<SquarePos> s;
 	std::set<SquarePos> finalNodes;
 	newEdges.push_back(comp);
@@ -296,7 +297,8 @@ void Segmentator::buildCycle(Component *comp, Graph & graph, QList < Component *
 	finalNodes.insert(s.top());
 	s.push(comp->last());
 	finalNodes.insert(s.top());
-	std::set<SquarePos> marked;
+	std::set<Component *> marked;
+	marked.insert(comp);
 	bool finishWhile = false;
 	while (!s.empty())
 	{
@@ -307,12 +309,12 @@ void Segmentator::buildCycle(Component *comp, Graph & graph, QList < Component *
 			if (wereInFor) { break; }
 			Component *cur = *i;
 			SquarePos anotherSide = cur->getAnotherSide(s.top());
-			if (marked.find(anotherSide) != marked.end()) { continue; }
+			if (marked.find(cur) != marked.end()) { continue; }
 			wereInFor = true;
 			s.push(anotherSide);
-			marked.insert(anotherSide);
+			marked.insert(cur);
 			newEdges.push_back(cur);
-			if (finalNodes.find(anotherSide) != marked.end())  //was found
+			if (finalNodes.find(anotherSide) != finalNodes.end())  //was found
 			{
 				finishWhile = true;
 				break;
@@ -333,28 +335,51 @@ QList < Component *> *Segmentator::getInnerShell(Component *comp, QList < Compon
 	std::set<Component *> *compsSet = Segmentator::QListToSet(comps);
 	QList < Component *> cComps(*comps);
 	QList < Component *> newEdges;
-	QList < Component *> *edges = new QList < Component *>();
+	QList < Component *> *edges;
+	//std::set<Component *> *edges = new std::set<Component *>();
 	std::set<SquarePos> finalNodes;
 	QList < Component *> *res = new QList < Component *>();
 	cGraph.eraseEdge(comp);
+	Segmentator::buildCycle(comp, cGraph, newEdges);
+	edges = new QList<Component *>(newEdges);
+	for (std::set<Component *>::iterator i = compsSet->begin(); i != compsSet->end(); i++)
+	{
+		Component *cur = *i;
+		if (!Field::compInContur(cur, edges))
+		{
+			cGraph.eraseEdge(cur);
+			//compsSet->erase(cur);
+		}
+	}
 	while (true)
 	{
-		Segmentator::buildCycle(comp, cGraph, newEdges);
+		for (QList < Component *>::iterator i = edges->begin(); i != edges->end(); i++)
+		{
+			Component *cur = *i;
+			if (cur == comp) { continue; }
+			Graph oldGraph(cGraph);
+			cGraph.eraseEdge(cur);
+			Segmentator::buildCycle(comp, cGraph, newEdges);
+			if (!newEdges.empty()) { break; }
+			//cGraph = oldGraph;
+			cGraph.insertEdge(cur);
+		}
 		if (newEdges.empty()) { break; }
 		delete edges;
 		edges = new QList<Component *>(newEdges);
-		for (QList < Component *>::iterator i = comps->begin(); i != comps->end(); i++)
+		for (std::set<Component *>::iterator i = compsSet->begin(); i != compsSet->end(); i++)
 		{
-			if (!Field::compInContur(*i, compsSet))
+			Component *cur = *i;
+			if (!Field::compInContur(cur, edges))
 			{
-				cGraph.eraseEdge(*i);
-				compsSet->erase(*i);
+				cGraph.eraseEdge(cur);
+				compsSet->erase(cur);
 			}
 		}
-		for (QList < Component *>::iterator i = newEdges.begin(); i != newEdges.end(); i++)
+		/*for (QList < Component *>::iterator i = edges->begin(); i != edges->end(); i++)
 		{
 			cGraph.eraseEdge(*i);
-		}
+		}*/
 	}
 	return edges;
 }

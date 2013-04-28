@@ -27,8 +27,12 @@ public:
 	std::set < SquarePos > *getNodes() const;
 	SquarePos intersectsAt(Component *comp1, Component *comp2) const;
 	bool mIListIsEmpty() const;
+	bool mInterListIsEmpty() const;
 	void eraseEdge(Component *edge);
+	void insertEdge(Component *edge);  //not tested
+	void operator =(Graph &graph);
 	static QList < QList < Component *> *> *cSegmentation(QList<Component *> *comps, Graph &graph);
+	std::set<Component *> *getEdges() const;
 
 
 private:
@@ -36,6 +40,7 @@ private:
 	IMatrix *mMatrix;
 	InterList *mInterList;
 	IList *mIList;
+	std::set<Component *> *mEdges;
 	std::set<SquarePos> *mNodes;
 
 };
