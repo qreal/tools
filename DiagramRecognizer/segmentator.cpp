@@ -19,20 +19,28 @@ Segmentator::~Segmentator()
 	delete mComps;
 	delete mGraph;
 }
-void Segmentator::makeSegmentation(QList < Figure *> *&figures, QList < Link *> *&links)
+void Segmentator::makeSegmentation(QList < EFigure *> *&figures, QList < ELink *> *&links)
 {
 	ESegmentator *eSegmentator = new ESegmentator(mComps);
 	eSegmentator->eSegmentation();
 	//ASegmentator *aSegmentator = new ASegmentator(eSegmentator);
 	//aSegmentator->aSegmentation();
-	//figures = aSegmentator->getFigures();
-	//links = aSegmentator->getLinks();
+	figures = new QList < EFigure *> (*(eSegmentator->getFigures()));
+	links = new QList < ELink *> (*(eSegmentator->getLinks()));
 	delete eSegmentator;
 	//delete aSegmentator;
 }
 QList < Component *> *Segmentator::getComponents() const
 {
 	return mComps;
+}
+QList < EFigure *> *Segmentator::getFigures() const
+{
+	return mFigures;
+}
+QList < ELink *> *Segmentator::getLinks() const
+{
+	return mLinks;
 }
 Graph *Segmentator::getGraph() const
 {
@@ -437,14 +445,14 @@ Segmentator::ESegmentator::ESegmentator()
 {
 	mComps = new QList<Component *>();
 	mFigures = new QList < EFigure *>();
-	mLinks = new std::set < ELink *>();
+	mLinks = new QList < ELink *>();
 	mGraph = new Graph();
 }
 Segmentator::ESegmentator::ESegmentator(QList <Component *> *cComp)
 {
 	mComps = new QList < Component *>(*cComp);
 	mFigures = new QList < EFigure *>();
-	mLinks = new std::set < ELink *>();
+	mLinks = new QList < ELink *>();
 	mGraph = new Graph(mComps);
 }
 void Segmentator::ESegmentator::eSegmentation()  //splits connected component into elementary items (figures and links)
@@ -458,35 +466,15 @@ void Segmentator::ESegmentator::eSegmentation()  //splits connected component in
 }
 void Segmentator::ESegmentator::makeSectionSegmentation()
 {
-	for (QList < EFigure *>::iterator itr = mFigures->begin(); itr != mFigures->end(); itr++)
+	for (QList < EFigure *>::const_iterator i = mFigures->begin(); i != mFigures->end(); i++)
 	{
-		QList < Component *> *edges = mComps; //link to Segmentator!!!(get it somehow)
-		QList < Component *> *links = new QList < Component *>();
-		for (std::set < ELink *>::iterator i = mLinks->begin(); i != mLinks->end(); i++)
-		{
-			links->push_front((*i)->getComponent());
-		}
-		for (QList < Component *>::iterator i = edges->begin(); i != edges->end(); i++)
-		{
-			if (((*i)->getIsFixed()) || (links->indexOf(*i)!=-1))  //if current edge doesn't belong to any figure or link
-			{
-				edges->erase(i);
-			}
-		}
-		//at this moment edges contain all inner lines in current figure
-		segmentateSection(*itr);
-		for (QList <  Component *>::iterator i = edges->begin(); i != edges->end(); i++)
-		{
-			(*i)->setIsFixed(true);
-		}
-		delete links;
-		delete edges;
+		segmentateSection(*i);
 	}
 }
 //CComponent *getCComp() { return mCComp; }
 QList < Component *> *Segmentator::ESegmentator::getCComp() const { return mComps; }
 QList < EFigure *> *Segmentator::ESegmentator::getFigures() const { return mFigures; }
-std::set < ELink *> *Segmentator::ESegmentator::getLinks() const { return mLinks; }
+QList< ELink *> *Segmentator::ESegmentator::getLinks() const { return mLinks; }
 Graph *Segmentator::ESegmentator::getGraph() const { return mGraph; }
 
 void Segmentator::ESegmentator::segmentateSection(EFigure *figure)
@@ -536,6 +524,8 @@ void Segmentator::ESegmentator::segmentateSection(EFigure *figure)
 			globShell->push_back(*i);
 		}
 	}
+	delete comps;
+	delete globShell;
 }
 CComponent *Segmentator::ESegmentator::filter(CComponent *comps)  //filters fixed components
 	{

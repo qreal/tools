@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <graph.h>
 #include <segmentator.h>
+#include <link.h>
 
 using namespace std;
 class Read
@@ -52,6 +53,8 @@ int main()
 	shell->push_back(*i++);
 	shell->push_back(*i++);
 	shell->push_back(*i++);
+	Link *link = new Link(comps->first());
+	Component *c = link->getComponent();
 	EFigure *figure = new EFigure(shell);
 	//QList < Component *> *shell = Segmentator::getInnerShell(comps->first(), comps, g);
 	Segmentator::ESegmentator segm(comps);

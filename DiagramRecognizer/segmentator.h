@@ -13,9 +13,11 @@ public:
 	Segmentator();
 	Segmentator(QList < Component *> *components);
 	~Segmentator();
-	void makeSegmentation(QList < Figure *> *&figures, QList < Link *> *&links);
+	void makeSegmentation(QList<EFigure *> *&figures, QList<ELink *> *&links);
 	Graph *getGraph() const;
 	QList < Component *> *getComponents() const;
+	QList < EFigure *> *getFigures() const;
+	QList < ELink *> *getLinks() const;
 	static bool areConnected(std::set<Component *> *comps, Graph & graph);  //should be private
 	static std::set<Component *> *extractBridge(std::set < Component *> *comps, Graph & graph);  //should be private
 	class ESegmentator
@@ -28,12 +30,12 @@ public:
 		void segmentateSection(EFigure *figure);  //should be private
 		QList < Component *> *getCComp() const;
 		QList < EFigure *> *getFigures() const;
-		std::set < ELink *> *getLinks() const;
+		QList < ELink *> *getLinks() const;
 		Graph *getGraph() const;
 	private:
 		QList < Component *> *mComps; //inner connected components
 		QList < EFigure *> *mFigures;  //elementary figures
-		std::set < ELink *> *mLinks;  //elementary links
+		QList < ELink *> *mLinks;  //elementary links
 		Graph *mGraph;
 		CComponent *filter(CComponent *comps);
 		bool makeESegmentation(QList<Component *> *comps, QList<EFigure *> &figures, QList<ELink *> &links, Graph &graph);
@@ -65,6 +67,8 @@ private:
 	static QList < Component *> *SetToQList(std::set<Component *> *comps);
 	static QList<Component *> *priorSort(QList<Component *> *comps);
 	//static Component *chooseLink(std::set<Component *> &comps, Graph &graph);
+	QList < EFigure *> *mFigures;
+	QList < ELink *> *mLinks;
 	QList < Component *> *mComps;  //list of all components
 	Graph *mGraph;
 };

@@ -6,8 +6,8 @@
 #include <iostream>
 Field::Field()
 {
-	mFigures = new QList < Figure *>();
-	mLinks = new QList < Link *>();
+	mFigures = new QList < EFigure *>();
+	mLinks = new QList < ELink *>();
 	mComponents = new QList < Component *>();
 }
 Field::Field(QList < Component *> *components)
@@ -95,11 +95,11 @@ QList < Component *> *Field::getComponents() const
 {
 	return mComponents;
 }
-QList < Figure *> *Field::getFigures() const
+QList < EFigure *> *Field::getFigures() const
 {
 	return mFigures;
 }
-QList < Link *> *Field::getLinks() const
+QList<ELink *> *Field::getLinks() const
 {
 	return mLinks;
 }

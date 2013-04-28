@@ -9,15 +9,15 @@ public:
 	Field();
 	Field(QList < Component *> *components);
 	~Field();
-	QList < Figure *> *getFigures() const;
-	QList < Link *> *getLinks() const;
+	QList < EFigure *> *getFigures() const;
+	QList < ELink *> *getLinks() const;
 	QList < Component *> *getComponents() const;
 	static bool pointInContur(SquarePos & point, QList < Component *> *comps);
 	static bool compInContur(Component *comp, QList < Component *> *comps);
 	static bool compInContur(Component *comp, std::set<Component *> *comps);
 
 private:
-	QList < Figure *> *mFigures;
-	QList < Link *> *mLinks;
+	QList < EFigure *> *mFigures;
+	QList < ELink *> *mLinks;
 	QList < Component *> *mComponents;  //list of all components
 };
