@@ -57,10 +57,10 @@ private:
 	static int dist(Component *comp, SquarePos point);
 public:
 	static QList<Component *> *getOuterShell(QList < Component *> *comps, Graph &graph);
+	static QList < Component *> *getInnerShell(Component *comp, QList<Component *> *comps, Graph &graph);
 private:
-	static void buildCycle(Graph & graph, std::set < SquarePos > & finalNodes, QList < Component *> *&newEdges);
+	static void buildCycle(Component *comp, Graph & graph, QList<Component *> &newEdges);
 	static void clearInnerEdges(QList < Component *> *edges, Graph & graph);
-	static QList < Component *> *getInnerShell(QList < Component *> *comps, Graph *graph);
 	static std::set<Component *> *QListToSet(QList < Component *> *comps);
 	static QList < Component *> *SetToQList(std::set<Component *> *comps);
 	static QList<Component *> *priorSort(QList<Component *> *comps);

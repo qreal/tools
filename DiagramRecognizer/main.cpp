@@ -12,7 +12,7 @@ class Read
 public:
 	static void readFile(QList < Component *> *comps)
 	{
-		FILE *f = fopen("test.txt", "r");
+		FILE *f = fopen("test2.txt", "r");
 		if (f == 0) { return; }
 		int num, n;
 		while (true)
@@ -40,7 +40,12 @@ int main()
 	QList < Component *> *comps = new QList < Component *>();
 	Read::readFile(comps);
 	Graph g(comps);
-	QList < QList < Component *> *> *segm = g.cSegmentation(comps, g);
+	QList < Component *> *shell = Segmentator::getInnerShell(comps->first(), comps, g);
+	for (QList < Component *>::iterator i = shell->begin(); i != shell->end(); i++)
+	{
+		cout << (*i)->num << " ";
+	}
+	/*QList < QList < Component *> *> *segm = g.cSegmentation(comps, g);
 	for (QList < QList < Component *> *>::iterator i = segm->begin(); i != segm->end(); i++)
 	{
 		QList < Component *> *list = *i;
@@ -49,7 +54,7 @@ int main()
 			cout << (*itr)->num << " ";
 		}
 		cout << endl;
-	}
+	}*/
 	//Component *cur = comps->first();
 	//Field f(comps);
 	//g.eraseEdge(cur);

@@ -112,6 +112,7 @@ IMatrix *Graph::getMatrix() const { return mMatrix; }
 InterList *Graph::getInterList() const { return mInterList; }
 QList < Component *> *Graph::getInterList(Component *component) const
 {
+	if (mInterList->find(component) == mInterList->end()) { return 0; }
 	return mInterList->at(component);
 }
 std::set < Component * > *Graph::getIList(SquarePos const & node) const
@@ -203,7 +204,9 @@ bool Graph::mIListIsEmpty() const
 }
 void Graph::eraseEdge(Component *edge)  //works only for the first graph type
 {
+	IMatrix *matrix = getMatrix();
 	QList < Component *> *list = getInterList(edge);
+	if (list == 0) { return; }
 	//mInterList->erase(std::pair<Component *, QList < Component *> *>(edge, list));
 	mInterList->erase(edge);
 	for (QList < Component *>::iterator i = list->begin(); i != list->end(); i++)
@@ -218,7 +221,6 @@ void Graph::eraseEdge(Component *edge)  //works only for the first graph type
 			}
 		}
 	}
-	IMatrix *matrix = getMatrix();
 	for (QList < Component *>::iterator i = list->begin(); i != list->end(); i++)
 	{
 		/*matrix->erase(std::pair<std::pair<Component *, Component *>, bool>(std::pair<Component *, Component *>(*i, edge), true));
