@@ -293,10 +293,10 @@ void Segmentator::buildCycle(Component *comp, Graph & graph, QList < Component *
 	std::stack<SquarePos> s;
 	std::set<SquarePos> finalNodes;
 	newEdges.push_back(comp);
-	s.push(comp->first());
-	finalNodes.insert(s.top());
+	//s.push(comp->first());
+	finalNodes.insert(comp->first());
 	s.push(comp->last());
-	finalNodes.insert(s.top());
+	//finalNodes.insert(s.top());
 	std::set<Component *> marked;
 	marked.insert(comp);
 	bool finishWhile = false;
@@ -331,6 +331,8 @@ void Segmentator::buildCycle(Component *comp, Graph & graph, QList < Component *
 
 QList < Component *> *Segmentator::getInnerShell(Component *comp, QList < Component *> *comps, Graph &graph)  //comps are connected
 {
+	if ((comps->size() == 1) && (comps->first() == comp)) { return comps; }
+	if ((comps->size() == 1) && (comps->first() != comp)) { return 0; }
 	Graph cGraph(graph);
 	std::set<Component *> *compsSet = Segmentator::QListToSet(comps);
 	QList < Component *> cComps(*comps);
@@ -357,7 +359,7 @@ QList < Component *> *Segmentator::getInnerShell(Component *comp, QList < Compon
 		{
 			Component *cur = *i;
 			if (cur == comp) { continue; }
-			Graph oldGraph(cGraph);
+			//Graph oldGraph(cGraph);
 			cGraph.eraseEdge(cur);
 			Segmentator::buildCycle(comp, cGraph, newEdges);
 			if (!newEdges.empty()) { break; }

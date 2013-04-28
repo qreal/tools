@@ -40,14 +40,8 @@ int main()
 	QList < Component *> *comps = new QList < Component *>();
 	Read::readFile(comps);
 	Graph g(comps);
-	Component *comp = comps->first();
-	//g.eraseEdge(comp);
-	Graph gr;
-	for (QList < Component *>::iterator i = comps->begin(); i != comps->end(); i++)
-	{
-		Component *cur = *i;
-		gr.insertEdge(cur);
-	}
+	g.eraseEdge(comps->first());
+	comps->removeFirst();
 	QList < Component *> *shell = Segmentator::getInnerShell(comps->first(), comps, g);
 	for (QList < Component *>::iterator i = shell->begin(); i != shell->end(); i++)
 	{
