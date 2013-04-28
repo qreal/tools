@@ -10,10 +10,12 @@ public:
 	EFigure(QList < Component *> *shell, QList < Section *> *sections);
 	EFigure(QList < Component *> *shell, QList < Section *> *sections, int id);
 	EFigure(QList < Component *> *shell, int id);
+	~EFigure();
 	void addSection(QList < Component *> *comps);
 	void addSection(Section *section);
 	QList < Component *> *getShell() const;
 	QList < Section *> *getSections() const;
+	int getId() const;
 
 private:
 	QList < Component *> *mShell;

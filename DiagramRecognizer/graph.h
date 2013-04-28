@@ -14,6 +14,7 @@ public:
 	Graph();
 	Graph(QList < Component *> *comps);
 	Graph(Graph & graph);  //copies
+	Graph(Graph & graph, int deep);  //copies
 	Graph(Graph *graph);  //copies
 	~Graph();
 	//QList < Component *> *depthSearch(Component *component);

@@ -25,6 +25,30 @@ Graph::Graph(Graph &graph)
 	mNodes = new std::set<SquarePos>(*(graph.getNodes()));
 	mEdges = new std::set<Component *>(*graph.getEdges());
 }
+Graph::Graph(Graph &graph, int deep)
+{
+	if (deep == 0)
+	{
+		Graph(graph);
+		return;
+	}
+	mNodes = new std::set<SquarePos>(*(graph.getNodes()));
+	mEdges = new std::set<Component *>(*graph.getEdges());
+	mInterList = new InterList();
+	mIList = new IList();
+	mMatrix = new IMatrix();
+	for (std::set<Component *>::const_iterator i = mEdges->begin(); i != mEdges->end(); i++)
+	{
+		QList<Component *> *newList = new QList<Component *>(*(graph.getInterList(*i)));
+		mInterList->insert(std::pair<Component *, QList<Component *> *>(*i, newList));
+	}
+	for (std::set<SquarePos>::const_iterator i = mNodes->begin(); i != mNodes->end(); i++)
+	{
+		std::set<Component *> *newList = new std::set<Component *>(*(graph.getIList(*i)));
+		mIList->insert(std::pair<SquarePos, std::set<Component *> *>(*i, newList));
+	}
+}
+
 Graph::Graph(Graph *graph)
 {
 	mMatrix = new IMatrix(*(graph->getMatrix()));

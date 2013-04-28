@@ -329,11 +329,11 @@ void Segmentator::buildCycle(Component *comp, Graph & graph, QList < Component *
 	}
 }
 
-QList < Component *> *Segmentator::getInnerShell(Component *comp, QList < Component *> *comps, Graph &graph)  //comps are connected
+QList < Component *> *Segmentator::getInnerShell(Component *comp, QList < Component *> *comps, Graph graph)  //comps are connected
 {
 	if ((comps->size() == 1) && (comps->first() == comp)) { return comps; }
 	if ((comps->size() == 1) && (comps->first() != comp)) { return 0; }
-	Graph cGraph(graph);
+	Graph cGraph(graph, 1);
 	std::set<Component *> *compsSet = Segmentator::QListToSet(comps);
 	QList < Component *> cComps(*comps);
 	QList < Component *> newEdges;
@@ -474,7 +474,7 @@ void Segmentator::ESegmentator::makeSectionSegmentation()
 			}
 		}
 		//at this moment edges contain all inner lines in current figure
-		segmentateSections(*itr, edges);
+		segmentateSection(*itr);
 		for (QList <  Component *>::iterator i = edges->begin(); i != edges->end(); i++)
 		{
 			(*i)->setIsFixed(true);
@@ -489,43 +489,53 @@ QList < EFigure *> *Segmentator::ESegmentator::getFigures() const { return mFigu
 std::set < ELink *> *Segmentator::ESegmentator::getLinks() const { return mLinks; }
 Graph *Segmentator::ESegmentator::getGraph() const { return mGraph; }
 
-void Segmentator::ESegmentator::segmentateSections(EFigure *figure, QList < Component *> *innerComps)
+void Segmentator::ESegmentator::segmentateSection(EFigure *figure)
 {
-	QList < Component *> *allComps = new QList < Component *>();
-	for (QList < Component *>::iterator itr = figure->getShell()->begin(); itr != figure->getShell()->end(); itr++)
+	QList < Component *> *comps = new QList < Component *>();
+	for (QList < Component *>::iterator i = mComps->begin(); i != mComps->end(); i++)
 	{
-		allComps->push_front(*itr);
-	}
-	for (QList < Component *>::iterator itr = innerComps->begin(); itr != innerComps->end(); itr++)
-	{
-		allComps->push_front(*itr);
-	}
-	QList < Component *> *shell = new QList < Component *>(*(figure->getShell()));
-	while (allComps->size() != 0)
-	{
-		//the following line MUST NOT BE COMMENTED
-		//QList < Component *> *inner = Segmentator::getInnerShell(allComps, mGraph);
-		QList < Component *> *inner;
-		figure->addSection(inner);
-		for (QList < Component *>::iterator itr = inner->begin(); itr != inner->end(); itr++)
+		if (Field::compInContur(*i, figure->getShell()))
 		{
-			int pos = shell->indexOf(*itr);
-			if (pos != -1)
+			comps->push_back(*i);
+		}
+	}
+	Graph graph(comps);
+	std::set<Component *> outer;
+	std::set<Component *> inner;
+	QList < Component *> *globShell = new QList < Component *>(*(figure->getShell()));
+	while (!comps->empty())
+	{
+		outer.clear();
+		inner.clear();
+		QList < Component *> *shell = Segmentator::getInnerShell(comps->first(), comps, graph);
+		for (QList < Component *>::const_iterator i = shell->begin(); i != shell->end(); i++)
+		{
+			Component *cur = *i;
+			int index = globShell->indexOf(cur);
+			if (index != -1)
 			{
-				shell->removeAt(pos);
-				inner->erase(itr);
-				allComps->removeOne(*itr);
+				outer.insert(cur);
+			}
+			else
+			{
+				inner.insert(cur);
 			}
 		}
-		for (QList < Component *>::iterator itr = inner->begin(); itr != inner->end(); itr++)
+		figure->addSection(shell);
+		for (std::set<Component *>::const_iterator i = outer.begin(); i != outer.end(); i++)
 		{
-			shell->push_front(*itr);
+			Component *cur = *i;
+			int index = comps->indexOf(cur);
+			comps->removeAt(index);
+			graph.eraseEdge(cur);
+			index = globShell->indexOf(cur);
+			globShell->removeAt(index);
 		}
-		delete inner;
+		for (std::set<Component *>::const_iterator i = inner.begin(); i != inner.end(); i++)
+		{
+			globShell->push_back(*i);
+		}
 	}
-	//next follows deleting memory; check it
-	delete shell;
-	delete allComps;
 }
 CComponent *Segmentator::ESegmentator::filter(CComponent *comps)  //filters fixed components
 	{

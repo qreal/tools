@@ -30,6 +30,12 @@ public:
 			comps->push_back(component);
 		}
 	}
+	static void make(Graph &graph)
+	{
+		Graph *g = new Graph(graph);
+		delete g;
+
+	}
 };
 int main()
 {
@@ -40,9 +46,16 @@ int main()
 	QList < Component *> *comps = new QList < Component *>();
 	Read::readFile(comps);
 	Graph g(comps);
-	g.eraseEdge(comps->first());
-	comps->removeFirst();
-	QList < Component *> *shell = Segmentator::getInnerShell(comps->first(), comps, g);
+	QList < Component *> *shell = new QList < Component *>();
+	QList < Component *>::iterator i = comps->begin();
+	shell->push_back(*i++);
+	shell->push_back(*i++);
+	shell->push_back(*i++);
+	shell->push_back(*i++);
+	EFigure *figure = new EFigure(shell);
+	//QList < Component *> *shell = Segmentator::getInnerShell(comps->first(), comps, g);
+	Segmentator::ESegmentator segm(comps);
+	segm.segmentateSection(figure);
 	for (QList < Component *>::iterator i = shell->begin(); i != shell->end(); i++)
 	{
 		cout << (*i)->num << " ";

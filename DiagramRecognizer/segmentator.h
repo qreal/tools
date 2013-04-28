@@ -25,6 +25,7 @@ public:
 		ESegmentator(QList<Component *> *cComp);
 		void eSegmentation();
 		void makeSectionSegmentation();
+		void segmentateSection(EFigure *figure);  //should be private
 		QList < Component *> *getCComp() const;
 		QList < EFigure *> *getFigures() const;
 		std::set < ELink *> *getLinks() const;
@@ -34,7 +35,6 @@ public:
 		QList < EFigure *> *mFigures;  //elementary figures
 		std::set < ELink *> *mLinks;  //elementary links
 		Graph *mGraph;
-		void segmentateSections(EFigure *figure, QList < Component *> *innerComps);
 		CComponent *filter(CComponent *comps);
 		bool makeESegmentation(QList<Component *> *comps, QList<EFigure *> &figures, QList<ELink *> &links, Graph &graph);
 	};
@@ -57,7 +57,7 @@ private:
 	static int dist(Component *comp, SquarePos point);
 public:
 	static QList<Component *> *getOuterShell(QList < Component *> *comps, Graph &graph);
-	static QList < Component *> *getInnerShell(Component *comp, QList<Component *> *comps, Graph &graph);
+	static QList < Component *> *getInnerShell(Component *comp, QList<Component *> *comps, Graph graph);
 private:
 	static void buildCycle(Component *comp, Graph & graph, QList<Component *> &newEdges);
 	static void clearInnerEdges(QList < Component *> *edges, Graph & graph);

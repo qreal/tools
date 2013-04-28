@@ -15,6 +15,10 @@ Section::Section(QList < Component *> *components)
 {
 	mComps = new QList < Component *>(*components);
 }
+Section::~Section()
+{
+	delete mComps;
+}
 QList < Component *> * Section::getComps() const
 {
 	return mComps;
