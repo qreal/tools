@@ -6,6 +6,10 @@
 #include <graph.h>
 #include <segmentator.h>
 #include <link.h>
+#include "recognizers/mixedGesturesManager.h"
+#include "simpleFormsInitializer.h"
+#include <QString>
+#include <QDebug>
 
 using namespace std;
 class Read
@@ -13,7 +17,7 @@ class Read
 public:
 	static void readFile(QList < Component *> *comps)
 	{
-		FILE *f = fopen("test4.txt", "r");
+		FILE *f = fopen("test5.txt", "r");
 		if (f == 0) { return; }
 		int num, n;
 		while (true)
@@ -47,7 +51,15 @@ int main()
 	QList < Component *> *comps = new QList < Component *>();
 	Read::readFile(comps);
 	Graph g(comps);
-	QList < Component *> *shell = new QList < Component *>();
+	//DiagramRecognizer d();
+	//GesturesManager *mGesturesManager = new MixedGesturesManager();
+	//AbstractRecognizer *mAbstractRecognizer = new AbstractRecognizer(mGesturesManager,
+	//											 SimpleFormsInitializer::initialForms());
+
+//	QString s = mAbstractRecognizer->recognizeObject();
+//	qDebug() << s;
+	cout << Recognizer::getType(comps);
+	/*QList < Component *> *shell = new QList < Component *>();
 	QList < Component *>::iterator i = comps->begin();
 	shell->push_back(*i++);
 	shell->push_back(*i++);
@@ -62,7 +74,7 @@ int main()
 	for (QList < Component *>::iterator i = shell->begin(); i != shell->end(); i++)
 	{
 		cout << (*i)->num << " ";
-	}
+	}*/
 	/*QList < QList < Component *> *> *segm = g.cSegmentation(comps, g);
 	for (QList < QList < Component *> *>::iterator i = segm->begin(); i != segm->end(); i++)
 	{

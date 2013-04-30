@@ -19,7 +19,15 @@ Field::Field(QList < Component *> *components)
 }
 Field::~Field()
 {
+	for (QList < EFigure *>::const_iterator i = mFigures->begin(); i != mFigures->end(); i++)
+	{
+		delete *i;
+	}
 	delete mFigures;
+	for (QList < ELink *>::const_iterator i = mLinks->begin(); i != mLinks->end(); i++)
+	{
+		delete *i;
+	}
 	delete mLinks;
 	delete mComponents;
 }

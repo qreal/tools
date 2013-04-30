@@ -16,6 +16,16 @@ Segmentator::Segmentator(QList < Component *> *components)
 }
 Segmentator::~Segmentator()
 {
+	for (QList < EFigure *>::const_iterator i = mFigures->begin(); i != mFigures->end(); i++)
+	{
+		delete *i;
+	}
+	delete mFigures;
+	for (QList < ELink *>::const_iterator i = mLinks->begin(); i != mLinks->end(); i++)
+	{
+		delete *i;
+	}
+	delete mLinks;
 	delete mComps;
 	delete mGraph;
 }
@@ -448,6 +458,22 @@ Segmentator::ESegmentator::ESegmentator()
 	mLinks = new QList < ELink *>();
 	mGraph = new Graph();
 }
+Segmentator::ESegmentator::~ESegmentator()
+{
+	for (QList < EFigure *>::const_iterator i = mFigures->begin(); i != mFigures->end(); i++)
+	{
+		delete *i;
+	}
+	delete mFigures;
+	for (QList < ELink *>::const_iterator i = mLinks->begin(); i != mLinks->end(); i++)
+	{
+		delete *i;
+	}
+	delete mLinks;
+	delete mComps;
+	delete mGraph;
+}
+
 Segmentator::ESegmentator::ESegmentator(QList <Component *> *cComp)
 {
 	mComps = new QList < Component *>(*cComp);

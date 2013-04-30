@@ -1,5 +1,5 @@
 #pragma once;
-#include <component.h>
+#include "component.h"
 #include <set>
 
 class Recognizer  //doesn't exist here; somewhere else

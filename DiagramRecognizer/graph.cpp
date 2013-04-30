@@ -59,6 +59,19 @@ Graph::Graph(Graph *graph)
 }
 Graph::~Graph()
 {
+	for (std::set<Component *>::const_iterator i = mEdges->begin(); i != mEdges->end(); i++)
+	{
+		delete mInterList->at(*i);
+	}
+	for (std::set<SquarePos>::const_iterator i = mNodes->begin(); i != mNodes->end(); i++)
+	{
+		delete mIList->at(*i);
+	}
+	delete mInterList;
+	delete mIList;
+	delete mNodes;
+	delete mEdges;
+	delete mMatrix;
 
 }
 

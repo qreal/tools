@@ -12,7 +12,7 @@ MixedGesturesManager::MixedGesturesManager()
 
 double MixedGesturesManager::maxDistance(QString const &) const
 {
-	return 1000;
+	return 150;  //1000
 }
 bool MixedGesturesManager::isMultistroke() const
 {

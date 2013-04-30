@@ -27,5 +27,5 @@ private:
 	bool mRecognized;
 	QPoint mComponentPoint;
 	GesturesManager *mGesturesManager;
-	AbstractRecognizer *mAbstractRecognizer;
+	AbstractRecognizer *mAbstractRecognizer;	
 };

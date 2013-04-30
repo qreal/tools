@@ -32,7 +32,8 @@ ELink::ELink(ELink *eLink)
 
 ELink::~ELink()
 {
-	//no actions
+	delete mFigure1;
+	delete mFigure2;
 }
 
 Component *ELink::getComponent() const { return mComponent; }

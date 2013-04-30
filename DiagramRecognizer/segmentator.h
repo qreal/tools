@@ -25,6 +25,7 @@ public:
 	public:
 		ESegmentator();
 		ESegmentator(QList<Component *> *cComp);
+		~ESegmentator();
 		void eSegmentation();
 		void makeSectionSegmentation();
 		void segmentateSection(EFigure *figure);  //should be private
