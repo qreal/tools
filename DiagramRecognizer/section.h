@@ -7,6 +7,7 @@ class Recognizer  //doesn't exist here; somewhere else
 public:
 	Recognizer();
 	static int getType(QList <Component *> *shell);
+	static Component *reverse(Component *comp);
 };
 
 class Section

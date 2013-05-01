@@ -56,7 +56,7 @@ public:
 		return pos.first == first && pos.second == second;
 	}
 
-	bool operator != (SquarePos const & pos) const
+	bool operator != (SquarePos const pos) const
 	{
 		return ! operator == (pos);
 	}
@@ -75,6 +75,19 @@ public:
 	bool operator > (SquarePos const & pos) const
 	{
 		return !((operator ==(pos)) && (operator <(pos)));
+	}
+	SquarePos operator +(SquarePos pos) const
+	{
+		return SquarePos(first + pos.first, second + pos.second);
+	}
+	SquarePos operator -(SquarePos pos) const
+	{
+		return SquarePos(first - pos.first, second - pos.second);
+	}
+	SquarePos operator =(SquarePos pos)
+	{
+		first = pos.first;
+		second = pos.second;
 	}
 };
 
