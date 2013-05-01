@@ -107,6 +107,10 @@ Section::Section(QList < Component *> *components)
 {
 	mComps = new QList < Component *>(*components);
 }
+Section::Section(Section *section)
+{
+	mComps = new QList < Component *>(*section->getComps());
+}
 Section::~Section()
 {
 	delete mComps;

@@ -15,6 +15,7 @@ class Section
 public:
 	Section();
 	Section(QList < Component *> *components);
+	Section(Section *section);
 	~Section();
 	QList < Component *> *getComps() const;
 

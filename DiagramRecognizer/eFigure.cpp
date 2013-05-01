@@ -31,6 +31,17 @@ EFigure::EFigure(QList < Component *> *shell, int id)
 	mSections = new QList < Section *>();
 	mId = id;
 }
+EFigure::EFigure(EFigure *figure)
+{
+	mShell = new QList < Component *>(*(figure->getShell()));
+	mSections = new QList < Section *>();
+	for (QList < Section *>::const_iterator i = figure->getSections()->begin(); i != figure->getSections()->end(); i++)
+	{
+		mSections->push_back(new Section(*i));
+	}
+	mId = figure->getId();
+}
+
 EFigure::~EFigure()
 {
 	delete mShell;

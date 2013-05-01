@@ -16,7 +16,15 @@ Field::Field(QList < Component *> *components)
 	mFigures = new QList < EFigure *>();
 	mLinks = new QList < ELink *>();
 	Segmentator *segmentator = new Segmentator(mComponents);
-	segmentator->makeSegmentation(mFigures, mLinks);
+	segmentator->makeSegmentation();
+	foreach(EFigure *fig, *(segmentator->getFigures()))
+	{
+		mFigures->push_back(new EFigure(fig));
+	}
+	foreach(ELink *link, *(segmentator->getLinks()))
+	{
+		mLinks->push_back(new ELink(link));
+	}
 	delete segmentator;
 }
 Field::~Field()

@@ -10,6 +10,7 @@ public:
 	EFigure(QList < Component *> *shell, QList < Section *> *sections);
 	EFigure(QList < Component *> *shell, QList < Section *> *sections, int id);
 	EFigure(QList < Component *> *shell, int id);
+	EFigure(EFigure *figure);
 	~EFigure();
 	void addSection(QList < Component *> *comps);
 	void addSection(Section *section);

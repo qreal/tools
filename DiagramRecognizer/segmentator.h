@@ -13,7 +13,7 @@ public:
 	Segmentator();
 	Segmentator(QList < Component *> *components);
 	~Segmentator();
-	void makeSegmentation(QList<EFigure *> *&figures, QList<ELink *> *&links);
+	void makeSegmentation();
 	Graph *getGraph() const;
 	QList < Component *> *getComponents() const;
 	QList < EFigure *> *getFigures() const;
@@ -39,7 +39,7 @@ public:
 		QList < ELink *> *mLinks;  //elementary links
 		Graph *mGraph;
 		CComponent *filter(CComponent *comps);
-		bool makeESegmentation(QList<Component *> *comps, QList<EFigure *> &figures, QList<ELink *> &links, Graph &graph);
+		bool makeESegmentation(QList<Component *> *comps, QList<EFigure *> *&figures, QList<ELink *> *&links, Graph &graph);
 	};
 	class ASegmentator
 	{
