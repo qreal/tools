@@ -13,6 +13,8 @@ Field::Field()
 Field::Field(QList < Component *> *components)
 {
 	mComponents = new QList < Component *>(*components);
+	mFigures = new QList < EFigure *>();
+	mLinks = new QList < ELink *>();
 	Segmentator *segmentator = new Segmentator(mComponents);
 	segmentator->makeSegmentation(mFigures, mLinks);
 	delete segmentator;
