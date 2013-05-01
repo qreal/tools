@@ -67,6 +67,7 @@ private:
 	static std::set<Component *> *QListToSet(QList < Component *> *comps);
 	static QList < Component *> *SetToQList(std::set<Component *> *comps);
 	static QList<Component *> *priorSort(QList<Component *> *comps);
+	static QList < Component *> *priorSort(std::set<Component *> &set);
 	//static Component *chooseLink(std::set<Component *> &comps, Graph &graph);
 	QList < EFigure *> *mFigures;
 	QList < ELink *> *mLinks;

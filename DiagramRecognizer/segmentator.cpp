@@ -222,25 +222,25 @@ std::set < Component *> *Segmentator::extractBridge(std::set < Component *> *com
 
 QList < Component *> *Segmentator::getOuterShell(QList < Component *> *components, Graph & graph)  //comps are connected
 {
-	std::set<Component *> *comps = new std::set<Component *>();
-	for (QList < Component *>::iterator i = components->begin(); i != components->end(); i++)
+	std::set<Component *> *comps = Segmentator::QListToSet(components);
+	/*for (QList < Component *>::iterator i = components->begin(); i != components->end(); i++)
 	{
 		comps->insert(*i);
-	}
-	for (std::set<Component *>::iterator i = comps->begin(); i != comps->end(); i++)
+	}*/
+	for (QList<Component *>::iterator i = components->begin(); i != components->end(); i++)
 	{
 		Component *curComp = *i;
-		comps->erase(i);
+		comps->erase(curComp);
 		if (!Field::compInContur(curComp, comps))
 		{
 			comps->insert(curComp);
 		}
 	}
-	QList < Component *> *compsList = new QList < Component *>();
-	for (std::set < Component *>::const_iterator i = comps->begin(); i != comps->end(); i++)
+	QList < Component *> *compsList = Segmentator::SetToQList(comps);
+	/*for (std::set < Component *>::const_iterator i = comps->begin(); i != comps->end(); i++)
 	{
 		compsList->push_back(*i);
-	}
+	}*/
 	delete comps;
 	return compsList;
 	/*std::stack<SquarePos> s;
@@ -408,6 +408,15 @@ QList<Component *> *Segmentator::priorSort(QList <Component *> *comps)
 {
 	return comps;
 }
+QList < Component *> *Segmentator::priorSort(std::set<Component *> &set)
+{
+	QList < Component *> *newList = new QList < Component *>();
+	foreach(Component *cur, set)
+	{
+		newList->push_back(cur);
+	}
+	return newList;
+}
 
 std::set<Component *> *Segmentator::QListToSet(QList < Component *> *comps)
 {
@@ -571,7 +580,7 @@ bool Segmentator::ESegmentator::makeESegmentation(QList < Component *> *comps, Q
 	QList < EFigure *> newFigures;
 	QList < ELink *> newLinks;
 	QList < QList < Component *> *> *connComps = Graph::cSegmentation(comps, graph);
-	if (connComps->size() > 0)
+	if (connComps->size() > 1)
 	{
 		bool res;
 		for (QList < QList < Component *> *>::const_iterator i = connComps->begin(); i != connComps->end(); i++)
@@ -607,9 +616,9 @@ bool Segmentator::ESegmentator::makeESegmentation(QList < Component *> *comps, Q
 		SquarePos beg = cur->first();
 		SquarePos end = cur->last();
 		std::set<Component *> *list = graph.getIList(beg);
-		bool begOk = list->size() >= 2;
+		bool begOk = list->size() >= 3;
 		list = graph.getIList(end);
-		bool endOk = list->size() >= 2;
+		bool endOk = list->size() >= 3;
 		if (begOk && endOk)
 		{
 			potLinks.insert(cur);
@@ -647,7 +656,7 @@ bool Segmentator::ESegmentator::makeESegmentation(QList < Component *> *comps, Q
 		figures += newFigures;
 		return true;
 	}
-	QList < Component *> *sComps = Segmentator::priorSort(comps);
+	QList < Component *> *sComps = Segmentator::priorSort(potLinks);
 	for (QList<Component *>::iterator i = sComps->begin(); i != sComps->end(); i++)
 	{
 		Component *cur = *i;

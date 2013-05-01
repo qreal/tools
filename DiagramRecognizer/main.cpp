@@ -17,7 +17,7 @@ class Read
 public:
 	static void readFile(QList < Component *> *comps)
 	{
-		FILE *f = fopen("test5.txt", "r");
+		FILE *f = fopen("test2.txt", "r");
 		if (f == 0) { return; }
 		int num, n;
 		while (true)
@@ -51,6 +51,7 @@ int main()
 	QList < Component *> *comps = new QList < Component *>();
 	Read::readFile(comps);
 	Graph g(comps);
+	Field f(comps);
 	//DiagramRecognizer d();
 	//GesturesManager *mGesturesManager = new MixedGesturesManager();
 	//AbstractRecognizer *mAbstractRecognizer = new AbstractRecognizer(mGesturesManager,
