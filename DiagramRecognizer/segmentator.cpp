@@ -357,7 +357,7 @@ void Segmentator::buildCycle(Component *comp, Graph & graph, QList < Component *
 	}
 }
 
-QList < Component *> *Segmentator::getInnerShell(Component *comp, QList < Component *> *comps, Graph graph)  //comps are connected
+QList < Component *> *Segmentator::getInnerShell(Component *comp, QList < Component *> *comps, Graph &graph)  //comps are connected
 {
 	if ((comps->size() == 1) && (comps->first() == comp)) { return comps; }
 	if ((comps->size() == 1) && (comps->first() != comp)) { return 0; }
@@ -548,7 +548,7 @@ void Segmentator::ESegmentator::segmentateSection(EFigure *figure)
 	{
 		outer.clear();
 		inner.clear();
-		QList < Component *> *shell = Segmentator::getInnerShell(comps->first(), comps, graph);
+		QList < Component *> *shell = Segmentator::getInnerShell(globShell->first(), comps, graph);
 		for (QList < Component *>::const_iterator i = shell->begin(); i != shell->end(); i++)
 		{
 			Component *cur = *i;
@@ -601,9 +601,12 @@ bool Segmentator::ESegmentator::makeESegmentation(QList < Component *> *comps, Q
 	if (connComps->size() > 1)
 	{
 		bool res;
+		QList < EFigure *> *newFigs = new QList < EFigure *>();
+		QList < ELink *> *newLks = new QList < ELink *>();
 		for (QList < QList < Component *> *>::const_iterator i = connComps->begin(); i != connComps->end(); i++)
 		{
 			newFigures->clear();
+			newLinks->clear();
 			Graph newGraph(*i);
 			res = makeESegmentation(*i, newFigures, newLinks, newGraph);
 			if (!res)
@@ -612,12 +615,18 @@ bool Segmentator::ESegmentator::makeESegmentation(QList < Component *> *comps, Q
 				{
 					delete *itr;
 				}
+				delete newFigs;
+				delete newLks;
 				delete connComps;
 				return false;
 			}
-			figures->append(*newFigures);
-			links->append(*newLinks);
+			newFigs->append(*newFigures);
+			newLks->append(*newLinks);
 		}
+		figures->append(*newFigs);
+		links->append(*newLks);
+		delete newFigs;
+		delete newLks;
 		for (QList < QList < Component *> *>::const_iterator itr = connComps->begin(); itr != connComps->end(); itr++)
 		{
 			delete *itr;
@@ -626,7 +635,6 @@ bool Segmentator::ESegmentator::makeESegmentation(QList < Component *> *comps, Q
 		return true;
 	}
 	QList < Component *> *shell = Segmentator::getOuterShell(comps, graph);
-	std::set<Component *> *shellSet = Segmentator::QListToSet(comps);
 	int type = Recognizer::getType(shell);
 	if (type != 0)
 	{
@@ -638,17 +646,29 @@ bool Segmentator::ESegmentator::makeESegmentation(QList < Component *> *comps, Q
 	for (QList < Component *>::iterator i = shell->begin(); i != shell->end(); i++)
 	{
 		Component *cur = (*i);
+		if (cur->isClosed()) { continue; }
 		SquarePos beg = cur->first();
 		SquarePos end = cur->last();
 		std::set<Component *> *list = graph.getIList(beg);
-		bool begOk = list->size() >= 3;
+		int size = list->size();
+		foreach (Component *comp, *list)
+		{
+			if (comp->isClosed()) { size++; }
+		}
+		bool begOk = size >= 3;
 		list = graph.getIList(end);
-		bool endOk = list->size() >= 3;
+		size = list->size();
+		foreach (Component *comp, *list)
+		{
+			if (comp->isClosed()) { size++; }
+		}
+		bool endOk = size >= 3;
 		if (begOk && endOk)
 		{
 			potLinks.insert(cur);
 		}
 	}
+	std::set<Component *> *shellSet = Segmentator::QListToSet(comps);
 	std::set<Component *> *curLinks = Segmentator::extractBridge(shellSet, graph);
 	delete shell;
 	delete shellSet;
@@ -684,8 +704,8 @@ bool Segmentator::ESegmentator::makeESegmentation(QList < Component *> *comps, Q
 			links->push_back(new ELink(cur));
 		}
 		//delete curLinks;
-
 		figures->append(*newFigures);
+		links->append(*newLinks);
 		return true;
 	}
 	delete curLinks;
@@ -703,6 +723,7 @@ bool Segmentator::ESegmentator::makeESegmentation(QList < Component *> *comps, Q
 		{
 			newLinks->push_back(new ELink(cur));
 			links->append(*newLinks);
+			//links->push_back(new ELink(cur));
 			figures->append(*newFigures);
 			delete sComps;
 			return true;

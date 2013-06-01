@@ -102,14 +102,17 @@ Component *Recognizer::reverse(Component *comp)
 Section::Section()
 {
 	mComps = new QList < Component *>();
+	mType = 0;
 }
 Section::Section(QList < Component *> *components)
 {
 	mComps = new QList < Component *>(*components);
+	setType(Recognizer::getType(components));
 }
 Section::Section(Section *section)
 {
 	mComps = new QList < Component *>(*section->getComps());
+	mType = section->getType();
 }
 Section::~Section()
 {
@@ -118,4 +121,12 @@ Section::~Section()
 QList < Component *> * Section::getComps() const
 {
 	return mComps;
+}
+int Section::getType() const
+{
+	return mType;
+}
+void Section::setType(int value)
+{
+	mType = value;
 }

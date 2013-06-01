@@ -18,7 +18,10 @@ public:
 	Section(Section *section);
 	~Section();
 	QList < Component *> *getComps() const;
+	int getType() const;
+	void setType(int value);
 
 private:
 	QList < Component *> *mComps;
+	int mType;
 };
