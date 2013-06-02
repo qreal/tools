@@ -8,7 +8,7 @@
 Recognizer::Recognizer() { }
 int Recognizer::getType(QList<Component *> *shell)
 {
-	/*AbstractRecognizer *abstractRecognizer = new AbstractRecognizer(new MixedGesturesManager(),
+	AbstractRecognizer *abstractRecognizer = new AbstractRecognizer(new MixedGesturesManager(),
 												 SimpleFormsInitializer::initialForms());
 
 	Component *newComp = new Component();
@@ -22,8 +22,8 @@ int Recognizer::getType(QList<Component *> *shell)
 		return 0;
 	}
 	delete newComp;
-	return 1;*/
-	std::set<SquarePos> sPos;
+	return 1;
+	/*std::set<SquarePos> sPos;
 	std::set<SquarePos> finish;
 	int count = 0;
 	for (QList < Component *>::const_iterator i = shell->begin(); i != shell->end(); i++)
@@ -85,7 +85,7 @@ int Recognizer::getType(QList<Component *> *shell)
 			if (!was) { return false; }
 			count++;
 		}
-	return false;
+	return false;*/
 }
 Component *Recognizer::reverse(Component *comp)
 {

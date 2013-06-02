@@ -4,6 +4,7 @@
 #include "simpleFormsInitializer.h"
 #include "recognizers/mixedGesturesManager.h"
 #include "output.h"
+#include "field.h"
 
 #include <QPainter>
 #include <QRect>
@@ -77,16 +78,30 @@ void DiagramRecognizer::recognizeDiagram()
 	//mRecognized = true;
 	mFormSegmentator = new FormSegmentator(mBitmap);
 	mFormSegmentator->uniteComponents();
+
 	QList<Component> objects = mFormSegmentator->getObjects();
+	QList < Component *> *objs = new QList < Component *>();
+	foreach (Component obj, objects)
+	{
+		Component *newComp = new Component(obj);
+		objs->push_back(newComp);
+	}
+	Field f(objs);
 	mDiagram.clear();
-	foreach (Component const &object, objects) {
+	foreach (Component *object, *objs) {
 		PathVector recognizedObject = mAbstractRecognizer->recognizeObject(
-					object.figure(mBitmap->xLeft(), mBitmap->yUpper()));
+					(*object).figure(mBitmap->xLeft(), mBitmap->yUpper()));
 		mDiagram.append(recognizedObject);
 	}
-	foreach (Component const &edge, mFormSegmentator->getEdges()) {
+	/*foreach (Component const &edge, mFormSegmentator->getEdges()) {
 		mDiagram.append(edge.figure(mBitmap->xLeft(), mBitmap->yUpper()));
+	}*/
+	foreach (ELink *edge, *(f.getLinks()))
+	{
+		Component *comp = edge->getComponent();
+		mDiagram.append((*comp).figure(mBitmap->xLeft(), mBitmap->yUpper()));
 	}
+	delete objs;
 	emit print(mDiagram, mBitmap, mFormSegmentator);
 }
 

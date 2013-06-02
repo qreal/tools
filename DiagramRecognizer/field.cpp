@@ -12,6 +12,13 @@ Field::Field()
 }
 Field::Field(QList < Component *> *components)
 {
+	if (components->empty())
+	{
+		mFigures = new QList < EFigure *>();
+		mLinks = new QList < ELink *>();
+		mComponents = new QList < Component *>();
+		return;
+	}
 	mComponents = new QList < Component *>(*components);
 	mFigures = new QList < EFigure *>();
 	mLinks = new QList < ELink *>();
