@@ -1,0 +1,109 @@
+#include "qRealCommunicator.h"
+
+#include <QtCore/QFile>
+#include <QtCore/QDebug>
+
+#include "runner.h"
+
+using namespace scriptRunner;
+
+int const bufferSize = 1000;
+
+QRealCommunicator::QRealCommunicator()
+		: mConnection(new QTcpSocket())
+{
+}
+
+QString QRealCommunicator::readFromFile(QString const &fileName)
+{
+	QFile file(fileName);
+	file.open(QIODevice::ReadOnly | QIODevice::Text);
+	if (!file.isOpen()) {
+		return "";
+	}
+
+	QTextStream input;
+	input.setDevice(&file);
+	input.setCodec("UTF-8");
+	QString const result = input.readAll();
+	file.close();
+	return result;
+}
+
+void QRealCommunicator::writeToFile(QString const &fileName, QString const &contents)
+{
+	QFile file(fileName);
+	file.open(QIODevice::WriteOnly | QIODevice::Text);
+	if (!file.isOpen()) {
+		throw "File open operation failed";
+	}
+
+	QTextStream stream(&file);
+	stream.setCodec("UTF-8");
+	stream << contents;
+	file.close();
+}
+
+void QRealCommunicator::listen(int const &port)
+{
+	// TODO: Listen correct network interface. For now --- LocalHost, to simplify local debugging.
+	connect(&mServer, SIGNAL(newConnection()), this, SLOT(onNewConnection()));
+	mServer.listen(QHostAddress::LocalHost, port);
+}
+
+void QRealCommunicator::onNewConnection()
+{
+	qDebug() << "New connection";
+	delete mConnection;
+	mConnection = mServer.nextPendingConnection();
+	connect(mConnection, SIGNAL(disconnected()), this, SLOT(onDisconnected()));
+	connect(mConnection, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
+}
+
+void QRealCommunicator::onDisconnected()
+{
+	qDebug() << "Disconnected";
+	mConnection->disconnectFromHost();
+}
+
+void QRealCommunicator::onReadyRead()
+{
+	qDebug() << "Incoming command";
+
+	if (!mConnection->isValid()) {
+		return;
+	}
+
+	QByteArray data = mConnection->readAll();
+	QString command(data);
+
+	qDebug() << "Raw: " << command;
+
+	if (command.startsWith("file")) {
+		command.remove(0, QString("file:").length());
+		int const separatorPosition = command.indexOf(':');
+		if (separatorPosition == -1) {
+			// TODO: Add logging and don't crash server.
+
+			qDebug() << "Malformed 'file' command";
+
+			throw "Malformed command";
+		}
+
+		QString const fileName = command.left(separatorPosition);
+		QString const fileContents = command.mid(separatorPosition + 1);
+		writeToFile(fileName, fileContents);
+
+		qDebug() << "File name: " << fileName;
+		qDebug() << "File contents: " << fileContents;
+
+	} else if (command.startsWith("run")) {
+		command.remove(0, QString("run:").length());
+		QString const fileContents = readFromFile(command);
+
+		qDebug() << "Run: " << command;
+		qDebug() << "Contents" << fileContents;
+
+		Runner::run(fileContents);
+	}
+}

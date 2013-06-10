@@ -15,7 +15,6 @@ class TRIKCONTROL_EXPORT Sensor : public QObject
 public slots:
 	/// Returns current reading of a sensor.
 	int read();
-
 };
 
 }

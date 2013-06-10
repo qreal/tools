@@ -3,18 +3,10 @@
 #include <QtCore/QFile>
 #include <QtCore/QStringList>
 
-#include <QtScript/QScriptEngine>
+#include "runner.h"
+#include "qRealCommunicator.h"
 
-#include <trikControl/brick.h>
-#include <trikControl/motor.h>
-#include <trikControl/sensor.h>
-
-#include "scriptableParts.h"
-
-using namespace trikControl;
 using namespace scriptRunner;
-
-Q_DECLARE_METATYPE(Motor*)
 
 int main(int argc, char *argv[])
 {
@@ -22,6 +14,12 @@ int main(int argc, char *argv[])
 	QStringList args = app.arguments();
 
 	qDebug() << "Running " + args.join(" ");
+
+	if (args.count() == 1) {
+		QRealCommunicator communicator;
+		communicator.listen(8888);
+		return app.exec();
+	}
 
 	if (args.count() != 2) {
 		qDebug() << "Usage: scriptRunner <QtScript file>";
@@ -39,19 +37,10 @@ int main(int argc, char *argv[])
 	QTextStream input;
 	input.setDevice(&file);
 	input.setCodec("UTF-8");
-	QString script = input.readAll();
+	QString const script = input.readAll();
 	file.close();
 
-	Brick brick;
-
-	QScriptEngine engine;
-
-	qScriptRegisterMetaType(&engine, motorToScriptValue, motorFromScriptValue);
-
-	QScriptValue brickProxy = engine.newQObject(&brick);
-	engine.globalObject().setProperty("brick", brickProxy);
-
-	engine.evaluate(script);
+	Runner::run(script);
 
 	return 0;
 }
