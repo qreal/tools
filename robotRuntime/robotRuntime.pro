@@ -1,18 +1,7 @@
-TEMPLATE = app
-QT += script
-CONFIG += console
+TEMPLATE = subdirs
 
-TARGET = robotRuntime
+SUBDIRS = \
+	scriptRunner \
+	trikControl \
 
-DESTDIR = bin
-
-OBJECTS_DIR = .obj
-MOC_DIR = .moc
-RCC_DIR = .moc
-
-HEADERS += \
-	robotModel.h \
-
-SOURCES += \
-	main.cpp \
-	robotModel.cpp \
+scriptRunner.depends = trikControl
