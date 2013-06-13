@@ -2,6 +2,7 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QString>
+#include <QtCore/QThread>
 
 #include "declSpec.h"
 #include "motor.h"
@@ -28,7 +29,19 @@ public slots:
 	/// Returns reference to sensor on a given port.
 	Sensor *sensor(int const &port);
 
+	/// Waits given amount of time in milliseconds and returns.
+	void wait(int const &milliseconds) const;
+
 private:
+	class SleeperThread : public QThread
+	{
+	public:
+		static void msleep(unsigned long msecs)
+		{
+			QThread::msleep(msecs);
+		}
+	};
+
 	Motor mMotor;
 	Sensor mSensor;
 };

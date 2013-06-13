@@ -25,3 +25,8 @@ Sensor *Brick::sensor(int const &port)
 	qDebug() << "sensor, port: " << port;
 	return &mSensor;
 }
+
+void Brick::wait(int const &milliseconds) const
+{
+	SleeperThread::msleep(milliseconds);
+}
