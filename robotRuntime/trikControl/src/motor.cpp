@@ -4,7 +4,27 @@
 
 using namespace trikControl;
 
-void Motor::setPower(int const &power)
+Motor::Motor(int powerMin, int powerMax, QString const& controlFile)
+	: mControlFile(controlFile)
+	, mPowerMax(powerMax)
+	, mPowerMin(powerMin)
+
 {
-	qDebug() << "setPower: " << power;
+}
+
+void Motor::setPower(int power)
+{
+	qDebug() << "Executing setPower command with power = " << power;
+
+	if (!mControlFile.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Unbuffered | QIODevice::Text)) {
+		qDebug() << "Can't open motor control file " << mControlFile.fileName();
+		return;
+	}
+
+	QString command;
+
+	qreal const powerFactor = static_cast<qreal>(mPowerMax - mPowerMin) / 100;
+	command.sprintf("%d\n", static_cast<int>(power * powerFactor + mPowerMin));
+	mControlFile.write(command.toLatin1());
+	mControlFile.close();
 }

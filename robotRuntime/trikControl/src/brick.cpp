@@ -4,6 +4,11 @@
 
 using namespace trikControl;
 
+Brick::Brick()
+	: mMotor(1500000, 1800000, "/sys/devices/platform/ehrpwm.1/pwm/ehrpwm.1:0/duty_ns")
+{
+}
+
 void Brick::playSound(const QString &soundFileName)
 {
 	qDebug() << "playSound, file: " << soundFileName;

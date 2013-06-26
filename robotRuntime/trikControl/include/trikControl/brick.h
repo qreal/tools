@@ -16,6 +16,9 @@ class TRIKCONTROL_EXPORT Brick : public QObject
 {
 	Q_OBJECT
 
+public:
+	Brick();
+
 public slots:
 	/// Plays given music file on a speaker (in format accepted by aplay utility).
 	void playSound(QString const &soundFileName);
