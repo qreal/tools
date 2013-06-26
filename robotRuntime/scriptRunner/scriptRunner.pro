@@ -4,6 +4,9 @@ CONFIG += console
 
 CONFIGURATION = debug
 
+CONFIG -= debug release
+CONFIG += $$CONFIGURATION
+
 DESTDIR = $$CONFIGURATION/bin
 
 INCLUDEPATH = ../trikControl/include
@@ -25,4 +28,9 @@ SOURCES += \
 	runner.cpp \
 	scriptableParts.cpp \
 
-QMAKE_POST_LINK = "cmd /C \" xcopy ..\\trikControl\\$$CONFIGURATION\\bin $$CONFIGURATION\\bin /s /e /q /y /i\""
+win32 {
+	QMAKE_POST_LINK = "cmd /C \" xcopy ..\\trikControl\\$$CONFIGURATION\\bin $$CONFIGURATION\\bin /s /e /q /y /i\""
+}
+else {
+	QMAKE_POST_LINK = "cp -r ../trikControl/$$CONFIGURATION/bin/* $$CONFIGURATION/bin"
+}
