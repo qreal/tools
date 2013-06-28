@@ -18,8 +18,12 @@ public:
 
 public slots:
 	/// Sets current motor power to specified value, 0 to stop motor.
-	/// @param power Power of a motor, from -100 (full reverse) to 100 (full forward), 0 --- stop.
+	/// @param power Power of a motor, from -100 (full reverse) to 100 (full forward), 0 --- break.
 	void setPower(int power);
+
+	/// Turns off motor. This is not the same as setPower(0), because setPower will
+	/// leave motor on in a break mode, and this method will turn motor off.
+	void powerOff();
 
 private:
 	QFile mControlFile;

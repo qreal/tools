@@ -5,7 +5,8 @@
 using namespace trikControl;
 
 Brick::Brick()
-	: mMotor(1500000, 1800000, "/sys/class/pwm/ehrpwm.1\\:0/duty_ns")
+		: mMotor0(1500000, 1800000, "/sys/class/pwm/ehrpwm.1\\:0/duty_ns")
+		, mMotor1(1500000, 1800000, "/sys/class/pwm/ehrpwm.1\\:1/duty_ns")
 {
 }
 
@@ -22,7 +23,15 @@ void Brick::stop()
 Motor *Brick::motor(int const &port)
 {
 	qDebug() << "motor, port: " << port;
-	return &mMotor;
+
+	switch (port) {
+	case 1:
+		return &mMotor0;
+	case 2:
+		return &mMotor1;
+	default:
+		return &mMotor0;
+	}
 }
 
 Sensor *Brick::sensor(int const &port)

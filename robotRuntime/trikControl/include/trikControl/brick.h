@@ -45,7 +45,8 @@ private:
 		}
 	};
 
-	Motor mMotor;
+	Motor mMotor0;
+	Motor mMotor1;
 	Sensor mSensor;
 };
 

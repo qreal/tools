@@ -28,3 +28,16 @@ void Motor::setPower(int power)
 	mControlFile.write(command.toLatin1());
 	mControlFile.close();
 }
+
+void Motor::powerOff()
+{
+	qDebug() << "Executing powerOff command";
+
+	if (!mControlFile.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Unbuffered | QIODevice::Text)) {
+		qDebug() << "Can't open motor control file " << mControlFile.fileName();
+		return;
+	}
+
+	mControlFile.write("0");
+	mControlFile.close();
+}
