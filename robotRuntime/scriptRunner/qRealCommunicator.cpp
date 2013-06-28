@@ -48,7 +48,7 @@ void QRealCommunicator::listen(int const &port)
 {
 	// TODO: Listen correct network interface. For now --- LocalHost, to simplify local debugging.
 	connect(&mServer, SIGNAL(newConnection()), this, SLOT(onNewConnection()));
-	mServer.listen(QHostAddress::LocalHost, port);
+	mServer.listen(QHostAddress::Any, port);
 }
 
 void QRealCommunicator::onNewConnection()
