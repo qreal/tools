@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphics>
+    <picture sizex="222" sizey="222">
+        <line y1="2041" y2="2007" x1="1334" x2="1300"/>
+        <line y1="2041" y2="2005" x1="1334" x2="1370"/>
+        <line y1="1898" y2="2041" x1="1334" x2="1334"/>
+        <rectangle y1="1877" y2="2075" x1="1234" x2="1432"/>
+    </picture>
+</graphics>
+
