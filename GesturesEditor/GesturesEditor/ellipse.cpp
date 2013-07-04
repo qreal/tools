@@ -288,8 +288,8 @@ QDomElement Ellipse::generateItem(QDomDocument &document)
 
 QList<QPoint> Ellipse::getCurve(QPoint topLeftPoint)
 {
-	QPointF pointOne = rectForDraw().topLeft();
-	QPointF pointTwo = rectForDraw().bottomRight();
+	QPointF pointOne = mapToScene(rectForDraw().topLeft());
+	QPointF pointTwo = mapToScene(rectForDraw().bottomRight());
 	QPoint point1 = pointOne.toPoint();
 	QPoint point2 = pointTwo.toPoint();
 	QList<QPoint> Ellipse;
