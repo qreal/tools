@@ -293,24 +293,15 @@ QList<QPoint> Ellipse::getCurve(QPoint topLeftPoint)
 	QPoint point1 = pointOne.toPoint();
 	QPoint point2 = pointTwo.toPoint();
 	QList<QPoint> Ellipse;
-	int minX = point2.x();
-	int minY = point2.y();
 	QPoint centre = (point1 + point2) / 2;
-	int diam = static_cast<int>(sqrt(pow(point2.x() - point1.x(), 2) + pow(point2.y() - point1.y(), 2)));
+	int diam = rectForDraw().width();
 	for (int i = 0; i < pointsOnEllipse; i++)
 	{
 		int x = static_cast<int>(diam * cos(2 * pi * i / pointsOnEllipse) / 2);
 		int y = static_cast<int>(diam * sin(2 * pi * i / pointsOnEllipse) / 2);
 		QPoint pointOnEllipse = centre + QPoint(x, y) - topLeftPoint;
-		if (minX > pointOnEllipse.x()) {
-			minX = pointOnEllipse.x();
-		}
-		if (minY > pointOnEllipse.y()) {
-			minY = pointOnEllipse.y();
-		}
 		Ellipse.push_back(pointOnEllipse);
 	}
-	QPoint min = QPoint(minX, minY);
 	Ellipse.push_back(QPoint(centre.x() + diam / 2, centre.y()) - topLeftPoint);
 	return Ellipse;
 }

@@ -293,20 +293,20 @@ void Curve::setXandY(QDomElement& dom)
 
 QList<QPoint> Curve::getCurve(QPoint topLeftPoint)
 {
-	QPointF pointOne = mapToScene(boundingRect().topLeft());
-	QPointF pointTwo = mapToScene(boundingRect().bottomRight());
+	QPointF pointOne = rectForDraw().topLeft();
+	QPointF pointTwo = rectForDraw().bottomRight();
 	QPoint point1 = pointOne.toPoint();
 	QPoint point2 = pointTwo.toPoint();
 	QList<QPoint> Curve;
 	QPoint centre = (point1 + point2) / 2;
-	int diam = static_cast<int>(sqrt(pow(point2.x() - point1.x(), 2) + pow(point2.y() - point1.y(), 2)));
+	int diam = rectForDraw().width();
 	switch (mOrient) {
 	case LeftTopRightBottom:
 		for (int i = (3 * pointsOnCurve); i < pointsOnEllipsee; i++)
 		{
 			int x = static_cast<int>(diam * cos(2 * pi * i / pointsOnEllipsee) / 2);
 			int y = static_cast<int>(diam * sin(2 * pi * i / pointsOnEllipsee) / 2);
-			Curve.push_back(centre + QPoint(x, y));
+			Curve.push_back(centre + QPoint(x, y) - topLeftPoint);
 		}
 		break;
 	case LeftBottomRightTop:
@@ -314,7 +314,7 @@ QList<QPoint> Curve::getCurve(QPoint topLeftPoint)
 		{
 			int x = static_cast<int>(diam * cos(2 * pi * i / pointsOnEllipsee) / 2);
 			int y = static_cast<int>(diam * sin(2 * pi * i / pointsOnEllipsee) / 2);
-			Curve.push_back(centre + QPoint(x, y));
+			Curve.push_back(centre + QPoint(x, y) - topLeftPoint);
 		}
 		break;
 	case RightTopLeftBottom:
@@ -322,21 +322,21 @@ QList<QPoint> Curve::getCurve(QPoint topLeftPoint)
 		{
 			int x = static_cast<int>(diam * cos(2 * pi * i / pointsOnEllipsee) / 2);
 			int y = static_cast<int>(diam * sin(2 * pi * i / pointsOnEllipsee) / 2);
-			Curve.push_back(centre + QPoint(x, y));
+			Curve.push_back(centre + QPoint(x, y) - topLeftPoint);
 		}
 	case RightBottomLeftTop:
 		for (int i = pointsOnCurve; i < (2 * pointsOnCurve); i++)
 		{
 			int x = static_cast<int>(diam * cos(2 * pi * i / pointsOnEllipsee) / 2);
 			int y = static_cast<int>(diam * sin(2 * pi * i / pointsOnEllipsee) / 2);
-			Curve.push_back(centre + QPoint(x, y));
+			Curve.push_back(centre + QPoint(x, y) - topLeftPoint);
 		}
 		break;
 	default :
 		mStartAngle = 0 * 16;
 		break;
 	}
-	Curve.push_back(QPoint(centre.x() + diam / 2, centre.y()));
+	Curve.push_back(QPoint(centre.x() + diam / 2, centre.y()) - topLeftPoint);
 	return Curve;
 }
 
