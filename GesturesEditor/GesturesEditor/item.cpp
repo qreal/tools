@@ -99,6 +99,8 @@ void Item::drawRect(QPainter *painter) const
 {
 	painter->setPen(mPenforRect);
 	painter->drawRect(rectForDraw());
+	qDebug() << "RectForDraw = " << rectForDraw();
+	qDebug() << "BoundingRect = " << boundingRect();
 }
 
 void Item::drawPorts(QPainter *painter)

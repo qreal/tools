@@ -293,12 +293,8 @@ void Curve::setXandY(QDomElement& dom)
 
 QList<QPoint> Curve::getCurve(QPoint topLeftPoint)
 {
-	int minX = topLeftPoint.x();
-	int minY = topLeftPoint.y();
 	QPointF pointOne = mapToScene(boundingRect().topLeft());
 	QPointF pointTwo = mapToScene(boundingRect().bottomRight());
-	pointOne = QPointF(pointOne.x() - minX, pointTwo.y() - minY);
-	pointTwo = QPointF(pointTwo.x() - minX, pointTwo.y() - minY);
 	QPoint point1 = pointOne.toPoint();
 	QPoint point2 = pointTwo.toPoint();
 	QList<QPoint> Curve;

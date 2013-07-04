@@ -3,7 +3,7 @@
 using namespace GestEditor;
 
 static const double pi = 3.141592;
-static const int pointsOnEllipsee = 64;
+static const int pointsOnEllipse = 64;
 
 Ellipse::Ellipse(qreal x1, qreal y1, qreal x2, qreal y2, QGraphicsItem *parent)
 	: Item(x1, y1, x2, y2)
@@ -288,23 +288,30 @@ QDomElement Ellipse::generateItem(QDomDocument &document)
 
 QList<QPoint> Ellipse::getCurve(QPoint topLeftPoint)
 {
-	int minX = topLeftPoint.x();
-	int minY = topLeftPoint.y();
-	QPointF pointOne = mapToScene(rectForDraw().topLeft());
-	QPointF pointTwo = mapToScene(rectForDraw().bottomRight());
-	pointOne = QPointF(pointOne.x() - minX, pointTwo.y() - minY);
-	pointTwo = QPointF(pointTwo.x() - minX, pointTwo.y() - minY);
+	QPointF pointOne = rectForDraw().topLeft();
+	QPointF pointTwo = rectForDraw().bottomRight();
 	QPoint point1 = pointOne.toPoint();
 	QPoint point2 = pointTwo.toPoint();
 	QList<QPoint> Ellipse;
+	int minX = point2.x();
+	int minY = point2.y();
 	QPoint centre = (point1 + point2) / 2;
 	int diam = static_cast<int>(sqrt(pow(point2.x() - point1.x(), 2) + pow(point2.y() - point1.y(), 2)));
-	for (int i = 0; i < pointsOnEllipsee; i++)
+	for (int i = 0; i < pointsOnEllipse; i++)
 	{
-		int x = static_cast<int>(diam * cos(2 * pi * i / pointsOnEllipsee) / 2);
-		int y = static_cast<int>(diam * sin(2 * pi * i / pointsOnEllipsee) / 2);
-		Ellipse.push_back(centre + QPoint(x, y));
+		int x = static_cast<int>(diam * cos(2 * pi * i / pointsOnEllipse) / 2);
+		int y = static_cast<int>(diam * sin(2 * pi * i / pointsOnEllipse) / 2);
+		QPoint pointOnEllipse = centre + QPoint(x, y) - topLeftPoint;
+		if (minX > pointOnEllipse.x()) {
+			minX = pointOnEllipse.x();
+		}
+		if (minY > pointOnEllipse.y()) {
+			minY = pointOnEllipse.y();
+		}
+		Ellipse.push_back(pointOnEllipse);
 	}
-	Ellipse.push_back(QPoint(centre.x() + diam / 2, centre.y()));
+	QPoint min = QPoint(minX, minY);
+	Ellipse.push_back(QPoint(centre.x() + diam / 2, centre.y()) - topLeftPoint);
 	return Ellipse;
 }
+

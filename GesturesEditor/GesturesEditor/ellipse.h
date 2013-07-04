@@ -28,7 +28,6 @@ public:
 	virtual QList<QPoint> getCurve(QPoint topLeftPoint);
 	virtual QDomElement generateItem(QDomDocument &document);
 
-
 private:
 
 	virtual void connectPoints(QPointF oldPoint, QPointF newPoint);

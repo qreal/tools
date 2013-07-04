@@ -238,15 +238,11 @@ QDomElement Line::generateItem(QDomDocument &document)
 
 QList<QPoint> Line::getCurve(QPoint topLeftPoint)
 {
-	int minX = topLeftPoint.x();
-	int minY = topLeftPoint.y();
 	QPointF point1 = mapToScene(QPoint(mX1, mY1));
 	QPointF point2 = mapToScene(QPoint(mX2, mY2));
-	point1 = QPointF(point1.x() - minX, point1.y() - minY);
-	point2 = QPointF(point2.x() - minX, point2.y() - minY);
 	QList<QPoint> component;
-	component.push_back(point1.toPoint());
-	component.push_back(point2.toPoint());
+	component.push_back(point1.toPoint() - topLeftPoint);
+	component.push_back(point2.toPoint() - topLeftPoint);
 	return component;
 }
 

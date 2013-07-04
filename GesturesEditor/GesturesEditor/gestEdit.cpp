@@ -233,9 +233,8 @@ QPoint GestEdit::getTopLeftPoint() const
 	qreal minY = heightGW;
 	foreach (QGraphicsItem *graphicsItem, mScene->items()) {
 		Item *item = dynamic_cast<Item*>(graphicsItem);
-		qDebug() << item->getName() << item->sceneBoundingRect();
-		qreal x = item->sceneBoundingRect().topLeft().x() + scalingDrift;
-		qreal y = item->sceneBoundingRect().topLeft().y() + scalingDrift;
+		qreal x = item->sceneBoundingRect().topLeft().x();
+		qreal y = item->sceneBoundingRect().topLeft().y();
 		if (minX > x) {
 			minX = x;
 		}

@@ -297,20 +297,14 @@ QDomElement Rectangle::generateItem(QDomDocument &document)
 QList<QPoint> Rectangle::getCurve(QPoint topLeftPoint)
 {
 	QList<QPoint> component;
-	int minX = topLeftPoint.x();
-	int minY = topLeftPoint.y();
-	QPointF point1 = mapToScene(QPointF(mX1, mY1));
-	QPointF point2 = mapToScene(QPointF(mX2, mY1));
-	QPointF point3 = mapToScene(QPointF(mX2, mY2));
-	QPointF point4 = mapToScene(QPointF(mX1, mY2));
-	point1 = QPointF(point1.x() - minX, point1.y() - minY);
-	point2 = QPointF(point2.x() - minX, point2.y() - minY);
-	point3 = QPointF(point3.x() - minX, point3.y() - minY);
-	point4 = QPointF(point4.x() - minX, point4.y() - minY);
-	component.push_back(point1.toPoint());
-	component.push_back(point2.toPoint());
-	component.push_back(point3.toPoint());
-	component.push_back(point4.toPoint());
-	component.push_back(point1.toPoint());
+	QPointF point1 = mapToScene(rectForDraw().topLeft());
+	QPointF point2 = mapToScene(rectForDraw().topRight());
+	QPointF point3 = mapToScene(rectForDraw().bottomRight());
+	QPointF point4 = mapToScene(rectForDraw().bottomLeft());
+	component.push_back(point1.toPoint() - topLeftPoint);
+	component.push_back(point2.toPoint() - topLeftPoint);
+	component.push_back(point3.toPoint() - topLeftPoint);
+	component.push_back(point4.toPoint() - topLeftPoint);
+	component.push_back(point1.toPoint() - topLeftPoint);
 	return component;
 }
