@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphics>
+    <picture sizex="233" sizey="233">
+        <rectangle y1="1893" y2="2017" x1="1303" x2="1427"/>
+        <rectangle y1="1847" y2="2056" x1="1260" x2="1469"/>
+    </picture>
+</graphics>
+
