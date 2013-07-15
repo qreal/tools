@@ -17,6 +17,10 @@ OBJECTS_DIR = $$CONFIGURATION/.obj
 MOC_DIR = $$CONFIGURATION/.moc
 RCC_DIR = $$CONFIGURATION/.moc
 
+!macx {
+	QMAKE_LFLAGS += -Wl,-O1,-rpath,.
+}
+
 HEADERS += \
 	qRealCommunicator.h \
 	runner.h \
