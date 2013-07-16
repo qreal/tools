@@ -43,7 +43,7 @@
                 redirectTarget = QueryString.target;
             }   
 
-            window.location.href = redirectTarget
+            setTimeout(function() { window.location.href = redirectTarget; }, 300);
         </script>
         <meta charset="UTF-8">
         <title>Download counter</title>
