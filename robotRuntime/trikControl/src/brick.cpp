@@ -7,17 +7,25 @@ using namespace trikControl;
 Brick::Brick()
 		: mMotor0(1500000, 1800000, "/sys/class/pwm/ehrpwm.1:0/duty_ns")
 		, mMotor1(1500000, 1800000, "/sys/class/pwm/ehrpwm.1:1/duty_ns")
+		, mSensor0("")
+		, mSensor1("")
 {
 }
 
-void Brick::playSound(const QString &soundFileName)
+void Brick::playSound(QString const &soundFileName)
 {
 	qDebug() << "playSound, file: " << soundFileName;
+
+	QString const command = "aplay --quiet " + soundFileName + " &";
+	system(command.toStdString().c_str());
 }
 
 void Brick::stop()
 {
 	qDebug() << "stop";
+
+	mMotor0.powerOff();
+	mMotor1.powerOff();
 }
 
 Motor *Brick::motor(int const &port)
@@ -37,7 +45,15 @@ Motor *Brick::motor(int const &port)
 Sensor *Brick::sensor(int const &port)
 {
 	qDebug() << "sensor, port: " << port;
-	return &mSensor;
+
+	switch (port) {
+	case 1:
+		return &mSensor0;
+	case 2:
+		return &mSensor1;
+	default:
+		return &mSensor0;
+	}
 }
 
 void Brick::wait(int const &milliseconds) const

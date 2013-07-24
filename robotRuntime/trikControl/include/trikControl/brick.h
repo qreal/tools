@@ -11,7 +11,7 @@
 namespace trikControl {
 
 /// Class representing TRIK controller board and devices installed on it, also provides access
-///to peripherals like motors and sensors.
+/// to peripherals like motors and sensors.
 class TRIKCONTROL_EXPORT Brick : public QObject
 {
 	Q_OBJECT
@@ -47,7 +47,8 @@ private:
 
 	Motor mMotor0;
 	Motor mMotor1;
-	Sensor mSensor;
+	Sensor mSensor0;
+	Sensor mSensor1;
 };
 
 }
