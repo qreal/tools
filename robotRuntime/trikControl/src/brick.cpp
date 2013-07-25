@@ -5,8 +5,8 @@
 using namespace trikControl;
 
 Brick::Brick()
-		: mMotor0(1500000, 1800000, "/sys/class/pwm/ehrpwm.1:0/duty_ns")
-		, mMotor1(1500000, 1800000, "/sys/class/pwm/ehrpwm.1:1/duty_ns")
+		: mMotor0(1100000, 1900000, "/sys/class/pwm/ecap.0/duty_ns")
+		, mMotor1(1100000, 1900000, "/sys/class/pwm/ecap.1/duty_ns")
 		, mSensor0("")
 		, mSensor1("")
 {

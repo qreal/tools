@@ -21,10 +21,19 @@ void Motor::setPower(int power)
 		return;
 	}
 
+	if (power == 0) {
+		// Quick hack for motors not stopping properly on middle power value
+		powerOff();
+		return;
+	}
+
 	QString command;
 
 	qreal const powerFactor = static_cast<qreal>(mPowerMax - mPowerMin) / 100;
 	command.sprintf("%d\n", static_cast<int>(power * powerFactor + mPowerMin));
+
+	qDebug() << "executing: " << command;
+
 	mControlFile.write(command.toLatin1());
 	mControlFile.close();
 }
