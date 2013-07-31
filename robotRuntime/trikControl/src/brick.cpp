@@ -14,7 +14,7 @@ Brick::Brick()
 	mMotor0.init(
 			settings.value("ValueMin", 1500000).toInt()
 			, settings.value("ValueMax", 1800000).toInt()
-			, settings.value("DeviceFile", "/sys/class/pwm/ehrpwm.1:0/duty_ns").toString()
+			, settings.value("DeviceFile", "/sys/class/pwm/ecap.0/duty_ns").toString()
 			);
 	settings.endGroup();
 
@@ -22,7 +22,7 @@ Brick::Brick()
 	mMotor0.init(
 			settings.value("ValueMin", 1500000).toInt()
 			, settings.value("ValueMax", 1800000).toInt()
-			, settings.value("DeviceFile", "/sys/class/pwm/ehrpwm.1:1/duty_ns").toString()
+			, settings.value("DeviceFile", "/sys/class/pwm/ecap.1/duty_ns").toString()
 			);
 	settings.endGroup();
 
