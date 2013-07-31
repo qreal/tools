@@ -4,13 +4,17 @@
 
 using namespace trikControl;
 
-Motor::Motor(int powerMin, int powerMax, QString const& controlFile)
-	: mControlFile(controlFile)
-	, mPowerMax(powerMax)
-	, mPowerMin(powerMin)
-
+Motor::Motor()
 {
 }
+
+void Motor::init(int powerMin, int powerMax, QString const& controlFile)
+{
+	mControlFile.setFileName(controlFile);
+	mPowerMin = powerMin;
+	mPowerMax = powerMax;
+}
+
 
 void Motor::setPower(int power)
 {

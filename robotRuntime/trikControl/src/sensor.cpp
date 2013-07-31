@@ -6,9 +6,9 @@
 
 using namespace trikControl;
 
-Sensor::Sensor(QString const &controlFile)
-	: mControlFile(controlFile)
+void Sensor::init(QString const &controlFile)
 {
+	mControlFile.setFileName(controlFile);
 }
 
 int Sensor::read()

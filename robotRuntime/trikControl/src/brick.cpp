@@ -1,15 +1,42 @@
 #include "brick.h"
 
+#include <QtCore/QSettings>
+
 #include <QtCore/QDebug>
 
 using namespace trikControl;
 
 Brick::Brick()
-		: mMotor0(1500000, 1800000, "/sys/class/pwm/ehrpwm.1:0/duty_ns")
-		, mMotor1(1500000, 1800000, "/sys/class/pwm/ehrpwm.1:1/duty_ns")
-		, mSensor0("")
-		, mSensor1("")
 {
+	QSettings settings("./config.ini", QSettings::IniFormat);
+
+	settings.beginGroup("Motor0");
+	mMotor0.init(
+			settings.value("ValueMin", 1500000).toInt()
+			, settings.value("ValueMax", 1800000).toInt()
+			, settings.value("DeviceFile", "/sys/class/pwm/ehrpwm.1:0/duty_ns").toString()
+			);
+	settings.endGroup();
+
+	settings.beginGroup("Motor1");
+	mMotor0.init(
+			settings.value("ValueMin", 1500000).toInt()
+			, settings.value("ValueMax", 1800000).toInt()
+			, settings.value("DeviceFile", "/sys/class/pwm/ehrpwm.1:1/duty_ns").toString()
+			);
+	settings.endGroup();
+
+	settings.beginGroup("Sensor0");
+	mSensor0.init(
+			settings.value("DeviceFile", "/sys/devices/platform/da850_trik/sensor_d1").toString()
+			);
+	settings.endGroup();
+
+	settings.beginGroup("Sensor1");
+	mSensor1.init(
+			settings.value("DeviceFile", "/sys/devices/platform/da850_trik/sensor_d1").toString()
+			);
+	settings.endGroup();
 }
 
 void Brick::playSound(QString const &soundFileName)

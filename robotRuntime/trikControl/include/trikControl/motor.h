@@ -14,7 +14,9 @@ class TRIKCONTROL_EXPORT Motor : public QObject
 	Q_OBJECT
 
 public:
-	Motor(int powerMin, int powerMax, QString const& controlFile);
+	/// Initializes motor.
+	/// @param controlFile Device file for this motor.
+	void init(int powerMin, int powerMax, QString const& controlFile);
 
 public slots:
 	/// Sets current motor power to specified value, 0 to stop motor.

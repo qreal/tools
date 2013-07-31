@@ -14,7 +14,9 @@ class TRIKCONTROL_EXPORT Sensor : public QObject
 	Q_OBJECT
 
 public:
-	Sensor(QString const &controlFile);
+	/// Initializes sensor.
+	/// @param controlFile Device file for this sensor.
+	void init(QString const &controlFile);
 
 public slots:
 	/// Returns current raw reading of a sensor.
