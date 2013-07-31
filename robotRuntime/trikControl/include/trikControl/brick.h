@@ -45,10 +45,10 @@ private:
 		}
 	};
 
-	Motor mMotor0;
 	Motor mMotor1;
-	Sensor mSensor0;
+	Motor mMotor2;
 	Sensor mSensor1;
+	Sensor mSensor2;
 };
 
 }

@@ -1,6 +1,6 @@
 #include "sensor.h"
 
-#include <QtCore/QDataStream>
+#include <QtCore/QTextStream>
 
 #include <QtCore/QDebug>
 
@@ -13,8 +13,8 @@ void Sensor::init(QString const &controlFile)
 
 int Sensor::read()
 {
-	if (mControlFile.open(QIODevice::ReadOnly)) {
-		QDataStream stream(&mControlFile);
+	if (mControlFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+		QTextStream stream(&mControlFile);
 		int value = 0;
 		stream >> value;
 		mControlFile.close();

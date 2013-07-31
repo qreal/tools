@@ -4,10 +4,6 @@
 
 using namespace trikControl;
 
-Motor::Motor()
-{
-}
-
 void Motor::init(int powerMin, int powerMax, QString const& controlFile)
 {
 	mControlFile.setFileName(controlFile);
