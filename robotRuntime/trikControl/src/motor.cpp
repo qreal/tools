@@ -16,14 +16,14 @@ void Motor::setPower(int power)
 {
 	qDebug() << "Executing setPower command with power = " << power;
 
-	if (!mControlFile.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Unbuffered | QIODevice::Text)) {
-		qDebug() << "Can't open motor control file " << mControlFile.fileName();
-		return;
-	}
-
 	if (power == 0) {
 		// Quick hack for motors not stopping properly on middle power value
 		powerOff();
+		return;
+	}
+
+	if (!mControlFile.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Unbuffered | QIODevice::Text)) {
+		qDebug() << "Can't open motor control file " << mControlFile.fileName();
 		return;
 	}
 
