@@ -103,7 +103,7 @@ void QRealCommunicator::onReadyRead()
 
 		mRunner.run(fileContents);
 	} else if (command == "stop") {
-		qDebug() << "Stop" << command;
+		qDebug() << "Stop";
 
 		mRunner.abort();
 		mRunner.run("brick.stop()");

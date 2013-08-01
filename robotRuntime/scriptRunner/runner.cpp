@@ -15,36 +15,37 @@ Q_DECLARE_METATYPE(Sensor*)
 
 Runner::Runner()
 {
-	mEngine.setProcessEventsInterval(100);
-
-	qScriptRegisterMetaType(&mEngine, motorToScriptValue, motorFromScriptValue);
-	qScriptRegisterMetaType(&mEngine, sensorToScriptValue, sensorFromScriptValue);
-
-	QScriptValue brickProxy = mEngine.newQObject(&mBrick);
-	mEngine.globalObject().setProperty("brick", brickProxy);
+	mRunnerThread = new QThread();
+	mEngineWrapper = new ScriptEngineWrapper();
+	connect(this, SIGNAL(threadRun(QString)), mEngineWrapper, SLOT(run(QString)));
+	mEngineWrapper->moveToThread(mRunnerThread);
+	mEngineWrapper->moveSubobjectsToThread(mRunnerThread);
+	mRunnerThread->start();
 }
-
 
 void Runner::run(QString const &script)
 {
-	if (mEngine.isEvaluating()) {
+	if (mEngineWrapper->isRunning()) {
 		qDebug() << "Script is already running";
 
 		return;
 	}
 
-	QScriptValue const result = mEngine.evaluate(script);
-
-	if (mEngine.hasUncaughtException()) {
-		int line = mEngine.uncaughtExceptionLineNumber();
-
-		qDebug() << "uncaught exception at line" << line << ":" << result.toString();
-	}
+	emit threadRun(script);
 }
 
 void Runner::abort()
 {
-	if (mEngine.isEvaluating()) {
-		mEngine.abortEvaluation();
-	}
+	// TODO: wt* is this sh**?
+	mRunnerThread->terminate();
+	delete mRunnerThread;
+	mRunnerThread = new QThread();
+
+	delete mEngineWrapper;
+	mEngineWrapper = new ScriptEngineWrapper();
+	connect(this, SIGNAL(threadRun(QString)), mEngineWrapper, SLOT(run(QString)));
+	mEngineWrapper->moveToThread(mRunnerThread);
+	mEngineWrapper->moveSubobjectsToThread(mRunnerThread);
+
+	mRunnerThread->start();
 }

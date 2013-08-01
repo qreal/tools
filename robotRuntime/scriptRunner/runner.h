@@ -1,16 +1,19 @@
 #pragma once
 
 #include <QtCore/QString>
-#include <QtScript/QScriptEngine>
+#include <QtCore/QTimer>
+#include <QtCore/QThread>
 
-#include <trikControl/brick.h>
+#include "scriptEngineWrapper.h"
 
 namespace scriptRunner
 {
 
 /// Executes scripts in Qt Scripting Engine.
-class Runner
+class Runner : public QObject
 {
+	Q_OBJECT
+
 public:
 	/// Constructor.
 	Runner();
@@ -21,9 +24,13 @@ public:
 	/// Aborts script execution.
 	void abort();
 
+signals:
+	void threadRun(QString const &script);
+
 private:
-	QScriptEngine mEngine;
-	trikControl::Brick mBrick;
+	ScriptEngineWrapper *mEngineWrapper;  // Has ownership.
+	QTimer mTestTimer;
+	QThread *mRunnerThread;  // Has ownership.
 };
 
 }
