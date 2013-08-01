@@ -23,7 +23,7 @@ public slots:
 	/// Plays given music file on a speaker (in format accepted by aplay utility).
 	void playSound(QString const &soundFileName);
 
-	/// Stops all motors shuts down all current activity.
+	/// Stops all motors and shuts down all current activity.
 	void stop();
 
 	/// Returns reference to motor on a given port.

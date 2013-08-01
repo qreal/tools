@@ -3,14 +3,12 @@
 #include <QtCore/QFile>
 #include <QtCore/QDebug>
 
-#include "runner.h"
-
 using namespace scriptRunner;
 
 int const bufferSize = 1000;
 
 QRealCommunicator::QRealCommunicator()
-		: mConnection(new QTcpSocket())
+	: mConnection(new QTcpSocket())
 {
 }
 
@@ -46,7 +44,6 @@ void QRealCommunicator::writeToFile(QString const &fileName, QString const &cont
 
 void QRealCommunicator::listen(int const &port)
 {
-	// TODO: Listen correct network interface. For now --- LocalHost, to simplify local debugging.
 	connect(&mServer, SIGNAL(newConnection()), this, SLOT(onNewConnection()));
 	mServer.listen(QHostAddress::Any, port);
 }
@@ -104,6 +101,17 @@ void QRealCommunicator::onReadyRead()
 		qDebug() << "Run: " << command;
 		qDebug() << "Contents" << fileContents;
 
-		Runner::run(fileContents);
+		mRunner.run(fileContents);
+	} else if (command == "stop") {
+		qDebug() << "Stop" << command;
+
+		mRunner.abort();
+		mRunner.run("brick.stop()");
+	} else if (command.startsWith("direct")) {
+		command.remove(0, QString("direct:").length());
+
+		qDebug() << "Direct: " << command;
+
+		mRunner.run(command);
 	}
 }

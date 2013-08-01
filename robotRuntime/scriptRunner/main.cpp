@@ -40,7 +40,8 @@ int main(int argc, char *argv[])
 	QString const script = input.readAll();
 	file.close();
 
-	Runner::run(script);
+	Runner runner;
+	runner.run(script);
 
 	return 0;
 }

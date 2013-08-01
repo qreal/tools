@@ -4,6 +4,8 @@
 #include <QtNetwork/QTcpServer>
 #include <QtNetwork/QTcpSocket>
 
+#include "runner.h"
+
 namespace scriptRunner
 {
 
@@ -27,6 +29,7 @@ private slots:
 private:
 	QTcpServer mServer;
 	QTcpSocket* mConnection;  // Has ownership.
+	Runner mRunner;
 
 	static QString readFromFile(QString const &fileName);
 	static void writeToFile(QString const &fileName, QString const &contents);
