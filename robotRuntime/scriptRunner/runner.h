@@ -21,6 +21,9 @@ public:
 	/// Executes given script.
 	void run(QString const &script);
 
+	/// Executes given script, but does not return until it is finished.
+	void runSynchronous(QString const &script);
+
 	/// Aborts script execution.
 	void abort();
 

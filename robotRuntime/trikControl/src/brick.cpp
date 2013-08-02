@@ -28,13 +28,17 @@ Brick::Brick()
 
 	settings.beginGroup("Sensor1");
 	mSensor1.init(
-			settings.value("DeviceFile", "/sys/devices/platform/da850_trik/sensor_d1").toString()
+			settings.value("Min", 30000).toInt()
+			, settings.value("Max", 350000).toInt()
+			, settings.value("DeviceFile", "/sys/devices/platform/da850_trik/sensor_d1").toString()
 			);
 	settings.endGroup();
 
 	settings.beginGroup("Sensor2");
 	mSensor2.init(
-			settings.value("DeviceFile", "/sys/devices/platform/da850_trik/sensor_d2").toString()
+			settings.value("Min", 30000).toInt()
+			, settings.value("Max", 350000).toInt()
+			, settings.value("DeviceFile", "/sys/devices/platform/da850_trik/sensor_d2").toString()
 			);
 	settings.endGroup();
 }

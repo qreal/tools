@@ -34,6 +34,12 @@ void Runner::run(QString const &script)
 	emit threadRun(script);
 }
 
+void Runner::runSynchronous(QString const &script)
+{
+	emit threadRun(script);
+	mRunnerThread->wait();
+}
+
 void Runner::abort()
 {
 	// TODO: wt* is this sh**?
