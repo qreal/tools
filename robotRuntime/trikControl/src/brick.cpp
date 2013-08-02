@@ -41,6 +41,12 @@ Brick::Brick()
 			, settings.value("DeviceFile", "/sys/devices/platform/da850_trik/sensor_d2").toString()
 			);
 	settings.endGroup();
+
+	mPowerMotor0.init(0);
+	mPowerMotor1.init(1);
+	mPowerMotor2.init(2);
+	mPowerMotor3.init(3);
+	mPowerMotor4.init(4);
 }
 
 void Brick::playSound(QString const &soundFileName)
@@ -71,6 +77,27 @@ Motor *Brick::motor(int const &port)
 	default:
 		return &mMotor1;
 	}
+}
+
+PowerMotor *Brick::powerMotor(int const &port)
+{
+	qDebug() << "Power motor, port: " << port;
+
+	switch (port) {
+	case 0:
+		return &mPowerMotor0;
+	case 1:
+		return &mPowerMotor1;
+	case 2:
+		return &mPowerMotor2;
+	case 3:
+		return &mPowerMotor3;
+	case 4:
+		return &mPowerMotor4;
+	default:
+		return &mPowerMotor0;
+	}
+
 }
 
 Sensor *Brick::sensor(int const &port)

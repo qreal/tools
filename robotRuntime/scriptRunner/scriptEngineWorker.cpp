@@ -13,6 +13,7 @@ using namespace scriptRunner;
 using namespace trikControl;
 
 Q_DECLARE_METATYPE(Motor*)
+Q_DECLARE_METATYPE(PowerMotor*)
 Q_DECLARE_METATYPE(Sensor*)
 
 ScriptEngineWorker::ScriptEngineWorker()

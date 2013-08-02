@@ -6,6 +6,7 @@
 
 #include "declSpec.h"
 #include "motor.h"
+#include "powerMotor.h"
 #include "sensor.h"
 
 namespace trikControl {
@@ -29,6 +30,9 @@ public slots:
 	/// Returns reference to motor on a given port.
 	Motor *motor(int const &port);
 
+	/// Returns reference to power motor on a given port.
+	PowerMotor *powerMotor(int const &port);
+
 	/// Returns reference to sensor on a given port.
 	Sensor *sensor(int const &port);
 
@@ -47,6 +51,11 @@ private:
 
 	Motor mMotor1;
 	Motor mMotor2;
+	PowerMotor mPowerMotor0;
+	PowerMotor mPowerMotor1;
+	PowerMotor mPowerMotor2;
+	PowerMotor mPowerMotor3;
+	PowerMotor mPowerMotor4;
 	Sensor mSensor1;
 	Sensor mSensor2;
 };

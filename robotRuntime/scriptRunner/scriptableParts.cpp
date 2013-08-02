@@ -15,6 +15,16 @@ void scriptRunner::motorFromScriptValue(QScriptValue const &object, Motor* &out)
 	out = qobject_cast<Motor*>(object.toQObject());
 }
 
+QScriptValue scriptRunner::powerMotorToScriptValue(QScriptEngine *engine, PowerMotor* const &in)
+{
+	return engine->newQObject(in);
+}
+
+void scriptRunner::powerMotorFromScriptValue(QScriptValue const &object, PowerMotor* &out)
+{
+	out = qobject_cast<PowerMotor*>(object.toQObject());
+}
+
 QScriptValue scriptRunner::sensorToScriptValue(QScriptEngine *engine, trikControl::Sensor* const &in)
 {
 	return engine->newQObject(in);
