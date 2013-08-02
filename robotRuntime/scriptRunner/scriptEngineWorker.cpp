@@ -1,4 +1,4 @@
-#include "scriptEngineWrapper.h"
+#include "scriptEngineWorker.h"
 
 #include "runner.h"
 
@@ -15,9 +15,20 @@ using namespace trikControl;
 Q_DECLARE_METATYPE(Motor*)
 Q_DECLARE_METATYPE(Sensor*)
 
-ScriptEngineWrapper::ScriptEngineWrapper()
+ScriptEngineWorker::ScriptEngineWorker()
 	: mEngine(NULL)
 {
+}
+
+ScriptEngineWorker::~ScriptEngineWorker()
+{
+	delete mEngine;
+}
+
+void ScriptEngineWorker::init()
+{
+	qDebug() << "ScriptEngineWorker::init()";
+
 	mEngine = new QScriptEngine(this);
 
 	mEngine->setProcessEventsInterval(10);
@@ -29,13 +40,14 @@ ScriptEngineWrapper::ScriptEngineWrapper()
 	mEngine->globalObject().setProperty("brick", brickProxy);
 }
 
-void ScriptEngineWrapper::moveSubobjectsToThread(QThread * const thread)
+void ScriptEngineWorker::run(QString const &script)
 {
-	mEngine->moveToThread(thread);
-}
+	qDebug() << "ScriptEngineWorker::run()";
 
-void ScriptEngineWrapper::run(QString const &script)
-{
+	if (!mEngine) {
+		qDebug() << "ScriptEngineWorker is not initialized";
+	}
+
 	if (mEngine->isEvaluating()) {
 		qDebug() << "Script is already running";
 
@@ -49,9 +61,20 @@ void ScriptEngineWrapper::run(QString const &script)
 
 		qDebug() << "uncaught exception at line" << line << ":" << result.toString();
 	}
+
+	qDebug() << "ScriptEngineWorker::finished";
+
+	thread()->quit();
 }
 
-bool ScriptEngineWrapper::isRunning() const
+void ScriptEngineWorker::deleteWorker()
 {
-	return mEngine->isEvaluating();
+	mEngine->abortEvaluation();
+	deleteLater();
+	thread()->quit();
+}
+
+bool ScriptEngineWorker::isRunning() const
+{
+	return mEngine && mEngine->isEvaluating();
 }

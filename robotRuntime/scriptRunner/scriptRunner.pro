@@ -25,14 +25,14 @@ HEADERS += \
 	qRealCommunicator.h \
 	runner.h \
 	scriptableParts.h \
-	scriptEngineWrapper.h \
+	scriptEngineWorker.h \
 
 SOURCES += \
 	main.cpp \
 	qRealCommunicator.cpp \
 	runner.cpp \
 	scriptableParts.cpp \
-	scriptEngineWrapper.cpp \
+	scriptEngineWorker.cpp \
 
 win32 {
 	QMAKE_POST_LINK = "xcopy ..\\trikControl\\$$CONFIGURATION\\bin $$CONFIGURATION\\bin /s /e /q /y /i"
