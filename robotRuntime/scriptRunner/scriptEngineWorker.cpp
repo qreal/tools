@@ -35,6 +35,7 @@ void ScriptEngineWorker::init()
 	mEngine->setProcessEventsInterval(10);
 
 	qScriptRegisterMetaType(mEngine, motorToScriptValue, motorFromScriptValue);
+	qScriptRegisterMetaType(mEngine, powerMotorToScriptValue, powerMotorFromScriptValue);
 	qScriptRegisterMetaType(mEngine, sensorToScriptValue, sensorFromScriptValue);
 
 	QScriptValue brickProxy = mEngine->newQObject(&mBrick);
