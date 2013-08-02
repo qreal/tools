@@ -39,6 +39,5 @@ win32 {
 	xcopy ..\\media $$CONFIGURATION\\bin\\media /s /e /q /y /i"
 }
 else {
-	QMAKE_POST_LINK = "cp -r ../trikControl/$$CONFIGURATION/bin/* $$CONFIGURATION/bin \
-	cp -r ../trikControl/media $$CONFIGURATION/bin"
+	QMAKE_POST_LINK = "cp -r ../trikControl/$$CONFIGURATION/bin/* $$CONFIGURATION/bin"
 }
