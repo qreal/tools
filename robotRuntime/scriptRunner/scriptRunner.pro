@@ -36,7 +36,9 @@ SOURCES += \
 
 win32 {
 	QMAKE_POST_LINK = "xcopy ..\\trikControl\\$$CONFIGURATION\\bin $$CONFIGURATION\\bin /s /e /q /y /i"
+	QMAKE_POST_LINK = "xcopy ..\\media $$CONFIGURATION\\bin /s /e /q /y /i"
 }
 else {
 	QMAKE_POST_LINK = "cp -r ../trikControl/$$CONFIGURATION/bin/* $$CONFIGURATION/bin"
+	QMAKE_POST_LINK = "cp -r ../trikControl/media $$CONFIGURATION/bin"
 }
