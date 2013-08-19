@@ -2,13 +2,46 @@
 <html lang="en-US">
     <head>
         <script type="text/javascript">
+            var linksMap = {}
+            linksMap["latest"] = "http://qreal.ru/files/QRealRobots-2.3.2-with-nxt-tools-windows-installer.exe";
+            linksMap["experimental"] = "https://drive.google.com/uc?id=0B0YEMCLGZLEnb0dUamRIX01vVGs";
+
+            linksMap["auto-QRealRobots-2.4.0-with-nxt-tools-windows-installer"] = "https://drive.google.com/uc?id=0B0YEMCLGZLEnT0J4b2VlUThJbjQ";
+            linksMap["auto-QRealRobots-2.4.0-windows-installer"] = "https://drive.google.com/uc?id=0B0YEMCLGZLEndEFYaGd4RGpDMGM";
+            linksMap["QRealRobots-2.4.0-with-nxt-tools-windows-installer"] = "https://drive.google.com/uc?id=0B0YEMCLGZLEnb0dUamRIX01vVGs";
+            linksMap["QRealRobots-2.4.0-windows-installer"] = "https://drive.google.com/uc?id=0B0YEMCLGZLEnMWpQcEJDalgzQ2c";
+
+            linksMap["auto-QRealRobots-2.3.2-with-nxt-tools-windows-installer"] = "http://qreal.ru/files/auto-QRealRobots-2.3.2-with-nxt-tools-windows-installer.exe";
+            linksMap["auto-QRealRobots-2.3.2-windows-installer"] = "http://qreal.ru/files/auto-QRealRobots-2.3.2-windows-installer.exe";
+            linksMap["QRealRobots-2.3.2-with-nxt-tools-windows-installer"] = "http://qreal.ru/files/QRealRobots-2.3.2-with-nxt-tools-windows-installer.exe";
+            linksMap["QRealRobots-2.3.2-windows-installer"] = "http://qreal.ru/files/QRealRobots-2.3.2-windows-installer.exe";
+
+            linksMap["auto-QRealRobots-2.3.1-with-nxt-tools-windows-installer"] = "http://qreal.ru/files/auto-QRealRobots-2.3.1-with-nxt-tools-windows-installer.exe";
+            linksMap["auto-QRealRobots-2.3.1-windows-installer"] = "http://qreal.ru/files/auto-QRealRobots-2.3.1-windows-installer.exe";
+            linksMap["QRealRobots-2.3.1-with-nxt-tools-windows-installer"] = "http://qreal.ru/files/QRealRobots-2.3.1-with-nxt-tools-windows-installer.exe";
+            linksMap["QRealRobots-2.3.1-windows-installer"] = "http://qreal.ru/files/QRealRobots-2.3.1-windows-installer.exe";
+
+            linksMap["auto-QRealRobots-2.3.0-with-nxt-tools-windows-installer"] = "http://qreal.ru/files/auto-QRealRobots-2.3.0-with-nxt-tools-windows-installer.exe";
+            linksMap["auto-QRealRobots-2.3.0-windows-installer"] = "http://qreal.ru/files/auto-QRealRobots-2.3.0-windows-installer.exe";
+            linksMap["QRealRobots-2.3.0-with-nxt-tools-windows-installer"] = "http://qreal.ru/files/QRealRobots-2.3.0-with-nxt-tools-windows-installer.exe";
+            linksMap["QRealRobots-2.3.0-windows-installer"] = "http://qreal.ru/files/QRealRobots-2.3.0-windows-installer.exe";
+
+            linksMap["QRealRobots-2.2.0-with-nxt-tools-windows-installer"] = "http://qreal.ru/files/QRealRobots-2.2.0-with-nxt-tools-windows-installer.exe";
+            linksMap["QRealRobots-2.2.0-windows-installer"] = "http://qreal.ru/files/QRealRobots-2.2.0-windows-installer.exe";
+
+            linksMap["QRealRobots-2.1.0-with-nxt-tools-windows-installer"] = "http://qreal.ru/files/QRealRobots-2.1.0-with-nxt-tools-windows-installer.exe";
+            linksMap["QRealRobots-2.1.0-windows-installer"] = "http://qreal.ru/files/QRealRobots-2.1.0-windows-installer.exe";
+
+            linksMap["QRealRobots-2.0.2-with-nxt-tools-windows-installer"] = "http://qreal.ru/files/QRealRobots-2.0.2-with-nxt-tools-windows-installer.exe";
+            linksMap["QRealRobots-2.0.2-linux-installer"] = "http://qreal.ru/files/QRealRobots-2.0.2-linux-installer.run";
+            linksMap["QRealRobots-2.0.2-windows-installer"] = "http://qreal.ru/files/QRealRobots-2.0.2-windows-installer.exe";
+
+            linksMap["NXTtools"] = "http://qreal.ru/files/nxttools-1.0-windows-installer.exe";
+
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
             m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
             })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-            var latest = "http://qreal.ru/files/QRealRobots-2.3.2-with-nxt-tools-windows-installer.exe";
-            var experimental = "http://qreal.ru/files/QRealRobots-2.3.2-with-nxt-tools-windows-installer.exe";
 
             ga('create', 'UA-42363987-1', 'qreal.ru');
             ga('send', 'pageview');
@@ -20,32 +53,27 @@
                 for (var i = 0; i < vars.length; i++) {
                     var pair = vars[i].split("=");
                     if (typeof query_string[pair[0]] === "undefined") {
-                        query_string[pair[0]] = pair[1];
+                        var value = "";
+                        for (var i = 1; i < pair.length; i++) {
+                            if (i == 1) {
+                                value = pair[1];
+                            } else {
+                                value = value + "=" + pair[i];
+                            }
+                        }
+                        query_string[pair[0]] = value;
                     } else if (typeof query_string[pair[0]] === "string") {
                         var arr = [query_string[pair[0]], pair[1]];
                         query_string[pair[0]] = arr;
                     } else {
-                        var value = "";
-                        for (var i = 1; i < pair.length; i++) {
-                            value = value + pair[i];
-                        } 
                         query_string[pair[0]].push(value);
                     }
                 } 
                 return query_string;
             } ();
 
-            var redirectTarget = "";
-            if (QueryString.target === "latest") {
-                ga('send', 'pageview', '/latest');
-                redirectTarget = latest;
-            } else if (QueryString.target === "experimental") {
-                ga('send', 'pageview', '/experimental');
-                redirectTarget = experimental;
-            } else {
-                ga('send', 'pageview', '/custom?target=' + QueryString.target);
-                redirectTarget = QueryString.target;
-            }   
+            ga('send', 'pageview', QueryString.target);
+            var redirectTarget = QueryString.target in linksMap ? linksMap[QueryString.target] : QueryString.target;
 
             setTimeout(function() { window.location.href = redirectTarget; }, 300);
         </script>
