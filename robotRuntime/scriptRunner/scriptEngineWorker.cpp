@@ -32,7 +32,7 @@ void ScriptEngineWorker::init()
 
 	mEngine = new QScriptEngine(this);
 
-	mEngine->setProcessEventsInterval(10);
+	// mEngine->setProcessEventsInterval(10);
 
 	qScriptRegisterMetaType(mEngine, motorToScriptValue, motorFromScriptValue);
 	qScriptRegisterMetaType(mEngine, powerMotorToScriptValue, powerMotorFromScriptValue);

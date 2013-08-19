@@ -63,6 +63,11 @@ void Brick::stop()
 
 	mMotor1.powerOff();
 	mMotor2.powerOff();
+	mPowerMotor0.powerOff();
+	mPowerMotor1.powerOff();
+	mPowerMotor2.powerOff();
+	mPowerMotor3.powerOff();
+	mPowerMotor4.powerOff();
 }
 
 Motor *Brick::motor(int const &port)
@@ -95,7 +100,7 @@ PowerMotor *Brick::powerMotor(int const &port)
 	case 4:
 		return &mPowerMotor4;
 	default:
-		return &mPowerMotor0;
+		return &mPowerMotor1;
 	}
 
 }

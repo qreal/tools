@@ -28,7 +28,7 @@ Runner::~Runner()
 
 	// Restart thread to be able to process threadDelete signal.
 	mRunnerThread->start();
-	mRunnerThread->wait(1000);
+	mRunnerThread->wait(100);
 	mRunnerThread->deleteLater();
 }
 
@@ -55,6 +55,7 @@ void Runner::runSynchronous(QString const &script)
 	emit threadRun(script);
 
 	// Block until thread is finished.
+	mRunnerThread->start();
 	mRunnerThread->wait();
 
 	qDebug() << "Runner::runSynchronous() done";
