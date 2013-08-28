@@ -28,10 +28,19 @@ type MainWindow (mainWindow : Window) =
 
     let setButtonsEnabled enabled = for button in buttons do button.IsEnabled <- enabled
 
-    let connectionFailed () =
+    let noConnection reason = 
         client <- None
         connectButton.IsChecked <- Nullable false
+        connectButton.IsEnabled <- true
+        connectionFailedLabel.Content <- reason
         connectionFailedLabel.Visibility <- Visibility.Visible
+        setButtonsEnabled false
+
+    let connectionFailed () =
+        noConnection "Подключение не удалось"
+
+    let disconnected () =
+        noConnection "Соединение потеряно"
 
     let connectionSucceed () =
         setButtonsEnabled true
@@ -43,6 +52,7 @@ type MainWindow (mainWindow : Window) =
             client <- Some <| Client (ip, port)
             client.Value.ConnectedEvent |> Event.add (fun _ -> connectionSucceed ())
             client.Value.ConnectionFailedEvent |> Event.add (fun _ -> connectionFailed ())
+            client.Value.DisconnectedEvent |> Event.add (fun _ -> disconnected ())
             client.Value.Connect ()
 
     let sendCommand command =
