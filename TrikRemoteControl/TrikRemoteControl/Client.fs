@@ -44,7 +44,7 @@ type Client (host : string, port) =
 
         async {
             let! result = Async.AwaitIAsyncResult (client.ConnectAsync(host, port), Constants.connectionTimeout)
-            if result then
+            if result && client.Connected then
                 postEvent connectedEvent
                 connectionState <- ConnectedState client :> ConnectionState
             else

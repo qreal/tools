@@ -65,6 +65,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Compile Include="Client.fs" />
+    <Compile Include="Settings.fs" />
     <Compile Include="Main.fs" />
     <None Include="App.config" />
     <Resource Include="App.xaml" />
