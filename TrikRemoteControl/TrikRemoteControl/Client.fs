@@ -8,7 +8,7 @@ module Constants =
     let SendTimeout = 2000
 
 /// Network client. Can connect to some endpoint, send and receive string data.
-type Client (host : string, port: int) =
+type Client () =
 
     /// TCP client that is used for communication.
     let client = new System.Net.Sockets.TcpClient()
@@ -24,7 +24,7 @@ type Client (host : string, port: int) =
     member this.ConnectionFailedEvent = connectionFailedEvent.Publish
     member this.DisconnectedEvent = disconnectedEvent.Publish
     
-    member this.Connect () =        
+    member this.Connect (host : string, port: int) =
         this.Disconnect()
         async {
             let! _ = Async.AwaitIAsyncResult (client.ConnectAsync(host, port), Constants.ConnectionTimeout)
