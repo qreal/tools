@@ -7,10 +7,10 @@ using namespace trikControl;
 void Motor::init(int powerMin, int powerMax, QString const& controlFile)
 {
 	mControlFile.setFileName(controlFile);
-	mPowerMin = powerMin;
 	mPowerMax = powerMax;
+	mPowerMin = powerMin;
+	mPower = 0;
 }
-
 
 void Motor::setPower(int power)
 {
@@ -27,6 +27,14 @@ void Motor::setPower(int power)
 		return;
 	}
 
+	if (power > 100) {
+		power = 100;
+	} else if (power < -100) {
+		power = -100;
+	}
+
+	mPower = power;
+
 	QString command;
 
 	qreal const powerFactor = static_cast<qreal>(mPowerMax - mPowerMin) / 100;
@@ -37,6 +45,12 @@ void Motor::setPower(int power)
 	mControlFile.write(command.toLatin1());
 	mControlFile.close();
 }
+
+int Motor::power() const
+{
+	return mPower;
+}
+
 
 void Motor::powerOff()
 {
@@ -49,4 +63,6 @@ void Motor::powerOff()
 
 	mControlFile.write("0");
 	mControlFile.close();
+
+	mPower = 0;
 }

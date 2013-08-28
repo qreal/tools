@@ -65,8 +65,6 @@ void QRealCommunicator::onDisconnected()
 
 void QRealCommunicator::onReadyRead()
 {
-	qDebug() << "Incoming command";
-
 	if (!mConnection->isValid()) {
 		return;
 	}
@@ -74,7 +72,10 @@ void QRealCommunicator::onReadyRead()
 	QByteArray data = mConnection->readAll();
 	QString command(data);
 
-	qDebug() << "Raw: " << command;
+	if (command != "keepalive") {
+		// Discard "keepalive" output.
+		qDebug() << "Command: " << command;
+	}
 
 	if (command.startsWith("file")) {
 		command.remove(0, QString("file:").length());
@@ -90,28 +91,15 @@ void QRealCommunicator::onReadyRead()
 		QString const fileName = command.left(separatorPosition);
 		QString const fileContents = command.mid(separatorPosition + 1);
 		writeToFile(fileName, fileContents);
-
-		qDebug() << "File name: " << fileName;
-		qDebug() << "File contents: " << fileContents;
-
 	} else if (command.startsWith("run")) {
 		command.remove(0, QString("run:").length());
 		QString const fileContents = readFromFile(command);
-
-		qDebug() << "Run: " << command;
-		qDebug() << "Contents" << fileContents;
-
 		mRunner.run(fileContents);
 	} else if (command == "stop") {
-		qDebug() << "Stop";
-
 		mRunner.abort();
 		mRunner.run("brick.stop()");
 	} else if (command.startsWith("direct")) {
 		command.remove(0, QString("direct:").length());
-
-		qDebug() << "Direct: " << command;
-
 		mRunner.run(command);
 	}
 }
