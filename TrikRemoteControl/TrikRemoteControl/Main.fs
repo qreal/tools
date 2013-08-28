@@ -36,6 +36,7 @@ type MainWindow (mainWindow : Window) =
     let connectionSucceed () =
         setButtonsEnabled true
         connectionFailedLabel.Visibility <- Visibility.Hidden
+        connectButton.IsEnabled <- false
 
     let connect ip =
         if client.IsNone then
@@ -46,6 +47,7 @@ type MainWindow (mainWindow : Window) =
 
     let sendCommand command =
         if client.IsSome then
+            let command = "direct:" + command
             client.Value.Send command
 
     let init () =
@@ -53,9 +55,13 @@ type MainWindow (mainWindow : Window) =
             let button = mainWindow.FindName buttonName :?> ButtonBase
             Event.add handler button.Click
 
-        let registerCommand button =
+        let registerCommand button key =
             let commandScriptFileName = "scripts/" + button + ".qts"
-            registerButtonHandler button (fun _ -> sendCommand <| System.IO.File.ReadAllText commandScriptFileName)
+            let command _ = sendCommand <| System.IO.File.ReadAllText commandScriptFileName
+            registerButtonHandler button command 
+            mainWindow.KeyDown 
+            |> Event.filter (fun event -> event.Key = key) 
+            |> Event.add command
 
         registerButtonHandler "connect" 
             (fun _ -> 
@@ -63,11 +69,11 @@ type MainWindow (mainWindow : Window) =
                 settings.IpAddress <- ipTextBox.Text
             )
 
-        registerCommand "up"
-        registerCommand "down"
-        registerCommand "left"
-        registerCommand "right"
-        registerCommand "stop"
+        registerCommand "up" Input.Key.Up
+        registerCommand "down" Input.Key.Down
+        registerCommand "left" Input.Key.Left
+        registerCommand "right" Input.Key.Right
+        registerCommand "stop" Input.Key.Back
 
         setButtonsEnabled false
 

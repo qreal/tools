@@ -1,1 +1,2 @@
-right
+brick.powerMotor(1).setPower(50)
+brick.powerMotor(4).setPower(0)
