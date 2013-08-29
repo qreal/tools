@@ -1,4 +1,4 @@
-#include "brick.h"
+#include "brickProxy.h"
 
 #include <QtCore/QSettings>
 

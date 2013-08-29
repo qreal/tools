@@ -5,7 +5,7 @@
 #include <QtCore/QThread>
 
 #include "declSpec.h"
-#include "motor.h"
+#include "servoMotor.h"
 #include "powerMotor.h"
 #include "sensor.h"
 
@@ -28,7 +28,7 @@ public slots:
 	void stop();
 
 	/// Returns reference to motor on a given port.
-	Motor *motor(int const &port);
+	ServoMotor *motor(int const &port);
 
 	/// Returns reference to power motor on a given port.
 	PowerMotor *powerMotor(int const &port);
@@ -49,8 +49,8 @@ private:
 		}
 	};
 
-	Motor mMotor1;
-	Motor mMotor2;
+	ServoMotor mMotor1;
+	ServoMotor mMotor2;
 	PowerMotor mPowerMotor1;
 	PowerMotor mPowerMotor2;
 	PowerMotor mPowerMotor3;

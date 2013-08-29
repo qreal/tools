@@ -17,13 +17,13 @@ INCLUDEPATH = include/trikControl
 
 HEADERS += \
 	include/trikControl/brick.h \
-	include/trikControl/motor.h \
+	include/trikControl/servoMotor.h \
 	include/trikControl/powerMotor.h \
 	include/trikControl/sensor.h \
 	include/trikControl/declSpec.h \
 
 SOURCES += \
 	src/brick.cpp \
-	src/motor.cpp \
+	src/servoMotor.cpp \
 	src/powerMotor.cpp \
 	src/sensor.cpp \

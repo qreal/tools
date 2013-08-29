@@ -8,8 +8,8 @@
 
 namespace trikControl {
 
-/// Generic TRIK motor.
-class TRIKCONTROL_EXPORT Motor : public QObject
+/// Generic TRIK servomotor.
+class TRIKCONTROL_EXPORT ServoMotor : public QObject
 {
 	Q_OBJECT
 

@@ -4,15 +4,12 @@
 
 #include <QtCore/QDebug>
 
-#include <trikControl/motor.h>
-#include <trikControl/sensor.h>
-
 #include "scriptableParts.h"
 
 using namespace scriptRunner;
 using namespace trikControl;
 
-Q_DECLARE_METATYPE(Motor*)
+Q_DECLARE_METATYPE(ServoMotor*)
 Q_DECLARE_METATYPE(PowerMotor*)
 Q_DECLARE_METATYPE(Sensor*)
 

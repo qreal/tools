@@ -3,16 +3,13 @@
 #include <QtCore/QDebug>
 #include <QtCore/QCoreApplication>
 
-#include <trikControl/motor.h>
+#include <trikControl/servoMotor.h>
 #include <trikControl/sensor.h>
 
 #include "scriptableParts.h"
 
 using namespace scriptRunner;
 using namespace trikControl;
-
-Q_DECLARE_METATYPE(Motor*)
-Q_DECLARE_METATYPE(Sensor*)
 
 Runner::Runner()
 	: mEngineWorker(NULL)

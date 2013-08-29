@@ -3,14 +3,14 @@
 #include <QtScript/QScriptEngine>
 
 #include <trikControl/brick.h>
-#include <trikControl/motor.h>
+#include <trikControl/servoMotor.h>
 #include <trikControl/powerMotor.h>
 #include <trikControl/sensor.h>
 
 namespace scriptRunner {
 
-QScriptValue motorToScriptValue(QScriptEngine *engine, trikControl::Motor* const &in);
-void motorFromScriptValue(QScriptValue const &object, trikControl::Motor* &out);
+QScriptValue motorToScriptValue(QScriptEngine *engine, trikControl::ServoMotor* const &in);
+void motorFromScriptValue(QScriptValue const &object, trikControl::ServoMotor* &out);
 
 QScriptValue powerMotorToScriptValue(QScriptEngine *engine, trikControl::PowerMotor* const &in);
 void powerMotorFromScriptValue(QScriptValue const &object, trikControl::PowerMotor* &out);

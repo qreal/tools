@@ -68,7 +68,7 @@ void Brick::stop()
 	mPowerMotor4.powerOff();
 }
 
-Motor *Brick::motor(int const &port)
+ServoMotor *Brick::motor(int const &port)
 {
 	qDebug() << "motor, port: " << port;
 

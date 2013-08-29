@@ -1,10 +1,10 @@
-#include "motor.h"
+#include "servoMotor.h"
 
 #include <QtCore/QDebug>
 
 using namespace trikControl;
 
-void Motor::init(int powerMin, int powerMax, QString const& controlFile)
+void ServoMotor::init(int powerMin, int powerMax, QString const& controlFile)
 {
 	mControlFile.setFileName(controlFile);
 	mPowerMax = powerMax;
@@ -12,7 +12,7 @@ void Motor::init(int powerMin, int powerMax, QString const& controlFile)
 	mPower = 0;
 }
 
-void Motor::setPower(int power)
+void ServoMotor::setPower(int power)
 {
 	qDebug() << "Executing setPower command with power = " << power;
 
@@ -46,13 +46,13 @@ void Motor::setPower(int power)
 	mControlFile.close();
 }
 
-int Motor::power() const
+int ServoMotor::power() const
 {
 	return mPower;
 }
 
 
-void Motor::powerOff()
+void ServoMotor::powerOff()
 {
 	qDebug() << "Executing powerOff command";
 

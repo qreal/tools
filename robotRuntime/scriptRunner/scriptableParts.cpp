@@ -5,14 +5,14 @@
 using namespace scriptRunner;
 using namespace trikControl;
 
-QScriptValue scriptRunner::motorToScriptValue(QScriptEngine *engine, Motor* const &in)
+QScriptValue scriptRunner::motorToScriptValue(QScriptEngine *engine, ServoMotor* const &in)
 {
 	return engine->newQObject(in);
 }
 
-void scriptRunner::motorFromScriptValue(QScriptValue const &object, Motor* &out)
+void scriptRunner::motorFromScriptValue(QScriptValue const &object, ServoMotor *&out)
 {
-	out = qobject_cast<Motor*>(object.toQObject());
+	out = qobject_cast<ServoMotor*>(object.toQObject());
 }
 
 QScriptValue scriptRunner::powerMotorToScriptValue(QScriptEngine *engine, PowerMotor* const &in)
