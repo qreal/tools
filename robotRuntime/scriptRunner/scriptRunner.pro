@@ -25,22 +25,12 @@ HEADERS += \
 	qRealCommunicator.h \
 	runner.h \
 	scriptableParts.h \
-	scriptEngineThread.h \
-	proxyRobotModel/brickProxy.h \
-	proxyRobotModel/servoMotorProxy.h \
-	proxyRobotModel/powerMotorProxy.h \
-	proxyRobotModel/sensorProxy.h \
 
 SOURCES += \
 	main.cpp \
 	qRealCommunicator.cpp \
 	runner.cpp \
 	scriptableParts.cpp \
-	scriptEngineThread.cpp \
-	proxyRobotModel/brickProxy.cpp \
-	proxyRobotModel/servoMotorProxy.cpp \
-	proxyRobotModel/powerMotorProxy.cpp \
-	proxyRobotModel/sensorProxy.cpp \
 
 win32 {
 	QMAKE_POST_LINK = "xcopy ..\\trikControl\\$$CONFIGURATION\\bin $$CONFIGURATION\\bin /s /e /q /y /i && \

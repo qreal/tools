@@ -11,97 +11,34 @@
 using namespace scriptRunner;
 using namespace trikControl;
 
+Q_DECLARE_METATYPE(ServoMotor*)
+Q_DECLARE_METATYPE(PowerMotor*)
+Q_DECLARE_METATYPE(Sensor*)
+
 Runner::Runner()
-	: mEngineWorker(NULL)
-	, mRunnerThread(new QThread())
 {
-//	initWorkerObject();
-//	mRunnerThread->start();
-}
+	mEngine.setProcessEventsInterval(1);
 
-Runner::~Runner()
-{
-	emit threadDelete();
+	qScriptRegisterMetaType(&mEngine, motorToScriptValue, motorFromScriptValue);
+	qScriptRegisterMetaType(&mEngine, powerMotorToScriptValue, powerMotorFromScriptValue);
+	qScriptRegisterMetaType(&mEngine, sensorToScriptValue, sensorFromScriptValue);
 
-	// Restart thread to be able to process threadDelete signal.
-	mRunnerThread->start();
-	mRunnerThread->wait(100);
-	mRunnerThread->deleteLater();
+	QScriptValue brickProxy = mEngine.newQObject(&mBrick);
+	mEngine.globalObject().setProperty("brick", brickProxy);
 }
 
 void Runner::run(QString const &script)
 {
-	qDebug() << "Runner::run";
+	QScriptValue const result = mEngine.evaluate(script);
 
-	initWorkerObject();
+	if (mEngine.hasUncaughtException()) {
+		int const line = mEngine.uncaughtExceptionLineNumber();
 
-	emit threadInit();
-	emit threadRun(script);
-
-	// Restart thread if needed (if it is already running, it will do nothing).
-	mRunnerThread->start();
-}
-
-void Runner::runSynchronous(QString const &script)
-{
-	qDebug() << "Runner::runSynchronous()";
-
-	initWorkerObject();
-
-	emit threadInit();
-	emit threadRun(script);
-
-	// Block until thread is finished.
-	mRunnerThread->start();
-	mRunnerThread->wait();
-
-	qDebug() << "Runner::runSynchronous() done";
+		qDebug() << "uncaught script exception at line" << line << ":" << result.toString();
+	}
 }
 
 void Runner::abort()
 {
-	qDebug() << "Runner::abort()";
-
-	// If script engine does not want to return control, kill it completely and create new thread.
-	mRunnerThread->quit();
-	if (!mRunnerThread->wait(100)) {
-		qDebug() << "Thread suspended, terminating";
-		mRunnerThread->terminate();
-		qDebug() << "Terminate called";
-		mRunnerThread->wait();
-		qDebug() << "Thread terminated";
-	} else {
-		qDebug() << "Exited gracefully";
-	}
-
-	initWorkerObject();
-
-	mRunnerThread->start();
-}
-
-void Runner::initWorkerObject()
-{
-	qDebug() << "Runner::initWorkerObject()";
-
-	mRunnerThread->disconnect();
-
-	// Exterminatus.
-	delete mRunnerThread;
-
-	mRunnerThread = new QThread();
-
-	disconnect();
-
-	// There will be memleak, old ScriptEngineWorker will be lost forever.
-	// We can not gracefully delete ScriptEngineWorker, because thread where it lives was terminated, leaving it in
-	// inconsistent state, subsequent restart and call of destructor fails on assert inside JavaScript core.
-	mEngineWorker = new ScriptEngineThread();
-
-	mEngineWorker->moveToThread(mRunnerThread);
-
-	connect(this, SIGNAL(threadInit()), mEngineWorker, SLOT(init()));
-	connect(this, SIGNAL(threadRun(QString const &)), mEngineWorker, SLOT(run(QString const &)));
-	connect(this, SIGNAL(threadDelete()), mEngineWorker, SLOT(deleteWorker()));
-
-	emit threadInit();
+	mEngine.abortEvaluation();
 }

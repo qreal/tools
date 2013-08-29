@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
 	file.close();
 
 	Runner runner;
-	runner.runSynchronous(script);
+	runner.run(script);
 
 	return 0;
 }
