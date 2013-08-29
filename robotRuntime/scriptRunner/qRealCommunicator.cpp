@@ -72,7 +72,7 @@ void QRealCommunicator::onReadyRead()
 	QByteArray data = mConnection->readAll();
 	QString command(data);
 
-	if (command != "keepalive") {
+	if (!command.startsWith("keepalive")) {
 		// Discard "keepalive" output.
 		qDebug() << "Command: " << command;
 	}
