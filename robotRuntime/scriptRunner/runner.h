@@ -4,7 +4,7 @@
 #include <QtCore/QTimer>
 #include <QtCore/QThread>
 
-#include "scriptEngineWorker.h"
+#include "scriptEngineThread.h"
 
 namespace scriptRunner
 {
@@ -46,7 +46,7 @@ signals:
 private:
 	void initWorkerObject();
 
-	ScriptEngineWorker *mEngineWorker;  // Has ownership.
+	ScriptEngineThread *mEngineWorker;  // Has ownership.
 	QTimer mTestTimer;
 	QThread *mRunnerThread;  // Has ownership.
 };

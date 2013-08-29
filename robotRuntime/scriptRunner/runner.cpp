@@ -98,7 +98,7 @@ void Runner::initWorkerObject()
 	// There will be memleak, old ScriptEngineWorker will be lost forever.
 	// We can not gracefully delete ScriptEngineWorker, because thread where it lives was terminated, leaving it in
 	// inconsistent state, subsequent restart and call of destructor fails on assert inside JavaScript core.
-	mEngineWorker = new ScriptEngineWorker();
+	mEngineWorker = new ScriptEngineThread();
 
 	mEngineWorker->moveToThread(mRunnerThread);
 

@@ -42,7 +42,6 @@ Brick::Brick()
 			);
 	settings.endGroup();
 
-	mPowerMotor0.init(0);
 	mPowerMotor1.init(1);
 	mPowerMotor2.init(2);
 	mPowerMotor3.init(3);
@@ -63,7 +62,6 @@ void Brick::stop()
 
 	mMotor1.powerOff();
 	mMotor2.powerOff();
-	mPowerMotor0.powerOff();
 	mPowerMotor1.powerOff();
 	mPowerMotor2.powerOff();
 	mPowerMotor3.powerOff();
@@ -89,8 +87,6 @@ PowerMotor *Brick::powerMotor(int const &port)
 	qDebug() << "Power motor, port: " << port;
 
 	switch (port) {
-	case 0:
-		return &mPowerMotor0;
 	case 1:
 		return &mPowerMotor1;
 	case 2:

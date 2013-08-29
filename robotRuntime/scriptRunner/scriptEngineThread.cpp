@@ -1,4 +1,4 @@
-#include "scriptEngineWorker.h"
+#include "scriptEngineThread.h"
 
 #include "runner.h"
 
@@ -16,17 +16,17 @@ Q_DECLARE_METATYPE(Motor*)
 Q_DECLARE_METATYPE(PowerMotor*)
 Q_DECLARE_METATYPE(Sensor*)
 
-ScriptEngineWorker::ScriptEngineWorker()
+ScriptEngineThread::ScriptEngineThread()
 	: mEngine(NULL)
 {
 }
 
-ScriptEngineWorker::~ScriptEngineWorker()
+ScriptEngineThread::~ScriptEngineThread()
 {
 	delete mEngine;
 }
 
-void ScriptEngineWorker::init()
+void ScriptEngineThread::init()
 {
 	qDebug() << "ScriptEngineWorker::init()";
 
@@ -42,7 +42,7 @@ void ScriptEngineWorker::init()
 	mEngine->globalObject().setProperty("brick", brickProxy);
 }
 
-void ScriptEngineWorker::run(QString const &script)
+void ScriptEngineThread::run(QString const &script)
 {
 	qDebug() << "ScriptEngineWorker::run()";
 
@@ -69,14 +69,14 @@ void ScriptEngineWorker::run(QString const &script)
 	thread()->quit();
 }
 
-void ScriptEngineWorker::deleteWorker()
+void ScriptEngineThread::deleteWorker()
 {
 	mEngine->abortEvaluation();
 	deleteLater();
 	thread()->quit();
 }
 
-bool ScriptEngineWorker::isRunning() const
+bool ScriptEngineThread::isRunning() const
 {
 	return mEngine && mEngine->isEvaluating();
 }

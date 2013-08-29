@@ -51,7 +51,6 @@ private:
 
 	Motor mMotor1;
 	Motor mMotor2;
-	PowerMotor mPowerMotor0;
 	PowerMotor mPowerMotor1;
 	PowerMotor mPowerMotor2;
 	PowerMotor mPowerMotor3;

@@ -12,16 +12,16 @@ namespace scriptRunner
 /// Worker object to be run in a separate thread for Qt Script execution. QScriptEngine::abortEvaluation does not work,
 /// because script engine refuses to call QCoreApplication::ProcessEvents on robot for unknown reason.
 /// On desktop computer (running Ubuntu 13.04) there is no need for multithreading, abortEvaluation() works fine.
-class ScriptEngineWorker : public QObject
+class ScriptEngineThread : public QObject
 {
 	Q_OBJECT
 
 public:
 	/// Constructor.
-	ScriptEngineWorker();
+	ScriptEngineThread();
 
 	/// Destructor.
-	virtual ~ScriptEngineWorker();
+	virtual ~ScriptEngineThread();
 
 	/// Returns true, if script engine is initialized and running.
 	bool isRunning() const;
