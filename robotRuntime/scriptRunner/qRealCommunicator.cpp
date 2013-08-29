@@ -14,6 +14,11 @@ QRealCommunicator::QRealCommunicator()
 {
 }
 
+QRealCommunicator::~QRealCommunicator()
+{
+	delete mConnection;
+}
+
 QString QRealCommunicator::readFromFile(QString const &fileName)
 {
 	QFile file(fileName);

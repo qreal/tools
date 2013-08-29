@@ -17,6 +17,8 @@ class QRealCommunicator : public QObject
 public:
 	QRealCommunicator();
 
+	~QRealCommunicator();
+
 	/// Starts listening given port on all network interfaces.
 	void listen(int const &port);
 
