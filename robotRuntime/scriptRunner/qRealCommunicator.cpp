@@ -2,13 +2,15 @@
 
 #include <QtCore/QFile>
 #include <QtCore/QDebug>
+#include <QtCore/QCoreApplication>
 
 using namespace scriptRunner;
 
 int const bufferSize = 1000;
 
 QRealCommunicator::QRealCommunicator()
-	: mConnection(new QTcpSocket())
+		: mConnection(new QTcpSocket())
+		, mReadingDone(false)
 {
 }
 
@@ -55,6 +57,16 @@ void QRealCommunicator::onNewConnection()
 	mConnection = mServer.nextPendingConnection();
 	connect(mConnection, SIGNAL(disconnected()), this, SLOT(onDisconnected()));
 	connect(mConnection, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
+
+	// HACK: since QScriptEngine too infrequently calls ProcessEvents, it is possible that
+	// connection will be closed before communicator will be able to read from a socket.
+	// So we will not give up control until data will be read.
+	while (!mReadingDone) {
+		SleeperThread::msleep(5);
+		QCoreApplication::processEvents();
+	}
+
+	mReadingDone = false;
 }
 
 void QRealCommunicator::onDisconnected()
@@ -76,6 +88,8 @@ void QRealCommunicator::onReadyRead()
 		// Discard "keepalive" output.
 		qDebug() << "Command: " << command;
 	}
+
+	mReadingDone = true;
 
 	if (command.startsWith("file")) {
 		command.remove(0, QString("file:").length());
@@ -102,4 +116,6 @@ void QRealCommunicator::onReadyRead()
 		command.remove(0, QString("direct:").length());
 		mRunner.run(command);
 	}
+
+
 }
