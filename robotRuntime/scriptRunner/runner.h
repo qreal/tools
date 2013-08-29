@@ -4,6 +4,8 @@
 #include <QtCore/QTimer>
 #include <QtCore/QThread>
 
+#include <trikControl/brick.h>
+
 #include "scriptEngineThread.h"
 
 namespace scriptRunner {
@@ -46,8 +48,8 @@ private:
 	void initWorkerObject();
 
 	ScriptEngineThread *mEngineWorker;  // Has ownership.
-	QTimer mTestTimer;
 	QThread *mRunnerThread;  // Has ownership.
+	trikControl::Brick mBrick;
 };
 
 }

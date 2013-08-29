@@ -4,51 +4,14 @@
 
 #include <QtCore/QDebug>
 
-using namespace trikControl;
+using namespace scriptRunner;
 
-Brick::Brick()
+BrickProxy::BrickProxy()
 {
-	QSettings settings("./config.ini", QSettings::IniFormat);
 
-	settings.beginGroup("Motor1");
-	mMotor1.init(
-			settings.value("ValueMin", 1500000).toInt()
-			, settings.value("ValueMax", 1800000).toInt()
-			, settings.value("DeviceFile", "/sys/class/pwm/ecap.0/duty_ns").toString()
-			);
-	settings.endGroup();
-
-	settings.beginGroup("Motor2");
-	mMotor2.init(
-			settings.value("ValueMin", 1500000).toInt()
-			, settings.value("ValueMax", 1800000).toInt()
-			, settings.value("DeviceFile", "/sys/class/pwm/ecap.1/duty_ns").toString()
-			);
-	settings.endGroup();
-
-	settings.beginGroup("Sensor1");
-	mSensor1.init(
-			settings.value("Min", 30000).toInt()
-			, settings.value("Max", 350000).toInt()
-			, settings.value("DeviceFile", "/sys/devices/platform/da850_trik/sensor_d1").toString()
-			);
-	settings.endGroup();
-
-	settings.beginGroup("Sensor2");
-	mSensor2.init(
-			settings.value("Min", 30000).toInt()
-			, settings.value("Max", 350000).toInt()
-			, settings.value("DeviceFile", "/sys/devices/platform/da850_trik/sensor_d2").toString()
-			);
-	settings.endGroup();
-
-	mPowerMotor1.init(1);
-	mPowerMotor2.init(2);
-	mPowerMotor3.init(3);
-	mPowerMotor4.init(4);
 }
 
-void Brick::playSound(QString const &soundFileName)
+void BrickProxy::playSound(QString const &soundFileName)
 {
 	qDebug() << "playSound, file: " << soundFileName;
 
@@ -56,7 +19,7 @@ void Brick::playSound(QString const &soundFileName)
 	system(command.toStdString().c_str());
 }
 
-void Brick::stop()
+void BrickProxy::stop()
 {
 	qDebug() << "stop";
 
@@ -68,7 +31,7 @@ void Brick::stop()
 	mPowerMotor4.powerOff();
 }
 
-Motor *Brick::motor(int const &port)
+ServoMotorProxy *BrickProxy::motor(int const &port)
 {
 	qDebug() << "motor, port: " << port;
 
@@ -82,7 +45,7 @@ Motor *Brick::motor(int const &port)
 	}
 }
 
-PowerMotor *Brick::powerMotor(int const &port)
+PowerMotor *BrickProxy::powerMotor(int const &port)
 {
 	qDebug() << "Power motor, port: " << port;
 
@@ -101,7 +64,7 @@ PowerMotor *Brick::powerMotor(int const &port)
 
 }
 
-Sensor *Brick::sensor(int const &port)
+Sensor *BrickProxy::sensor(int const &port)
 {
 	qDebug() << "sensor, port: " << port;
 
@@ -115,7 +78,7 @@ Sensor *Brick::sensor(int const &port)
 	}
 }
 
-void Brick::wait(int const &milliseconds) const
+void BrickProxy::wait(int const &milliseconds) const
 {
 	SleeperThread::msleep(milliseconds);
 }
