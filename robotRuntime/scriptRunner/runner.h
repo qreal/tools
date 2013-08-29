@@ -6,8 +6,7 @@
 
 #include "scriptEngineThread.h"
 
-namespace scriptRunner
-{
+namespace scriptRunner {
 
 /// Executes scripts in Qt Scripting Engine.
 class Runner : public QObject

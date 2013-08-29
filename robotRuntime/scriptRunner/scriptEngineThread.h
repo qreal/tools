@@ -6,8 +6,7 @@
 
 #include <trikControl/brick.h>
 
-namespace scriptRunner
-{
+namespace scriptRunner {
 
 /// Worker object to be run in a separate thread for Qt Script execution. QScriptEngine::abortEvaluation does not work,
 /// because script engine refuses to call QCoreApplication::ProcessEvents on robot for unknown reason.

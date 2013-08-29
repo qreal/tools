@@ -6,8 +6,7 @@
 
 #include "runner.h"
 
-namespace scriptRunner
-{
+namespace scriptRunner {
 
 /// Class that keeps connection with QReal:Robots running on computer.
 /// Accepts commands in form "file:<file name>:<file contents>" and "run:<file name>".
