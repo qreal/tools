@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphics>
+    <picture sizex="370" sizey="246">
+        <line y1="1965" y2="1965" x1="1226" x2="1388"/>
+        <rectangle y1="1854" y2="2076" x1="1388" x2="1572"/>
+    </picture>
+</graphics>
+
