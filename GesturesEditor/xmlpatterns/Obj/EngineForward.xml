@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphics>
+    <picture sizey="231" sizex="311">
+        <line x1="1458" x2="1560" y1="2108" y2="2006"/>
+        <line x1="1560" x2="1455" y1="2006" y2="1901"/>
+        <line x1="1273" x2="1560" y1="2006" y2="2006"/>
+    </picture>
+</graphics>
+

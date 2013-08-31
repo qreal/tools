@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphics>
+    <picture sizex="293" sizey="265">
+        <line y1="1833" y2="1833" x1="1561" x2="1690"/>
+        <line y1="2004" y2="1833" x1="1561" x2="1561"/>
+        <ellipse y1="1934" y2="2074" x1="1421" x2="1561"/>
+    </picture>
+</graphics>
+
