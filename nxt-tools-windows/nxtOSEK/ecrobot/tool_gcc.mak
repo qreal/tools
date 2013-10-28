@@ -6,7 +6,7 @@
 
 # specify GNU-ARM root directory
 # ifndef GNUARM_ROOT
-GNUARM_ROOT = $(QREALDIR)/nxt-tools/gnuarm
+GNUARM_ROOT = $(QREALDIRPOSIX)/nxt-tools/gnuarm
 # endif
 
 # specify NeXTTool root directory
