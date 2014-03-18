@@ -8,8 +8,9 @@ int const firstPropertyIndex = 0;
 int const secondPropertyIndex = 1;
 
 FindDialog::FindDialog(QWidget *parent) :
-	QDialog(parent),
-	ui(new Ui::FindDialog)
+	QDialog(parent)
+	, ui(new Ui::FindDialog)
+	, mAction(nullptr)
 {
 	ui->setupUi(this);
 	connect (ui->findButton, &QPushButton::clicked, this, &FindDialog::sendCustomAction);
