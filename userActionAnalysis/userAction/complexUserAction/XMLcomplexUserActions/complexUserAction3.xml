@@ -1,0 +1,20 @@
+<!DOCTYPE complexUserAction3>
+<complexUserAction name="Выбрать элемент в палитре">
+ <userAction name="Навести на элемент в палитре">
+  <flexibleProperty value="?" name="название элемента"/>
+ </userAction>
+ <userAction name="Нажать на элемент в палитре">
+  <flexibleProperty value="?" name="название элемента"/>
+ </userAction>
+ <userAction name="Убрать наведение с элемента в палитре">
+  <property value="?" name="название элемента"/>
+ </userAction>
+ <properties>
+  <property name="название элемента">
+   <value>Конец</value>
+   <value>Гудок</value>
+   <value>Цикл</value>
+   <value>Условие</value>
+  </property>
+ </properties>
+</complexUserAction>

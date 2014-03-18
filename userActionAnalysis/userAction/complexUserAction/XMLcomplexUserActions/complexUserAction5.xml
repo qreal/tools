@@ -1,0 +1,7 @@
+<!DOCTYPE complexUserAction5>
+<complexUserAction name="Изменить отображение иконок в палитре">
+ <userAction name="Нажать на кнопку в палитре">
+  <customProperty value="иконки/обычный вид" name="название"/>
+ </userAction>
+ <properties/>
+</complexUserAction>
