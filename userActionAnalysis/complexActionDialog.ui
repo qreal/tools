@@ -27,7 +27,13 @@
       </widget>
      </item>
      <item>
-      <widget class="QListWidget" name="ruleListWidget"/>
+      <widget class="QTreeWidget" name="ruleTreeWidget">
+       <column>
+        <property name="text">
+         <string>Действия</string>
+        </property>
+       </column>
+      </widget>
      </item>
     </layout>
    </item>
@@ -117,7 +123,7 @@
       <widget class="QListWidget" name="baseActionListWidget"/>
      </item>
      <item>
-      <widget class="QTreeWidget" name="ComplexActionTreeWidget">
+      <widget class="QTreeWidget" name="complexActionTreeWidget">
        <column>
         <property name="text">
          <string>Составные действия</string>

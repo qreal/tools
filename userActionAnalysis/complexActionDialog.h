@@ -7,6 +7,7 @@
 #include "userAction/complexUserAction/complexUserActionGenerator.h"
 #include "propertiesDialog.h"
 #include "complexActionNameDialog.h"
+#include "widgetItemProperty/widgetItemCustomPropertyList.h"
 
 namespace Ui {
 class ComplexActionDialog;
@@ -24,9 +25,9 @@ public:
 
 	QStringList initComplexActionTreeWidget();
 public slots:
-	void addBaseActionToRuleList();
+	void addActionToRuleList();
 	void deleteActionFromRuleList();
-	void openProperties(QListWidgetItem *item);
+	void openProperties(QTreeWidgetItem *item);
 	void updateCustomProperties();
 	void openNameDialogComplexAction();
 	void saveComplexAction();
@@ -46,7 +47,7 @@ private:
 
 	PropertiesDialog *mPropertiesDialog;
 	ComplexActionNameDialog *mComplexActionNameDialog;
-	QMap<QListWidgetItem *, QMap<QString, QString > > mCustomProperties;
-	QListWidgetItem *mOpenedRuleItem;
+	WidgetItemCustomPropertyList mWidgetItemCustomPropertyList;
+	QTreeWidgetItem *mOpenedRuleItem;
 	ComplexUserActionGenerator *mComplexUserActionGenerator;
 };
