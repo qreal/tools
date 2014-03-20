@@ -36,7 +36,7 @@ private:
 	Ui::MainWindow *ui;
 	BaseUserActionsParser *mBaseUserActionsParser;
 	BaseUserActionList mBaseUserActions;
-	QList<ComplexUserAction *> mComplexUserActions;
+	ComplexUserActionList mComplexUserActions;
 	ComplexActionDialog *mComplexActionDialog;
 	QAction *mAddComplexAction;
 	FindDialog *mFindDialog;

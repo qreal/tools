@@ -17,9 +17,9 @@ ComplexUserActionParser::~ComplexUserActionParser()
 
 }
 
-QList<ComplexUserAction *> ComplexUserActionParser::parse()
+ComplexUserActionList ComplexUserActionParser::parse()
 {
-	QList<ComplexUserAction *> complexActions;
+	ComplexUserActionList complexActions;
 
 	QDir dir;
 	dir.current().cdUp();

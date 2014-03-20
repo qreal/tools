@@ -7,7 +7,7 @@
 #include <QMessageBox>
 #include <QtCore/QDebug>
 
-ComplexActionDialog::ComplexActionDialog(QWidget *parent, BaseUserActionList baseUserActions, QList<ComplexUserAction *> complexUserActions) :
+ComplexActionDialog::ComplexActionDialog(QWidget *parent, BaseUserActionList baseUserActions, ComplexUserActionList complexUserActions) :
 	QDialog(parent)
 	, ui(new Ui::ComplexActionDialog)
 	, mBaseUserActions(baseUserActions)
@@ -65,29 +65,20 @@ void ComplexActionDialog::addActionToRuleList()
 {
 	// add base action, if some of them selected
 	QList<QListWidgetItem *> selectedItems = ui->baseActionListWidget->selectedItems();
-	for (QListWidgetItem * selectedItem: selectedItems) {
-		QTreeWidgetItem *ruleItem = new QTreeWidgetItem(ui->ruleTreeWidget);
-		if (ruleItem) {
-			QString const name = selectedItem->text();
-			QMap<QString, QString> mapProperties;
-			QMap<QString, QStringList> properties = mBaseUserActions.propertiesByBaseUserActionName(name);
-
-			QMap<QString, QStringList>::const_iterator i = properties.constBegin();
-			QString ruleProperties = " — ";
-			while (i != properties.constEnd()) {
-				QStringList const values = i.value();
-				QString const value = (!values.isEmpty()) ? values.at(0) : "";
-				mapProperties.insert(i.key(), value);
-				ruleProperties += i.key() + ": " + value + "|";
-				++i;
-			}
-			mWidgetItemCustomPropertyList.append(new WidgetItemCustomProperty(ruleItem, ruleItem, mapProperties));
-			int column = 0;
-			ruleItem->setText(column, name + ruleProperties);
-		}
+	for (QListWidgetItem *selectedItem: selectedItems) {
+		addBaseActionToRuleWidget(nullptr, selectedItem->text(), QMap<QString, QString>());
 	}
 	ui->baseActionListWidget->clearSelection();
-
+	// add complex action, if some of them selected
+	QList<QTreeWidgetItem *> selectedTreeItems = ui->complexActionTreeWidget->selectedItems();
+	for (QTreeWidgetItem *selectedTreeItem: selectedTreeItems) {
+		if (selectedTreeItem->parent()) {
+			continue;
+		}
+		int column = 0;
+		addComplexActionToRuleWidget(nullptr, mComplexUserActions.complexUserActionByName(selectedTreeItem->text(column)));
+	}
+	ui->complexActionTreeWidget->clearSelection();
 }
 
 void ComplexActionDialog::deleteActionFromRuleList()
@@ -96,6 +87,9 @@ void ComplexActionDialog::deleteActionFromRuleList()
 	ui->ruleTreeWidget->clearSelection();
 	for (QTreeWidgetItem * selectedItem: selectedItems) {
 		if (!selectedItem->parent()) {
+			if (mOpenedRuleItem == selectedItem) {
+				mOpenedRuleItem = nullptr;
+			}
 			mWidgetItemCustomPropertyList.removePropertiesWithParent(selectedItem);
 			delete selectedItem;
 		}
@@ -112,7 +106,8 @@ void ComplexActionDialog::openProperties(QTreeWidgetItem *item)
 	if (map.isEmpty()) {
 		return;
 	}
-	mPropertiesDialog->setLabelsAndProperties(map, mWidgetItemCustomPropertyList.customPropertiesByItem(item));
+	mPropertiesDialog->setLabelsAndProperties(map, mWidgetItemCustomPropertyList.customPropertiesByItem(item)
+			, mDisabledProperties.value(mOpenedRuleItem).keys());
 	mPropertiesDialog->show();
 }
 
@@ -170,7 +165,7 @@ void ComplexActionDialog::addNewComplexAction(ComplexUserAction *action)
 
 void ComplexActionDialog::initComplexAction(ComplexUserAction *complexUserAction, QTreeWidgetItem *item, const int &column)
 {
-	int const currentColumn = column + 1;
+	int const currentColumn = column;
 	QList<UserAction *> userActions = complexUserAction->userActions();
 	for (UserAction *userAction: userActions) {
 		BaseUserAction *baseUserAction = dynamic_cast<BaseUserAction *>(userAction);
@@ -190,10 +185,69 @@ void ComplexActionDialog::initComplexAction(ComplexUserAction *complexUserAction
 	}
 }
 
+void ComplexActionDialog::addComplexActionToRuleWidget(QTreeWidgetItem *parent, ComplexUserAction *complexUserAction)
+{
+	QTreeWidgetItem *ruleItem = nullptr;
+	if (parent == nullptr) {
+		ruleItem = new QTreeWidgetItem(ui->ruleTreeWidget);
+	} else {
+		ruleItem = new QTreeWidgetItem(parent);
+	}
+	if (ruleItem) {
+		int column = 0;
+		ruleItem->setText(column, complexUserAction->userActionName());
+		for (UserAction *userAction: complexUserAction->userActions()) {
+			ComplexUserAction *complexAction = dynamic_cast<ComplexUserAction *>(userAction);
+			if (complexAction) {
+				addComplexActionToRuleWidget(ruleItem, complexAction);
+			}
+			else {
+				BaseUserAction *baseAction = dynamic_cast<BaseUserAction *>(userAction);
+				if (baseAction) {
+					addBaseActionToRuleWidget(ruleItem, baseAction->userActionName(), baseAction->customActionProperties());
+				}
+			}
+		}
+	}
+}
+
+void ComplexActionDialog::addBaseActionToRuleWidget(QTreeWidgetItem *parent, QString const &name, QMap<QString, QString> const &disabledProperties)
+{
+	QTreeWidgetItem *ruleItem = nullptr;
+	if (parent == nullptr) {
+		ruleItem = new QTreeWidgetItem(ui->ruleTreeWidget);
+	} else {
+		ruleItem = new QTreeWidgetItem(parent);
+	}
+	if (ruleItem) {
+		QMap<QString, QString> mapProperties;
+		QMap<QString, QStringList> properties = mBaseUserActions.propertiesByBaseUserActionName(name);
+
+		QMap<QString, QStringList>::const_iterator i = properties.constBegin();
+		QString ruleProperties = " — ";
+		while (i != properties.constEnd()) {
+			QStringList const values = i.value();
+			QString value = (!values.isEmpty()) ? values.at(0) : "";
+			if (disabledProperties.keys().contains(i.key())) {
+				value = disabledProperties.value(i.key());
+			}
+			mapProperties.insert(i.key(), value);
+			ruleProperties += i.key() + ": " + value + "|";
+			++i;
+		}
+		mWidgetItemCustomPropertyList.append(new WidgetItemCustomProperty(ruleItem, ruleItem, mapProperties));
+		mDisabledProperties.insert(ruleItem, disabledProperties);
+		int column = 0;
+		ruleItem->setText(column, name + ruleProperties);
+	}
+}
+
 ComplexActionDialog::~ComplexActionDialog()
 {
 	delete mComplexUserActionGenerator;
-	delete mOpenedRuleItem;
+	if (mOpenedRuleItem) {
+		delete mOpenedRuleItem;
+	}
 	delete mComplexActionNameDialog;
 	delete mPropertiesDialog;
 	delete ui;

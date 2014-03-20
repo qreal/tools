@@ -15,7 +15,8 @@ public:
 	explicit PropertiesDialog(QWidget *parent = 0);
 	~PropertiesDialog();
 
-	void setLabelsAndProperties(QMap<QString, QStringList> const &properties, QMap<QString, QString> const &conProperties);
+	void setLabelsAndProperties(QMap<QString, QStringList> const &properties, QMap<QString, QString> const &conProperties
+			, QStringList const &disabledProperties);
 	QMap<QString, QString> conProperties();
 
 private slots:

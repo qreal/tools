@@ -8,6 +8,7 @@
 #include "propertiesDialog.h"
 #include "complexActionNameDialog.h"
 #include "widgetItemProperty/widgetItemCustomPropertyList.h"
+#include "userAction/complexUserAction/complexUserActionList.h"
 
 namespace Ui {
 class ComplexActionDialog;
@@ -20,7 +21,7 @@ class ComplexActionDialog : public QDialog
 public:
 	explicit ComplexActionDialog(QWidget *parent = 0
 			, BaseUserActionList baseUserActions = BaseUserActionList()
-			, QList<ComplexUserAction *> complexUserActions = QList<ComplexUserAction *>());
+			, ComplexUserActionList complexUserActions = ComplexUserActionList());
 	~ComplexActionDialog();
 
 	QStringList initComplexActionTreeWidget();
@@ -39,15 +40,19 @@ signals:
 private:
 	QStringList initBaseActionListWidget();
 	void initComplexAction(ComplexUserAction *complexUserAction, QTreeWidgetItem *item, int const &column);
+	void addBaseActionToRuleWidget(QTreeWidgetItem *parent, const QString &name, const QMap<QString, QString> &disabledProperties);
 
 	Ui::ComplexActionDialog *ui;
 
 	BaseUserActionList mBaseUserActions;
-	QList<ComplexUserAction *> mComplexUserActions;
+	ComplexUserActionList mComplexUserActions;
 
 	PropertiesDialog *mPropertiesDialog;
 	ComplexActionNameDialog *mComplexActionNameDialog;
 	WidgetItemCustomPropertyList mWidgetItemCustomPropertyList;
 	QTreeWidgetItem *mOpenedRuleItem;
 	ComplexUserActionGenerator *mComplexUserActionGenerator;
+
+	QMap<QTreeWidgetItem *, QMap<QString, QString>> mDisabledProperties;
+	void addComplexActionToRuleWidget(QTreeWidgetItem *parent, ComplexUserAction *complexUserAction);
 };

@@ -5,6 +5,7 @@
 
 #include "userAction/complexUserAction/complexUserAction.h"
 #include "userAction/baseUserAction/baseUserActionList.h"
+#include "userAction/complexUserAction/complexUserActionList.h"
 
 class ComplexUserActionParser : public QObject
 {
@@ -13,12 +14,12 @@ class ComplexUserActionParser : public QObject
 public:
 	ComplexUserActionParser(BaseUserActionList baseUserActions);
 	~ComplexUserActionParser();
-	QList<ComplexUserAction*> parse();
+	ComplexUserActionList parse();
 
 private:
 	QDomDocument loadDocument(const QString &fileName);
 	ComplexUserAction *parseAction(QString const &fileName);
 
 	BaseUserActionList mBaseUserActions;
-	QList<ComplexUserAction *> mComplexUserActions;
+	ComplexUserActionList mComplexUserActions;
 };

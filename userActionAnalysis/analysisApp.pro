@@ -22,7 +22,8 @@ SOURCES += main.cpp \
 	complexActionNameDialog.cpp \
 	logParser.cpp \
 	complexActionDialog.cpp \
-    	findDialog.cpp
+    	findDialog.cpp \
+    userAction/complexUserAction/complexUserActionList.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -39,7 +40,8 @@ HEADERS  += mainwindow.h \
 	complexActionNameDialog.h \
 	logParser.h \
 	complexActionDialog.h \
-    	findDialog.h
+    	findDialog.h \
+    userAction/complexUserAction/complexUserActionList.h
 
 
 FORMS  += mainwindow.ui \

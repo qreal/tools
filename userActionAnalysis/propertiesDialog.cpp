@@ -20,11 +20,13 @@ PropertiesDialog::~PropertiesDialog()
 	delete ui;
 }
 
-void PropertiesDialog::setLabelsAndProperties(const QMap<QString, QStringList> &properties, QMap<QString, QString> const &conProperties)
+void PropertiesDialog::setLabelsAndProperties(const QMap<QString, QStringList> &properties, QMap<QString, QString> const &conProperties, QStringList const &disabledProperties)
 {
 	mConProperties.clear();
 	ui->comboBoxProperty1->clear();
 	ui->comboBoxProperty2->clear();
+	ui->comboBoxProperty1->setEnabled(true);
+	ui->comboBoxProperty2->setEnabled(true);
 	int propertiesCount = properties.count();
 	if (propertiesCount == oneProperty) {
 		QString const name = properties.keys().at(firstPropertyIndex);
@@ -39,6 +41,10 @@ void PropertiesDialog::setLabelsAndProperties(const QMap<QString, QStringList> &
 		ui->comboBoxProperty1->show();
 		ui->labelProperty2->hide();
 		ui->comboBoxProperty2->hide();
+
+		if (disabledProperties.contains(name)) {
+			ui->comboBoxProperty1->setDisabled(true);
+		}
 	}
 	else if (propertiesCount == twoProperties) {
 		QString const name1 = properties.keys().at(firstPropertyIndex);
@@ -62,6 +68,13 @@ void PropertiesDialog::setLabelsAndProperties(const QMap<QString, QStringList> &
 		ui->comboBoxProperty1->show();
 		ui->labelProperty2->show();
 		ui->comboBoxProperty2->show();
+
+		if (disabledProperties.contains(name1)) {
+			ui->comboBoxProperty1->setDisabled(true);
+		}
+		if (disabledProperties.contains(name2)) {
+			ui->comboBoxProperty2->setDisabled(true);
+		}
 	}
 	else {
 		ui->labelProperty1->hide();
