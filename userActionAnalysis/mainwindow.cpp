@@ -120,7 +120,7 @@ void MainWindow::findAction(const QString &actionToFind)
 
 void MainWindow::initComplexAction(ComplexUserAction *complexUserAction, QTreeWidgetItem *item, const int &column)
 {
-	int const currentColumn = column + 1;
+	int const currentColumn = column;
 	QList<UserAction *> userActions = complexUserAction->userActions();
 	for (UserAction *userAction: userActions) {
 		BaseUserAction *baseUserAction = dynamic_cast<BaseUserAction *>(userAction);
