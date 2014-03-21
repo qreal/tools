@@ -19,6 +19,8 @@ public:
 private:
 	QDomDocument loadDocument(const QString &fileName);
 	ComplexUserAction *parseAction(QString const &fileName);
+	BaseUserAction *parseBaseUserAction(const QDomElement &element);
+	ComplexUserAction *parseComplexUserAction(const QDomElement &element);
 
 	BaseUserActionList mBaseUserActions;
 	ComplexUserActionList mComplexUserActions;

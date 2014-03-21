@@ -38,7 +38,7 @@ void ComplexUserActionGenerator::generateComplexAction(const QString &name, cons
 
 	QString const documentName = "complexUserAction" + QString::number(mComplexActionsCount);
 	QDomDocument document(documentName);
-	QDomElement complexUserAction = document.createElement("complexUserAction");
+	QDomElement complexUserAction = document.createElement("mainComplexUserAction");
 	complexUserAction.setAttribute("name", name);
 	document.appendChild(complexUserAction);
 

@@ -70,7 +70,7 @@ QDomDocument ComplexUserActionParser::loadDocument(QString const &fileName)
 ComplexUserAction *ComplexUserActionParser::parseAction(const QString &fileName)
 {
 	QDomDocument const document = loadDocument(fileName);
-	QDomNodeList const actionList = document.elementsByTagName("complexUserAction");
+	QDomNodeList const actionList = document.elementsByTagName("mainComplexUserAction");
 	if (actionList.length() != 1) {
 		return nullptr;
 	}
@@ -78,31 +78,71 @@ ComplexUserAction *ComplexUserActionParser::parseAction(const QString &fileName)
 	QDomElement const actionElement = action.toElement();
 
 	QString const actionName = actionElement.attribute("name", "noName");
-	QDomNodeList baseActionList = actionElement.elementsByTagName("userAction");
+	QDomNodeList userActionList = actionElement.childNodes();
 
 	QList<UserAction *> userActions;
-	for (int i = 0; i < baseActionList.length(); ++i) {
-		QDomNode baseAction = baseActionList.at(i);
-		QDomElement const baseUserActionElement = baseAction.toElement();
-
-		QString const baseUserActionName = baseUserActionElement.attribute("name", "noName");
-		BaseUserAction *baseUserActionFromList = mBaseUserActions.baseUserActionByName(baseUserActionName);
-		if (baseUserActionElement.isNull()) {
-			continue;
-		}
-		BaseUserAction *baseUserAction = new BaseUserAction(baseUserActionFromList->userActionName(), baseUserActionFromList->actionProperties());
-		QDomNodeList const customPropertyList = baseUserActionElement.elementsByTagName("customProperty");
-
-		for (int j = 0; j < customPropertyList.length(); ++j) {
-			QDomNode customProperty = customPropertyList.at(i);
-			QDomElement const customPropertyElement = customProperty.toElement();
-			QString const customPropertyName = customPropertyElement.attribute("name", "");
-			QString const customPropertyValue = customPropertyElement.attribute("value", "");
-			if (customPropertyName != "" && customPropertyValue != "") {
-				baseUserAction->setUserActionProperty(customPropertyName, customPropertyValue);
+	for (int i = 0; i < userActionList.length(); ++i) {
+		QDomNode userAction = userActionList.at(i);
+		QDomElement const userActionElement = userAction.toElement();
+		if (userActionElement.tagName() == "baseUserAction") {
+			BaseUserAction *baseAction = parseBaseUserAction(userActionElement);
+			if (baseAction != nullptr) {
+				userActions.append(baseAction);
 			}
 		}
-		userActions << baseUserAction;
+		else if (userActionElement.tagName() == "complexUserAction") {
+			ComplexUserAction *complexAction = parseComplexUserAction(userActionElement);
+			if (complexAction != nullptr) {
+				userActions.append(complexAction);
+			}
+		}
+	}
+	return new ComplexUserAction(actionName, userActions);
+}
+
+BaseUserAction *ComplexUserActionParser::parseBaseUserAction(QDomElement const &element)
+{
+	QString const baseUserActionName = element.attribute("name", "noName");
+	BaseUserAction *baseUserActionFromList = mBaseUserActions.baseUserActionByName(baseUserActionName);
+	if (baseUserActionFromList == nullptr) {
+		return nullptr;
+	}
+	BaseUserAction *baseUserAction = new BaseUserAction(baseUserActionName, baseUserActionFromList->actionProperties());
+	QDomNodeList const customPropertyList = element.elementsByTagName("customProperty");
+
+	for (int j = 0; j < customPropertyList.length(); ++j) {
+		QDomNode customProperty = customPropertyList.at(j);
+		QDomElement const customPropertyElement = customProperty.toElement();
+		QString const customPropertyName = customPropertyElement.attribute("name", "");
+		QString const customPropertyValue = customPropertyElement.attribute("value", "");
+		if (customPropertyName != "" && customPropertyValue != "") {
+			baseUserAction->setUserActionProperty(customPropertyName, customPropertyValue);
+		}
+	}
+	return baseUserAction;
+}
+
+ComplexUserAction *ComplexUserActionParser::parseComplexUserAction(const QDomElement &element)
+{
+	QString const actionName = element.attribute("name", "noName");
+	QDomNodeList userActionList = element.childNodes();
+
+	QList<UserAction *> userActions;
+	for (int i = 0; i < userActionList.length(); ++i) {
+		QDomNode userAction = userActionList.at(i);
+		QDomElement const userActionElement = userAction.toElement();
+		if (userActionElement.tagName() == "baseUserAction") {
+			BaseUserAction *baseAction = parseBaseUserAction(userActionElement);
+			if (baseAction != nullptr) {
+				userActions.append(baseAction);
+			}
+		}
+		else if (userActionElement.tagName() == "complexUserAction") {
+			ComplexUserAction *complexAction = parseComplexUserAction(userActionElement);
+			if (complexAction != nullptr) {
+				userActions.append(complexAction);
+			}
+		}
 	}
 	return new ComplexUserAction(actionName, userActions);
 }
