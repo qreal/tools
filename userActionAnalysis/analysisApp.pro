@@ -15,15 +15,15 @@ SOURCES += main.cpp \
 	userAction/complexUserAction/complexUserActionParser.cpp \
 	userAction/complexUserAction/complexUserAction.cpp \
 	userAction/complexUserAction/complexUserActionGenerator.cpp \
-    	userAction/baseUserAction/BaseUserActionList.cpp \
+	userAction/baseUserAction/BaseUserActionList.cpp \
 	widgetItemProperty/widgetItemCustomProperty.cpp \
 	widgetItemProperty/widgetItemCustomPropertyList.cpp \
 	propertiesDialog.cpp \
 	complexActionNameDialog.cpp \
-	logParser.cpp \
 	complexActionDialog.cpp \
-    	findDialog.cpp \
-    userAction/complexUserAction/complexUserActionList.cpp
+	findDialog.cpp \
+	userAction/complexUserAction/complexUserActionList.cpp \
+	ruleElement.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -33,19 +33,19 @@ HEADERS  += mainwindow.h \
 	userAction/complexUserAction/complexUserActionParser.h \
 	userAction/complexUserAction/complexUserAction.h \
 	userAction/complexUserAction/complexUserActionGenerator.h \
-    	userAction/baseUserAction/baseUserActionList.h \
+	userAction/baseUserAction/baseUserActionList.h \
 	widgetItemProperty/widgetItemCustomProperty.h \
 	widgetItemProperty/widgetItemCustomPropertyList.h \
 	propertiesDialog.h \
 	complexActionNameDialog.h \
-	logParser.h \
 	complexActionDialog.h \
-    	findDialog.h \
-    userAction/complexUserAction/complexUserActionList.h
+	findDialog.h \
+	userAction/complexUserAction/complexUserActionList.h \
+	ruleElement.h
 
 
 FORMS  += mainwindow.ui \
 	propertiesDialog.ui \
-    	complexActionNameDialog.ui \
-   	complexActionDialog.ui \
-    	findDialog.ui
+	complexActionNameDialog.ui \
+	complexActionDialog.ui \
+	findDialog.ui

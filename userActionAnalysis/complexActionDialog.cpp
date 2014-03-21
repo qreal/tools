@@ -23,7 +23,7 @@ ComplexActionDialog::ComplexActionDialog(QWidget *parent, BaseUserActionList bas
 	reservedNames << initComplexActionTreeWidget();
 
 	mComplexActionNameDialog->initReservedNames(reservedNames);
-	mComplexUserActionGenerator = new ComplexUserActionGenerator(mBaseUserActions);
+	mComplexUserActionGenerator = new ComplexUserActionGenerator(mBaseUserActions, mComplexUserActions);
 
 	connect(ui->addPushButton, &QPushButton::clicked, this, &ComplexActionDialog::addActionToRuleList);
 	connect(ui->baseActionListWidget, &QListWidget::itemDoubleClicked, this, &ComplexActionDialog::addActionToRuleList);
@@ -144,12 +144,20 @@ void ComplexActionDialog::saveComplexAction()
 	if (items.isEmpty()) {
 		return;
 	}
-	QStringList ruleList;
+
+	QList<RuleElement *> ruleElements;
 	int column = 0;
-	for (QTreeWidgetItem *item: items) {
-		ruleList.append(item->text(column));
+	for (int i = 0; i < ui->ruleTreeWidget->topLevelItemCount(); ++i) {
+		QTreeWidgetItem *item = ui->ruleTreeWidget->topLevelItem(i);
+		if (item->childCount() > 0) {
+			ruleElements.append(parseRuleTreeItem(item));
+		}
+		else {
+			ruleElements.append(new RuleElement(item->text(column), QList<RuleElement *>()));
+		}
 	}
-	mComplexUserActionGenerator->generateComplexAction(mComplexActionNameDialog->complexActionName(), ruleList);
+	//printRuleElements(ruleElements);
+	mComplexUserActionGenerator->generateComplexAction(mComplexActionNameDialog->complexActionName(), ruleElements);
 }
 
 void ComplexActionDialog::addNewComplexAction(ComplexUserAction *action)
@@ -208,6 +216,25 @@ void ComplexActionDialog::addComplexActionToRuleWidget(QTreeWidgetItem *parent, 
 				}
 			}
 		}
+	}
+}
+
+RuleElement *ComplexActionDialog::parseRuleTreeItem(QTreeWidgetItem *item)
+{
+	int column = 0;
+	RuleElement *ruleElement = new RuleElement();
+	ruleElement->setContent(item->text(column));
+	for (int i = 0; i < item->childCount(); ++i) {
+		ruleElement->addElementToList(*parseRuleTreeItem(item->child(i)));
+	}
+	return ruleElement;
+}
+
+void ComplexActionDialog::printRuleElements(QList<RuleElement *> ruleElements)
+{
+	for (RuleElement *element: ruleElements) {
+		qDebug() << element->content() << "\n";
+		printRuleElements(element->list());
 	}
 }
 

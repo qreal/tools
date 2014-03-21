@@ -69,7 +69,6 @@ QDomDocument ComplexUserActionParser::loadDocument(QString const &fileName)
 
 ComplexUserAction *ComplexUserActionParser::parseAction(const QString &fileName)
 {
-	Q_UNUSED(fileName);
 	QDomDocument const document = loadDocument(fileName);
 	QDomNodeList const actionList = document.elementsByTagName("complexUserAction");
 	if (actionList.length() != 1) {

@@ -7,25 +7,30 @@
 #include "userAction/baseUserAction/baseUserAction.h"
 #include "userAction/baseUserAction/baseUserActionList.h"
 #include "userAction/complexUserAction/complexUserAction.h"
+#include "userAction/complexUserAction/complexUserActionList.h"
+#include "ruleElement.h"
 
 class ComplexUserActionGenerator : public QObject
 {
 	Q_OBJECT
 
 public:
-	ComplexUserActionGenerator(BaseUserActionList const &baseUserActionList);
+	ComplexUserActionGenerator(BaseUserActionList const &baseUserActionList, ComplexUserActionList const &complexUserActionList);
 	~ComplexUserActionGenerator();
 
-	void generateComplexAction(QString const &name, QStringList const &userActions);
+	void generateComplexAction(QString const &name, QList<RuleElement *> const &userActions);
 
 signals:
 	void newComplexActionCreated(ComplexUserAction *action);
 
 private:
-	QDomElement userActionElement(QString const &userAction, QDomDocument &document);
+	QDomElement userActionElement(RuleElement *userAction, QDomDocument &document, QList<UserAction *> &userActionList);
+	QDomElement baseUserActionElement(RuleElement *userAction, QDomDocument &document, QList<UserAction *> &userActionList);
+	void addComplexAction(RuleElement *userAction, QDomDocument &document, QDomElement &complexUserActionElement);
 	QMap<QString, QString> userActionPropertiesMap(QString const &userActionProperties);
 
 	BaseUserActionList mBaseUserActions;
+	ComplexUserActionList mComplexUserActions;
 	int mComplexActionsCount;
 	QDir mComplexActionsDir;
 
