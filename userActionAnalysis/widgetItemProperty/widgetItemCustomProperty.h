@@ -24,4 +24,5 @@ private:
 	QTreeWidgetItem *mTopLevelParent;
 	QTreeWidgetItem *mItem;
 	QMap<QString, QString> mCustomProperties;
+
 };

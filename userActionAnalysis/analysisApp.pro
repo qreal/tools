@@ -16,6 +16,7 @@ SOURCES += main.cpp \
 	userAction/complexUserAction/complexUserAction.cpp \
 	userAction/complexUserAction/complexUserActionGenerator.cpp \
 	userAction/baseUserAction/BaseUserActionList.cpp \
+	userAction/userActionProperty/duration.cpp \
 	widgetItemProperty/widgetItemCustomProperty.cpp \
 	widgetItemProperty/widgetItemCustomPropertyList.cpp \
 	propertiesDialog.cpp \
@@ -34,6 +35,7 @@ HEADERS  += mainwindow.h \
 	userAction/complexUserAction/complexUserAction.h \
 	userAction/complexUserAction/complexUserActionGenerator.h \
 	userAction/baseUserAction/baseUserActionList.h \
+	userAction/userActionProperty/duration.h \
 	widgetItemProperty/widgetItemCustomProperty.h \
 	widgetItemProperty/widgetItemCustomPropertyList.h \
 	propertiesDialog.h \

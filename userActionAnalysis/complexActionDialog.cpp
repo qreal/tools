@@ -272,9 +272,7 @@ void ComplexActionDialog::addBaseActionToRuleWidget(QTreeWidgetItem *parent, QSt
 ComplexActionDialog::~ComplexActionDialog()
 {
 	delete mComplexUserActionGenerator;
-	if (mOpenedRuleItem) {
-		delete mOpenedRuleItem;
-	}
+	delete mOpenedRuleItem;
 	delete mComplexActionNameDialog;
 	delete mPropertiesDialog;
 	delete ui;

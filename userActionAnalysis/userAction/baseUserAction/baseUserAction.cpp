@@ -8,7 +8,6 @@ BaseUserAction::BaseUserAction(const QString &name, const QMap<QString, QStringL
 
 BaseUserAction::~BaseUserAction()
 {
-
 }
 
 QMap<QString, QStringList> BaseUserAction::actionProperties() const

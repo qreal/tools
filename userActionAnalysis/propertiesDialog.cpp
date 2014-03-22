@@ -1,6 +1,10 @@
 #include "propertiesDialog.h"
 #include "ui_propertiesDialog.h"
 
+int const defaultRepeatCount = 1;
+bool const defaultIsKeyAction = true;
+int const defaultDuration = 0;
+
 int const noSuchIndex = -1;
 int const twoProperties = 2;
 int const oneProperty = 1;
@@ -12,11 +16,29 @@ PropertiesDialog::PropertiesDialog(QWidget *parent) :
 	ui(new Ui::PropertiesDialog)
 {
 	ui->setupUi(this);
+
+	QStringList keyElements;
+	keyElements << "обязательное" << "необязательное";
+	ui->keyComboBox->addItems(keyElements);
+	ui->keyComboBox->setCurrentIndex(firstPropertyIndex);
+	mIsKeyAction = defaultIsKeyAction;
+
+	QStringList repeatCount;
+	repeatCount << "1" << "несколько";
+	ui->repeatComboBox->addItems(repeatCount);
+	ui->repeatComboBox->setCurrentIndex(firstPropertyIndex);
+	mRepeatCount = defaultRepeatCount;
+
+	ui->fromSpinBox->setValue(defaultDuration);
+	ui->toSpinBox->setValue(defaultDuration);
+	mDuration = new Duration(defaultDuration, defaultDuration);
+
 	connect(ui->saveButton, &QPushButton::clicked, this, &PropertiesDialog::saveProperties);
 }
 
 PropertiesDialog::~PropertiesDialog()
 {
+	delete mDuration;
 	delete ui;
 }
 
@@ -89,12 +111,36 @@ QMap<QString, QString> PropertiesDialog::conProperties()
 	return mConProperties;
 }
 
+int PropertiesDialog::repeatCount()
+{
+	return mRepeatCount;
+}
+
+bool PropertiesDialog::isKeyAction()
+{
+	return mIsKeyAction;
+}
+
+Duration *PropertiesDialog::duration()
+{
+	return mDuration;
+}
+
 void PropertiesDialog::saveProperties()
 {
 	mConProperties.insert(ui->labelProperty1->text(), ui->comboBoxProperty1->currentText());
 	if (!ui->comboBoxProperty2->isHidden()) {
 		mConProperties.insert(ui->labelProperty2->text(), ui->comboBoxProperty2->currentText());
 	}
+
+	QString const oneAction = "1";
+	int const oneActionValue = 1;
+	int const someActionsValue = 2;
+	QString const keyAction = QString::fromUtf8("обязательное");
+
+	mRepeatCount = (ui->repeatComboBox->currentText() == oneAction) ? oneActionValue : someActionsValue;
+	mIsKeyAction = ui->keyComboBox->currentText() == keyAction;
+	mDuration->setFrom(ui->fromSpinBox->value());
+	mDuration->setTo(ui->toSpinBox->value());
 	accept();
 }
-

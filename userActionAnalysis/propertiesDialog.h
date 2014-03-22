@@ -3,6 +3,8 @@
 #include <QtCore/QMap>
 #include <QCloseEvent>
 
+#include "userAction/userActionProperty/duration.h"
+
 namespace Ui {
 class PropertiesDialog;
 }
@@ -18,6 +20,9 @@ public:
 	void setLabelsAndProperties(QMap<QString, QStringList> const &properties, QMap<QString, QString> const &conProperties
 			, QStringList const &disabledProperties);
 	QMap<QString, QString> conProperties();
+	int repeatCount();
+	bool isKeyAction();
+	Duration *duration();
 
 private slots:
 	void saveProperties();
@@ -25,4 +30,7 @@ private slots:
 private:
 	Ui::PropertiesDialog *ui;
 	QMap<QString, QString> mConProperties;
+	int mRepeatCount;
+	bool mIsKeyAction;
+	Duration *mDuration;
 };
