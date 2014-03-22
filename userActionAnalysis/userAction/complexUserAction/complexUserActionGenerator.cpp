@@ -103,7 +103,7 @@ QDomElement ComplexUserActionGenerator::baseUserActionElement(RuleElement *userA
 		isKeyAction.appendChild(isKeyActionValue);
 		baseUserActionElement.appendChild(isKeyAction);
 
-		QDomElement duration = document.createElement("Diration");
+		QDomElement duration = document.createElement("Duration");
 		QDomElement from = document.createElement("From");
 		QDomText fromValue = document.createTextNode(QString::number(userAction->duration()->from()));
 		from.appendChild(fromValue);
@@ -118,6 +118,10 @@ QDomElement ComplexUserActionGenerator::baseUserActionElement(RuleElement *userA
 		if (baseUserActionFromList != nullptr) {
 
 			BaseUserAction *baseUserAction = new BaseUserAction(baseUserActionFromList->userActionName(), baseUserActionFromList->actionProperties());
+
+			baseUserAction->setRepeatCount(userAction->repeatCount());
+			baseUserAction->setIsKeyAction(userAction->isKeyAction());
+			baseUserAction->setDuration(userAction->duration()->from(), userAction->duration()->to());
 
 			QString const userActionProperties = userActionNameAndProperties.at(1);
 			QMap<QString, QString> properties = userActionPropertiesMap(userActionProperties);

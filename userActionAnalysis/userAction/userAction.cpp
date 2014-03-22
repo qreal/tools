@@ -38,3 +38,18 @@ void UserAction::setDuration(const int &from, const int &to)
 	mDuration->setFrom(from);
 	mDuration->setTo(to);
 }
+
+int UserAction::repeatCount() const
+{
+	return mRepeatCount;
+}
+
+bool UserAction::isKeyAction() const
+{
+	return mIsKeyAction;
+}
+
+Duration *UserAction::duration() const
+{
+	return mDuration;
+}

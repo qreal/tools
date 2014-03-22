@@ -226,7 +226,11 @@ void ComplexActionDialog::addComplexActionToRuleWidget(QTreeWidgetItem *parent, 
 			else {
 				BaseUserAction *baseAction = dynamic_cast<BaseUserAction *>(userAction);
 				if (baseAction) {
-					addBaseActionToRuleWidget(ruleItem, baseAction->userActionName(), baseAction->customActionProperties());
+					addBaseActionToRuleWidget(ruleItem, baseAction->userActionName(),
+							baseAction->customActionProperties()
+							, baseAction->repeatCount()
+							, baseAction->isKeyAction()
+							, *(baseAction->duration()));
 				}
 			}
 		}
@@ -252,7 +256,7 @@ void ComplexActionDialog::printRuleElements(QList<RuleElement *> ruleElements)
 	}
 }
 
-void ComplexActionDialog::addBaseActionToRuleWidget(QTreeWidgetItem *parent, QString const &name, QMap<QString, QString> const &disabledProperties)
+void ComplexActionDialog::addBaseActionToRuleWidget(QTreeWidgetItem *parent, QString const &name, QMap<QString, QString> const &disabledProperties, const int &repeatCountValue, const bool &isKeyActionValue, const Duration &durationValue)
 {
 	QTreeWidgetItem *ruleItem = nullptr;
 	if (parent == nullptr) {
@@ -277,11 +281,8 @@ void ComplexActionDialog::addBaseActionToRuleWidget(QTreeWidgetItem *parent, QSt
 			++i;
 		}
 
-		int const repeatCount = 1;
-		bool isKeyAction = true;
-		Duration duration(0, 0);
 		mWidgetItemCustomPropertyList.append(new WidgetItemCustomProperty(ruleItem, ruleItem, mapProperties
-				, repeatCount, isKeyAction, duration));
+				, repeatCountValue, isKeyActionValue, durationValue));
 		mDisabledProperties.insert(ruleItem, disabledProperties);
 		int column = 0;
 		ruleItem->setText(column, name + ruleProperties);

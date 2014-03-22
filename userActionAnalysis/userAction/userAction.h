@@ -18,6 +18,10 @@ public:
 	virtual void setIsKeyAction(bool isKeyAction);
 	virtual void setDuration(int const &from, int const &to);
 
+	virtual int repeatCount() const;
+	virtual bool isKeyAction() const;
+	virtual Duration *duration() const;
+
 private:
 	QString mName;
 

@@ -41,7 +41,11 @@ signals:
 private:
 	QStringList initBaseActionListWidget();
 	void initComplexAction(ComplexUserAction *complexUserAction, QTreeWidgetItem *item, int const &column);
-	void addBaseActionToRuleWidget(QTreeWidgetItem *parent, const QString &name, const QMap<QString, QString> &disabledProperties);
+	void addBaseActionToRuleWidget(QTreeWidgetItem *parent, const QString &name, const QMap<QString
+			, QString> &disabledProperties
+			, int const &repeatCountValue = 1
+			, bool const &isKeyActionValue = true
+			, Duration const &durationValue = Duration(0, 0));
 	void addComplexActionToRuleWidget(QTreeWidgetItem *parent, ComplexUserAction *complexUserAction);
 	RuleElement *parseRuleTreeItem(QTreeWidgetItem *item);
 	void printRuleElements(QList<RuleElement *> ruleElements);

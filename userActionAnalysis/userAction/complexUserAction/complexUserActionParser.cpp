@@ -108,6 +108,39 @@ BaseUserAction *ComplexUserActionParser::parseBaseUserAction(QDomElement const &
 		return nullptr;
 	}
 	BaseUserAction *baseUserAction = new BaseUserAction(baseUserActionName, baseUserActionFromList->actionProperties());
+
+	QDomNodeList const repeatCountList = element.elementsByTagName("RepeatCount");
+	if (repeatCountList.length() == 1) {
+		QDomElement repeatCountElement = repeatCountList.at(0).toElement();
+		int const repeatCount = (repeatCountElement.text() == "1") ? 1 : 2;
+		baseUserAction->setRepeatCount(repeatCount);
+	}
+
+	QDomNodeList const isKeyActionList = element.elementsByTagName("IsKeyAction");
+	if (isKeyActionList.length() == 1) {
+		QDomElement isKeyActionElement = isKeyActionList.at(0).toElement();
+		bool const isKeyAction = (isKeyActionElement.text() == "true");
+		baseUserAction->setIsKeyAction(isKeyAction);
+	}
+
+	QDomNodeList const durationList = element.elementsByTagName("Duration");
+	if (durationList.length() == 1) {
+		QDomElement durationElement = durationList.at(0).toElement();
+		QDomNodeList durationChildren = durationElement.childNodes();
+		int from = 0;
+		int to = 0;
+		for (int k = 0; k < durationChildren.length(); ++k) {
+			QDomElement durationChildElement = durationChildren.at(k).toElement();
+			if (durationChildElement.tagName() == "From") {
+				from = durationChildElement.text().toInt();
+			}
+			else if (durationChildElement.tagName() == "To") {
+				to = durationChildElement.text().toInt();
+			}
+		}
+		baseUserAction->setDuration(from, to);
+	}
+
 	QDomNodeList const customPropertyList = element.elementsByTagName("customProperty");
 
 	for (int j = 0; j < customPropertyList.length(); ++j) {
