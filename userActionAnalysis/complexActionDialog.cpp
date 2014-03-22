@@ -164,7 +164,10 @@ void ComplexActionDialog::saveComplexAction()
 			ruleElements.append(parseRuleTreeItem(item));
 		}
 		else {
-			ruleElements.append(new RuleElement(item->text(column), QList<RuleElement *>()));
+			ruleElements.append(new RuleElement(item->text(column), QList<RuleElement *>()
+					, mWidgetItemCustomPropertyList.repeatCountByItem(item)
+					, mWidgetItemCustomPropertyList.isKeyActionByItem(item)
+					, *(mWidgetItemCustomPropertyList.durationByItem(item))));
 		}
 	}
 	//printRuleElements(ruleElements);

@@ -92,6 +92,28 @@ QDomElement ComplexUserActionGenerator::baseUserActionElement(RuleElement *userA
 		}
 		QString const userActionName = userActionNameAndProperties.at(0);
 		baseUserActionElement.setAttribute("name", userActionName);
+
+		QDomElement repeatCount = document.createElement("RepeatCount");
+		QDomText repeatCountValue = document.createTextNode((userAction->repeatCount() == 1) ? "1" : "2");
+		repeatCount.appendChild(repeatCountValue);
+		baseUserActionElement.appendChild(repeatCount);
+
+		QDomElement isKeyAction = document.createElement("IsKeyAction");
+		QDomText isKeyActionValue = document.createTextNode((userAction->isKeyAction()) ? "true" : "false");
+		isKeyAction.appendChild(isKeyActionValue);
+		baseUserActionElement.appendChild(isKeyAction);
+
+		QDomElement duration = document.createElement("Diration");
+		QDomElement from = document.createElement("From");
+		QDomText fromValue = document.createTextNode(QString::number(userAction->duration()->from()));
+		from.appendChild(fromValue);
+		duration.appendChild(from);
+		QDomElement to = document.createElement("To");
+		QDomText toValue = document.createTextNode(QString::number(userAction->duration()->to()));
+		to.appendChild(toValue);
+		duration.appendChild(to);
+		baseUserActionElement.appendChild(duration);
+
 		BaseUserAction *baseUserActionFromList = mBaseUserActions.baseUserActionByName(userActionName);
 		if (baseUserActionFromList != nullptr) {
 
