@@ -4,7 +4,8 @@
 #include "userAction/complexUserAction/complexUserActionGenerator.h"
 #include "propertiesDialog.h"
 
-#include <QMessageBox>
+#include <QtWidgets/QMessageBox>
+#include <QtWidgets/QApplication>
 #include <QtCore/QDebug>
 
 ComplexActionDialog::ComplexActionDialog(QWidget *parent, BaseUserActionList baseUserActions, ComplexUserActionList complexUserActions) :
@@ -14,7 +15,9 @@ ComplexActionDialog::ComplexActionDialog(QWidget *parent, BaseUserActionList bas
 	, mComplexUserActions(complexUserActions)
 {
 	ui->setupUi(this);
-	mPropertiesDialog = new PropertiesDialog();
+	mPropertiesDialog = new PropertiesDialog(this);
+	mPropertiesDialog->move(this->geometry().center() - mPropertiesDialog->geometry().center());
+
 	mComplexActionNameDialog = new ComplexActionNameDialog();
 	mOpenedRuleItem = new QTreeWidgetItem();
 	QStringList reservedNames;
@@ -107,7 +110,11 @@ void ComplexActionDialog::openProperties(QTreeWidgetItem *item)
 		return;
 	}
 	mPropertiesDialog->setLabelsAndProperties(map, mWidgetItemCustomPropertyList.customPropertiesByItem(item)
+			, mWidgetItemCustomPropertyList.repeatCountByItem(item)
+			, mWidgetItemCustomPropertyList.isKeyActionByItem(item)
+			, mWidgetItemCustomPropertyList.durationByItem(item)
 			, mDisabledProperties.value(mOpenedRuleItem).keys());
+
 	mPropertiesDialog->show();
 }
 
@@ -124,6 +131,10 @@ void ComplexActionDialog::updateCustomProperties()
 	}
 	mOpenedRuleItem->setText(column, itemName + ruleProperties);
 	mWidgetItemCustomPropertyList.replaceProperties(mOpenedRuleItem, customProperties);
+	mWidgetItemCustomPropertyList.updateOtherProperties(mOpenedRuleItem
+			, mPropertiesDialog->repeatCount()
+			, mPropertiesDialog->isKeyAction()
+			, *(mPropertiesDialog->duration()));
 }
 
 void ComplexActionDialog::openNameDialogComplexAction()
@@ -262,7 +273,12 @@ void ComplexActionDialog::addBaseActionToRuleWidget(QTreeWidgetItem *parent, QSt
 			ruleProperties += i.key() + ": " + value + "|";
 			++i;
 		}
-		mWidgetItemCustomPropertyList.append(new WidgetItemCustomProperty(ruleItem, ruleItem, mapProperties));
+
+		int const repeatCount = 1;
+		bool isKeyAction = true;
+		Duration duration(0, 0);
+		mWidgetItemCustomPropertyList.append(new WidgetItemCustomProperty(ruleItem, ruleItem, mapProperties
+				, repeatCount, isKeyAction, duration));
 		mDisabledProperties.insert(ruleItem, disabledProperties);
 		int column = 0;
 		ruleItem->setText(column, name + ruleProperties);

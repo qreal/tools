@@ -42,13 +42,14 @@ PropertiesDialog::~PropertiesDialog()
 	delete ui;
 }
 
-void PropertiesDialog::setLabelsAndProperties(const QMap<QString, QStringList> &properties, QMap<QString, QString> const &conProperties, QStringList const &disabledProperties)
+void PropertiesDialog::setLabelsAndProperties(const QMap<QString, QStringList> &properties
+		, QMap<QString, QString> const &conProperties,
+		const int &repeatCountValue
+		, bool isKeyActionValue
+		, Duration *durationValue
+		, QStringList const &disabledProperties)
 {
-	mConProperties.clear();
-	ui->comboBoxProperty1->clear();
-	ui->comboBoxProperty2->clear();
-	ui->comboBoxProperty1->setEnabled(true);
-	ui->comboBoxProperty2->setEnabled(true);
+	initDefaultValues();
 	int propertiesCount = properties.count();
 	if (propertiesCount == oneProperty) {
 		QString const name = properties.keys().at(firstPropertyIndex);
@@ -104,6 +105,36 @@ void PropertiesDialog::setLabelsAndProperties(const QMap<QString, QStringList> &
 		ui->labelProperty2->hide();
 		ui->comboBoxProperty2->hide();
 	}
+	if (repeatCountValue == 1) {
+		ui->repeatComboBox->setCurrentIndex(firstPropertyIndex);
+	}
+	else {
+		ui->repeatComboBox->setCurrentIndex(secondPropertyIndex);
+	}
+
+	if (isKeyActionValue) {
+		ui->keyComboBox->setCurrentIndex(firstPropertyIndex);
+	}
+	else {
+		ui->keyComboBox->setCurrentIndex(secondPropertyIndex);
+	}
+
+	ui->fromSpinBox->setValue(durationValue->from());
+	ui->toSpinBox->setValue(durationValue->to());
+}
+
+void PropertiesDialog::initDefaultValues()
+{
+	mConProperties.clear();
+	ui->comboBoxProperty1->clear();
+	ui->comboBoxProperty2->clear();
+	ui->comboBoxProperty1->setEnabled(true);
+	ui->comboBoxProperty2->setEnabled(true);
+
+	ui->keyComboBox->setCurrentIndex(firstPropertyIndex);
+	ui->repeatComboBox->setCurrentIndex(firstPropertyIndex);
+	ui->fromSpinBox->setValue(defaultDuration);
+	ui->toSpinBox->setValue(defaultDuration);
 }
 
 QMap<QString, QString> PropertiesDialog::conProperties()

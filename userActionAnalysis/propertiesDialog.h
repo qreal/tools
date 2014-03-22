@@ -17,8 +17,13 @@ public:
 	explicit PropertiesDialog(QWidget *parent = 0);
 	~PropertiesDialog();
 
-	void setLabelsAndProperties(QMap<QString, QStringList> const &properties, QMap<QString, QString> const &conProperties
+	void setLabelsAndProperties(QMap<QString, QStringList> const &properties
+			, QMap<QString, QString> const &conProperties
+			, int const &repeatCountValue
+			, bool isKeyActionValue
+			, Duration *durationValue
 			, QStringList const &disabledProperties);
+	void initDefaultValues();
 	QMap<QString, QString> conProperties();
 	int repeatCount();
 	bool isKeyAction();
