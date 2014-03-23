@@ -11,9 +11,9 @@ class RuleElement : public QObject
 public:
 	RuleElement();
 	RuleElement(QString const &content, QList<RuleElement *> const &list
-			, int const &repeatCount = 1
-			, bool const &isKeyAction = true
-			, Duration const &duration = Duration(0, 0));
+			, int repeatCount = 1
+			, bool isKeyAction = true
+			, Duration *duration = new Duration(0, 0));
 	~RuleElement();
 
 	void setContent(QString const &content);

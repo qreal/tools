@@ -167,10 +167,10 @@ void ComplexActionDialog::saveComplexAction()
 			ruleElements.append(new RuleElement(item->text(column), QList<RuleElement *>()
 					, mWidgetItemCustomPropertyList.repeatCountByItem(item)
 					, mWidgetItemCustomPropertyList.isKeyActionByItem(item)
-					, *(mWidgetItemCustomPropertyList.durationByItem(item))));
+					, mWidgetItemCustomPropertyList.durationByItem(item)));
 		}
 	}
-	//printRuleElements(ruleElements);
+	printRuleElements(ruleElements);
 	mComplexUserActionGenerator->generateComplexAction(mComplexActionNameDialog->complexActionName(), ruleElements);
 }
 
@@ -251,7 +251,8 @@ RuleElement *ComplexActionDialog::parseRuleTreeItem(QTreeWidgetItem *item)
 void ComplexActionDialog::printRuleElements(QList<RuleElement *> ruleElements)
 {
 	for (RuleElement *element: ruleElements) {
-		qDebug() << element->content() << "\n";
+		qDebug() << element->content() << element->repeatCount() << element->isKeyAction();
+		qDebug() << element->duration()->from() << element->duration()->to();
 		printRuleElements(element->list());
 	}
 }

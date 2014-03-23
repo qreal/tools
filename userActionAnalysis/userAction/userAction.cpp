@@ -33,7 +33,7 @@ void UserAction::setIsKeyAction(bool isKeyAction)
 	mIsKeyAction = isKeyAction;
 }
 
-void UserAction::setDuration(const int &from, const int &to)
+void UserAction::setDuration(int from, int to)
 {
 	mDuration->setFrom(from);
 	mDuration->setTo(to);

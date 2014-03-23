@@ -16,7 +16,7 @@ public:
 
 	virtual void setRepeatCount(int const &repeatCount);
 	virtual void setIsKeyAction(bool isKeyAction);
-	virtual void setDuration(int const &from, int const &to);
+	virtual void setDuration(int from, int to);
 
 	virtual int repeatCount() const;
 	virtual bool isKeyAction() const;

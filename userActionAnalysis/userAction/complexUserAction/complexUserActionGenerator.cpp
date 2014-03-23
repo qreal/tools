@@ -75,6 +75,8 @@ QDomElement ComplexUserActionGenerator::userActionElement(RuleElement *userActio
 	QList<UserAction *> complexUserActionList;
 	QString const name = userAction->content();
 	complexUserActionElement.setAttribute("name", name);
+	complexUserActionElement.setAttribute("repeatCount", (userAction->repeatCount() == 1) ? "1" : "2");
+	complexUserActionElement.setAttribute("isKeyAction", userAction->isKeyAction() ? "true" : "false");
 	for (RuleElement *userActionFromList: userAction->list()) {
 		complexUserActionElement.appendChild(userActionElement(userActionFromList, document, complexUserActionList));
 	}
@@ -103,8 +105,14 @@ QDomElement ComplexUserActionGenerator::baseUserActionElement(RuleElement *userA
 		isKeyAction.appendChild(isKeyActionValue);
 		baseUserActionElement.appendChild(isKeyAction);
 
-		QDomElement duration = document.createElement("Duration");
+		/*QDomElement duration = document.createElement("Duration");
 		QDomElement from = document.createElement("From");
+		if (userAction->duration() == nullptr) {
+			qDebug() << "duration null for " << userActionName;
+		}
+		else {
+			qDebug() << "duration ok for " << userActionName << "from: " << userAction->duration()->from();
+		}
 		QDomText fromValue = document.createTextNode(QString::number(userAction->duration()->from()));
 		from.appendChild(fromValue);
 		duration.appendChild(from);
@@ -112,7 +120,7 @@ QDomElement ComplexUserActionGenerator::baseUserActionElement(RuleElement *userA
 		QDomText toValue = document.createTextNode(QString::number(userAction->duration()->to()));
 		to.appendChild(toValue);
 		duration.appendChild(to);
-		baseUserActionElement.appendChild(duration);
+		baseUserActionElement.appendChild(duration);*/
 
 		BaseUserAction *baseUserActionFromList = mBaseUserActions.baseUserActionByName(userActionName);
 		if (baseUserActionFromList != nullptr) {
@@ -121,7 +129,7 @@ QDomElement ComplexUserActionGenerator::baseUserActionElement(RuleElement *userA
 
 			baseUserAction->setRepeatCount(userAction->repeatCount());
 			baseUserAction->setIsKeyAction(userAction->isKeyAction());
-			baseUserAction->setDuration(userAction->duration()->from(), userAction->duration()->to());
+//			baseUserAction->setDuration(userAction->duration()->from(), userAction->duration()->to());
 
 			QString const userActionProperties = userActionNameAndProperties.at(1);
 			QMap<QString, QString> properties = userActionPropertiesMap(userActionProperties);

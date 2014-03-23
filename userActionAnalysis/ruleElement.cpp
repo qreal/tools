@@ -6,14 +6,14 @@ RuleElement::RuleElement()
 }
 
 RuleElement::RuleElement(const QString &content, const QList<RuleElement *> &list
-		, int const &repeatCount
-		, bool const &isKeyAction
-		, const Duration &duration)
+		, int repeatCount
+		, bool isKeyAction
+		, Duration *duration)
 		: mContent(content)
 		, mList(list)
 		, mRepeatCount(repeatCount)
 		, mIsKeyAction(isKeyAction)
-		, mDuration(new Duration(duration.from(), duration.to()))
+		, mDuration(new Duration(duration->from(), duration->to()))
 {
 
 }

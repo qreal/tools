@@ -93,6 +93,8 @@ ComplexUserAction *ComplexUserActionParser::parseAction(const QString &fileName)
 		else if (userActionElement.tagName() == "complexUserAction") {
 			ComplexUserAction *complexAction = parseComplexUserAction(userActionElement);
 			if (complexAction != nullptr) {
+				complexAction->setRepeatCount(userActionElement.attribute("repeatCount", "1").toInt());
+				complexAction->setIsKeyAction(userActionElement.attribute("isKeyAction", "true") == "true");
 				userActions.append(complexAction);
 			}
 		}
@@ -100,7 +102,7 @@ ComplexUserAction *ComplexUserActionParser::parseAction(const QString &fileName)
 	return new ComplexUserAction(actionName, userActions);
 }
 
-BaseUserAction *ComplexUserActionParser::parseBaseUserAction(QDomElement const &element)
+BaseUserAction *ComplexUserActionParser:: parseBaseUserAction(QDomElement const &element)
 {
 	QString const baseUserActionName = element.attribute("name", "noName");
 	BaseUserAction *baseUserActionFromList = mBaseUserActions.baseUserActionByName(baseUserActionName);
@@ -173,6 +175,8 @@ ComplexUserAction *ComplexUserActionParser::parseComplexUserAction(const QDomEle
 		else if (userActionElement.tagName() == "complexUserAction") {
 			ComplexUserAction *complexAction = parseComplexUserAction(userActionElement);
 			if (complexAction != nullptr) {
+				complexAction->setRepeatCount(userActionElement.attribute("repeatCount", "1").toInt());
+				complexAction->setIsKeyAction(userActionElement.attribute("isKeyAction", "true") == "true");
 				userActions.append(complexAction);
 			}
 		}
