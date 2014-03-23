@@ -12,6 +12,7 @@ public:
 	ComplexUserAction(QString const &name, QList<UserAction *> userActions);
 	~ComplexUserAction();
 	QList<UserAction *> userActions();
+	virtual Duration *duration() const;
 
 private:
 	QList<UserAction *> mUserActions;

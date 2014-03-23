@@ -47,9 +47,22 @@ void PropertiesDialog::setLabelsAndProperties(const QMap<QString, QStringList> &
 		const int &repeatCountValue
 		, bool isKeyActionValue
 		, Duration *durationValue
-		, QStringList const &disabledProperties)
+		, QStringList const &disabledProperties
+		, bool isTopLevelItem
+		, bool isComplexAction)
 {
 	initDefaultValues();
+	if (!isTopLevelItem) {
+		ui->repeatComboBox->setEnabled(false);
+		ui->keyComboBox->setEnabled(false);
+		ui->fromSpinBox->setEnabled(false);
+		ui->toSpinBox->setEnabled(false);
+	}
+	if (isComplexAction) {
+		ui->fromSpinBox->setEnabled(false);
+		ui->toSpinBox->setEnabled(false);
+	}
+
 	int propertiesCount = properties.count();
 	if (propertiesCount == oneProperty) {
 		QString const name = properties.keys().at(firstPropertyIndex);
@@ -135,6 +148,11 @@ void PropertiesDialog::initDefaultValues()
 	ui->repeatComboBox->setCurrentIndex(firstPropertyIndex);
 	ui->fromSpinBox->setValue(defaultDuration);
 	ui->toSpinBox->setValue(defaultDuration);
+
+	ui->keyComboBox->setEnabled(true);
+	ui->repeatComboBox->setEnabled(true);
+	ui->fromSpinBox->setEnabled(true);
+	ui->toSpinBox->setEnabled(true);
 }
 
 QMap<QString, QString> PropertiesDialog::conProperties()
@@ -159,7 +177,9 @@ Duration *PropertiesDialog::duration()
 
 void PropertiesDialog::saveProperties()
 {
-	mConProperties.insert(ui->labelProperty1->text(), ui->comboBoxProperty1->currentText());
+	if (!ui->comboBoxProperty1->isHidden()) {
+		mConProperties.insert(ui->labelProperty1->text(), ui->comboBoxProperty1->currentText());
+	}
 	if (!ui->comboBoxProperty2->isHidden()) {
 		mConProperties.insert(ui->labelProperty2->text(), ui->comboBoxProperty2->currentText());
 	}

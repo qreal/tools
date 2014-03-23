@@ -1,5 +1,6 @@
 #include "widgetItemProperty/widgetItemCustomPropertyList.h"
 
+#include <QtCore/QDebug>
 
 WidgetItemCustomPropertyList::WidgetItemCustomPropertyList()
 {

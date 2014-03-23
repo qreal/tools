@@ -79,7 +79,7 @@ void ComplexActionDialog::addActionToRuleList()
 			continue;
 		}
 		int column = 0;
-		addComplexActionToRuleWidget(nullptr, mComplexUserActions.complexUserActionByName(selectedTreeItem->text(column)));
+		addComplexActionToRuleWidget(nullptr, mComplexUserActions.complexUserActionByName(selectedTreeItem->text(column)), nullptr);
 	}
 	ui->complexActionTreeWidget->clearSelection();
 }
@@ -103,17 +103,20 @@ void ComplexActionDialog::openProperties(QTreeWidgetItem *item)
 {
 	mOpenedRuleItem = item;
 	int column = 0;
+	bool isTopLevelItem = isTopLevelItemInRuleTree(item);
+	bool isComplexAction = false;
 	QString itemName = item->text(column).section(" — ", 0, 0);
 	mPropertiesDialog->setWindowTitle(itemName);
 	QMap<QString, QStringList> const map = mBaseUserActions.propertiesByBaseUserActionName(itemName);
-	if (map.isEmpty()) {
-		return;
-	}
+	isComplexAction = map.isEmpty();
+
 	mPropertiesDialog->setLabelsAndProperties(map, mWidgetItemCustomPropertyList.customPropertiesByItem(item)
 			, mWidgetItemCustomPropertyList.repeatCountByItem(item)
 			, mWidgetItemCustomPropertyList.isKeyActionByItem(item)
 			, mWidgetItemCustomPropertyList.durationByItem(item)
-			, mDisabledProperties.value(mOpenedRuleItem).keys());
+			, mDisabledProperties.value(mOpenedRuleItem).keys()
+			, isTopLevelItem
+			, isComplexAction);
 
 	mPropertiesDialog->show();
 }
@@ -128,6 +131,9 @@ void ComplexActionDialog::updateCustomProperties()
 	while (i != customProperties.constEnd()) {
 		ruleProperties += i.key() + ": " + i.value() + "|";
 		++i;
+	}
+	if (ruleProperties == " — ") {
+		ruleProperties = "";
 	}
 	mOpenedRuleItem->setText(column, itemName + ruleProperties);
 	mWidgetItemCustomPropertyList.replaceProperties(mOpenedRuleItem, customProperties);
@@ -207,7 +213,7 @@ void ComplexActionDialog::initComplexAction(ComplexUserAction *complexUserAction
 	}
 }
 
-void ComplexActionDialog::addComplexActionToRuleWidget(QTreeWidgetItem *parent, ComplexUserAction *complexUserAction)
+void ComplexActionDialog::addComplexActionToRuleWidget(QTreeWidgetItem *parent, ComplexUserAction *complexUserAction, QTreeWidgetItem *topLevelParent)
 {
 	QTreeWidgetItem *ruleItem = nullptr;
 	if (parent == nullptr) {
@@ -216,12 +222,19 @@ void ComplexActionDialog::addComplexActionToRuleWidget(QTreeWidgetItem *parent, 
 		ruleItem = new QTreeWidgetItem(parent);
 	}
 	if (ruleItem) {
+		QTreeWidgetItem *topLevelParentItem = new QTreeWidgetItem();
+		if (topLevelParent == nullptr) {
+			topLevelParentItem = ruleItem;
+		}
+		else {
+			topLevelParentItem = topLevelParent;
+		}
 		int column = 0;
 		ruleItem->setText(column, complexUserAction->userActionName());
 		for (UserAction *userAction: complexUserAction->userActions()) {
 			ComplexUserAction *complexAction = dynamic_cast<ComplexUserAction *>(userAction);
 			if (complexAction) {
-				addComplexActionToRuleWidget(ruleItem, complexAction);
+				addComplexActionToRuleWidget(ruleItem, complexAction, topLevelParentItem);
 			}
 			else {
 				BaseUserAction *baseAction = dynamic_cast<BaseUserAction *>(userAction);
@@ -230,10 +243,18 @@ void ComplexActionDialog::addComplexActionToRuleWidget(QTreeWidgetItem *parent, 
 							baseAction->customActionProperties()
 							, baseAction->repeatCount()
 							, baseAction->isKeyAction()
-							, *(baseAction->duration()));
+							, *(baseAction->duration())
+							, topLevelParentItem);
 				}
 			}
 		}
+		mWidgetItemCustomPropertyList.append(new WidgetItemCustomProperty(topLevelParentItem
+				, ruleItem
+				, QMap<QString, QString>()
+				, complexUserAction->repeatCount()
+				, complexUserAction->isKeyAction()
+				, *(complexUserAction->duration())));
+		mDisabledProperties.insert(ruleItem, QMap<QString, QString>());
 	}
 }
 
@@ -259,7 +280,23 @@ void ComplexActionDialog::printRuleElements(QList<RuleElement *> ruleElements)
 	}
 }
 
-void ComplexActionDialog::addBaseActionToRuleWidget(QTreeWidgetItem *parent, QString const &name, QMap<QString, QString> const &disabledProperties, const int &repeatCountValue, const bool &isKeyActionValue, const Duration &durationValue)
+bool ComplexActionDialog::isTopLevelItemInRuleTree(QTreeWidgetItem *item)
+{
+	for (int i = 0; i < ui->ruleTreeWidget->topLevelItemCount(); ++i) {
+		if (item == ui->ruleTreeWidget->topLevelItem(i)) {
+			return true;
+		}
+	}
+	return false;
+}
+
+void ComplexActionDialog::addBaseActionToRuleWidget(QTreeWidgetItem *parent
+		, QString const &name, QMap<QString, QString> const &disabledProperties
+		, const int &repeatCountValue
+		, const bool &isKeyActionValue
+		, const Duration &durationValue
+		, QTreeWidgetItem *topLevelParent
+		)
 {
 	QTreeWidgetItem *ruleItem = nullptr;
 	if (parent == nullptr) {
@@ -283,8 +320,14 @@ void ComplexActionDialog::addBaseActionToRuleWidget(QTreeWidgetItem *parent, QSt
 			ruleProperties += i.key() + ": " + value + "|";
 			++i;
 		}
-
-		mWidgetItemCustomPropertyList.append(new WidgetItemCustomProperty(ruleItem, ruleItem, mapProperties
+		QTreeWidgetItem *topLevelParentItem = new QTreeWidgetItem();
+		if (topLevelParent == nullptr) {
+			topLevelParentItem = ruleItem;
+		}
+		else {
+			topLevelParentItem = topLevelParent;
+		}
+		mWidgetItemCustomPropertyList.append(new WidgetItemCustomProperty(topLevelParentItem, ruleItem, mapProperties
 				, repeatCountValue, isKeyActionValue, durationValue));
 		mDisabledProperties.insert(ruleItem, disabledProperties);
 		int column = 0;

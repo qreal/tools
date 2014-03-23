@@ -22,7 +22,9 @@ public:
 			, int const &repeatCountValue
 			, bool isKeyActionValue
 			, Duration *durationValue
-			, QStringList const &disabledProperties);
+			, QStringList const &disabledProperties
+			, bool isTopLevelItem
+			, bool isComplexAction);
 	void initDefaultValues();
 	QMap<QString, QString> conProperties();
 	int repeatCount();

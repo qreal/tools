@@ -81,6 +81,8 @@ QDomElement ComplexUserActionGenerator::userActionElement(RuleElement *userActio
 		complexUserActionElement.appendChild(userActionElement(userActionFromList, document, complexUserActionList));
 	}
 	ComplexUserAction *complexUserAction = new ComplexUserAction(name, complexUserActionList);
+	complexUserAction->setRepeatCount(userAction->repeatCount());
+	complexUserAction->setIsKeyAction(userAction->isKeyAction());
 	userActionList.append(complexUserAction);
 	return complexUserActionElement;
 }
