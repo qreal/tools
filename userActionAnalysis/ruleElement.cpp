@@ -39,11 +39,10 @@ void RuleElement::addList(const QList<RuleElement *> &list)
 	mList << list;
 }
 
-void RuleElement::addElementToList(const RuleElement &element)
+void RuleElement::addElementToList(RuleElement *element)
 {
-	RuleElement *newElement = new RuleElement();
-	newElement->setContent(element.content());
-	newElement->setList(element.list());
+	RuleElement *newElement = new RuleElement(element->content(), element->list(), element->repeatCount()
+			, element->isKeyAction(), element->duration());
 	mList.append(newElement);
 }
 

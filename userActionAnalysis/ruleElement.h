@@ -19,7 +19,7 @@ public:
 	void setContent(QString const &content);
 	void setList(const QList<RuleElement *> &list);
 	void addList(QList<RuleElement *> const &list);
-	void addElementToList(RuleElement const &element);
+	void addElementToList(RuleElement *element);
 	bool isBaseAction();
 	QList<RuleElement *> list() const;
 	QString content() const;

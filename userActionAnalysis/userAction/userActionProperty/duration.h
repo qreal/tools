@@ -1,11 +1,7 @@
 #pragma once
 
-#include <QtCore/QObject>
-
-class Duration : public QObject
+class Duration
 {
-	Q_OBJECT
-
 public:
 	Duration(int from = 0, int to = 0);
 	~Duration();
