@@ -1,0 +1,7 @@
+<!DOCTYPE complexUserAction4>
+<mainComplexUserAction name="Прокрутить палитру вниз">
+ <baseUserAction name="Прокрутить палитру">
+  <customProperty value="вниз" name="направление"/>
+  <flexibleProperty value="?" name="шагов"/>
+ </baseUserAction>
+</mainComplexUserAction>

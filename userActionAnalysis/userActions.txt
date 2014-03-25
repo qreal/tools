@@ -1,0 +1,42 @@
+1 Palette: group collapse:  2014.03.11_23.03.08.423
+2 Palette: group collapse:  +13 msec
+3 Palette: group collapse:  +19 msec
+4 Palette: group collapse:  +1 msec
+5 Palette: group collapse:  +0 msec
+6 Palette: group collapse: Алгоритмы +0 msec
+7 Palette: group collapse:  +1 msec
+8 Palette: group collapse:  +0 msec
+9 Palette: group collapse:  +0 msec
+10 Palette: group collapse:  +1 msec
+11 Palette: group collapse:  +0 msec
+12 Palette: group collapse:  +1 msec
+13 Palette: group collapse:  +0 msec
+14 Palette: group collapse: Действия +0 msec
+15 Palette: group collapse:  +1 msec
+16 Palette: group collapse:  +0 msec
+17 Palette: group collapse:  +0 msec
+18 Palette: group collapse: Инициализация +0 msec
+19 Palette: group collapse:  +1 msec
+20 Palette: group collapse:  +0 msec
+21 Palette: group collapse:  +0 msec
+22 Palette: group collapse:  +0 msec
+23 Palette: group collapse:  +1 msec
+24 Palette: group collapse:  +1 msec
+25 Palette: group collapse:  +0 msec
+26 Palette: group collapse:  +0 msec
+27 Palette: group collapse:  +0 msec
+28 Palette: group collapse:  +0 msec
+29 Palette: group collapse: Ожидания +1 msec
+30 Palette: group collapse:  +0 msec
+31 Palette: group collapse:  +0 msec
+32 Palette: group collapse:  +0 msec
+33 Palette: group collapse:  +1 msec
+34 Palette: group collapse:  +0 msec
+35 Palette: group collapse:  +0 msec
+36 Palette: group collapse: Рисование на дисплее +0 msec
+37 Нажать на кнопку в палитре — название: свернуть/развернуть| +0 msec
+38 Нажать на кнопку в палитре — название: иконки/обычный вид| +1333 msec
+39 Прокрутить палитру — направление: вниз|шагов: 1| +5645 msec
+40 Прокрутить палитру — направление: вниз|шагов: 1| +910 msec
+41 Прокрутить палитру — направление: вниз|шагов: 1| +797 msec
+42 Прокрутить палитру — направление: вниз|шагов: 1| +973 msec

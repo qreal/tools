@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<userActions>
+	<userAction name="Прокрутить палитру">
+		<property name="направление" type="variants">
+			<value>вверх</value>
+			<value>вниз</value>
+		</property>
+		<property name="шагов" type="int"/>
+	</userAction>
+	<userAction name="Нажать на кнопку в палитре">
+		<property name="название" type="variants">
+			<value>свернуть/развернуть</value>
+			<value>иконки/обычный вид</value>
+		</property>
+	</userAction>
+	<userAction name="Навести на элемент в палитре">
+		<property name="название элемента" type="variants">
+			<value>Конец</value>
+			<value>Гудок</value>
+			<value>Цикл</value>
+			<value>Условие</value>			
+		</property>
+	</userAction>
+	<userAction name="Убрать наведение с элемента в палитре">
+		<property name="название элемента" type="variants">
+			<value>Конец</value>
+			<value>Гудок</value>
+			<value>Цикл</value>
+			<value>Условие</value>			
+		</property>
+	</userAction>
+		<userAction name="Нажать на элемент в палитре">
+		<property name="название элемента" type="variants">
+			<value>Конец</value>
+			<value>Гудок</value>
+			<value>Цикл</value>
+			<value>Условие</value>			
+		</property>
+	</userAction>
+</userActions>
