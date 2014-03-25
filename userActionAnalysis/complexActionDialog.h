@@ -34,6 +34,8 @@ public slots:
 	void openNameDialogComplexAction();
 	void saveComplexAction();
 	void addNewComplexAction(ComplexUserAction *action);
+	void clearBaseListSelection();
+	void clearComplexTreeSelection();
 
 signals:
 	void newComplexActionCreated(ComplexUserAction *complexUserAction);

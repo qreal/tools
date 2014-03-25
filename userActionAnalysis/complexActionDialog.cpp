@@ -36,6 +36,8 @@ ComplexActionDialog::ComplexActionDialog(QWidget *parent, BaseUserActionList bas
 	connect(ui->savePushButton, &QPushButton::clicked, this, &ComplexActionDialog::openNameDialogComplexAction);
 	connect(mComplexActionNameDialog, &ComplexActionNameDialog::accepted, this, &ComplexActionDialog::saveComplexAction);
 	connect(mComplexUserActionGenerator, &ComplexUserActionGenerator::newComplexActionCreated, this, &ComplexActionDialog::addNewComplexAction);
+	connect(ui->complexActionTreeWidget, &QTreeWidget::itemClicked, this, &ComplexActionDialog::clearBaseListSelection);
+	connect(ui->baseActionListWidget, &QListWidget::itemClicked, this, &ComplexActionDialog::clearComplexTreeSelection);
 }
 
 QStringList ComplexActionDialog::initBaseActionListWidget()
@@ -189,6 +191,18 @@ void ComplexActionDialog::addNewComplexAction(ComplexUserAction *action)
 	mComplexActionNameDialog->addReservedName(action->userActionName());
 	mComplexUserActions << action;
 	emit newComplexActionCreated(action);
+}
+
+void ComplexActionDialog::clearBaseListSelection()
+{
+	ui->baseActionListWidget->clearSelection();
+	ui->ruleTreeWidget->clearSelection();
+}
+
+void ComplexActionDialog::clearComplexTreeSelection()
+{
+	ui->complexActionTreeWidget->clearSelection();
+	ui->ruleTreeWidget->clearSelection();
 }
 
 void ComplexActionDialog::initComplexAction(ComplexUserAction *complexUserAction, QTreeWidgetItem *item, const int &column)
