@@ -8,6 +8,12 @@
 #include <QtWidgets/QApplication>
 #include <QtCore/QDebug>
 
+QStringList const reserveRuleItems = (QStringList() << QString::fromUtf8("Начать группу {")
+									  << QString::fromUtf8("} Завершить группу")
+									  << QString::fromUtf8("или")
+									  << QString::fromUtf8("Начать множество [")
+									  << QString::fromUtf8("] Завершить множество"));
+
 ComplexActionDialog::ComplexActionDialog(QWidget *parent, BaseUserActionList baseUserActions, ComplexUserActionList complexUserActions) :
 	QDialog(parent)
 	, ui(new Ui::ComplexActionDialog)
@@ -112,8 +118,11 @@ void ComplexActionDialog::deleteActionFromRuleList()
 
 void ComplexActionDialog::openProperties(QTreeWidgetItem *item)
 {
-	mOpenedRuleItem = item;
 	int column = 0;
+	if (reserveRuleItems.contains(item->text(column))) {
+		return;
+	}
+	mOpenedRuleItem = item;
 	bool isTopLevelItem = isTopLevelItemInRuleTree(item);
 	bool isComplexAction = false;
 	QString itemName = item->text(column).section(" — ", 0, 0);
