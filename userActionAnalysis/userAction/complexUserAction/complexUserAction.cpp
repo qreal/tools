@@ -22,8 +22,10 @@ Duration *ComplexUserAction::duration() const
 	int from = 0;
 	int to = 0;
 	for (UserAction *userAction: mUserActions) {
-		from += userAction->duration()->from();
-		to += userAction->duration()->to();
+		if (userAction->isKeyAction() && isKeyAction()) {
+			from += userAction->duration()->from();
+		}
+		to += userAction->duration()->to() * userAction->repeatCount();
 	}
 	return new Duration(from, to);
 }

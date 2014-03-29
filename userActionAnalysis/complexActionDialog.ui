@@ -43,6 +43,54 @@
       <number>0</number>
      </property>
      <item>
+      <widget class="QPushButton" name="orPushButton">
+       <property name="text">
+        <string> Альтернатива</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="startGroupPushButton">
+       <property name="text">
+        <string>Начать группу</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="finishGroupPushButton">
+       <property name="text">
+        <string>Завершить группу</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_4">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="startSetPushButton">
+       <property name="text">
+        <string>Начать множество</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="finishSetPushButton">
+       <property name="text">
+        <string>Завершить множество</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer name="verticalSpacer_2">
        <property name="orientation">
         <enum>Qt::Vertical</enum>

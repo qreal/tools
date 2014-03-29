@@ -37,6 +37,13 @@ public slots:
 	void clearBaseListSelection();
 	void clearComplexTreeSelection();
 
+	void startGroupInRuleList();
+	void finishGroupInRuleList();
+	void orInRuleList();
+
+	void startSetInRuleList();
+	void finishSetInRuleList();
+
 signals:
 	void newComplexActionCreated(ComplexUserAction *complexUserAction);
 
@@ -54,6 +61,7 @@ private:
 	RuleElement *parseRuleTreeItem(QTreeWidgetItem *item);
 	void printRuleElements(QList<RuleElement *> ruleElements);
 	bool isTopLevelItemInRuleTree(QTreeWidgetItem *item);
+	void initButtonsState();
 
 	Ui::ComplexActionDialog *ui;
 

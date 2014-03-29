@@ -15,6 +15,8 @@ ComplexActionDialog::ComplexActionDialog(QWidget *parent, BaseUserActionList bas
 	, mComplexUserActions(complexUserActions)
 {
 	ui->setupUi(this);
+
+	initButtonsState();
 	mPropertiesDialog = new PropertiesDialog(this);
 	mPropertiesDialog->move(this->geometry().center() - mPropertiesDialog->geometry().center());
 
@@ -38,6 +40,13 @@ ComplexActionDialog::ComplexActionDialog(QWidget *parent, BaseUserActionList bas
 	connect(mComplexUserActionGenerator, &ComplexUserActionGenerator::newComplexActionCreated, this, &ComplexActionDialog::addNewComplexAction);
 	connect(ui->complexActionTreeWidget, &QTreeWidget::itemClicked, this, &ComplexActionDialog::clearBaseListSelection);
 	connect(ui->baseActionListWidget, &QListWidget::itemClicked, this, &ComplexActionDialog::clearComplexTreeSelection);
+
+	connect(ui->startGroupPushButton, &QPushButton::clicked, this, &ComplexActionDialog::startGroupInRuleList);
+	connect(ui->finishGroupPushButton, &QPushButton::clicked, this, &ComplexActionDialog::finishGroupInRuleList);
+	connect(ui->orPushButton, &QPushButton::clicked, this, &ComplexActionDialog::orInRuleList);
+
+	connect(ui->startSetPushButton, &QPushButton::clicked, this, &ComplexActionDialog::startSetInRuleList);
+	connect(ui->finishSetPushButton, &QPushButton::clicked, this, &ComplexActionDialog::finishSetInRuleList);
 }
 
 QStringList ComplexActionDialog::initBaseActionListWidget()
@@ -205,6 +214,50 @@ void ComplexActionDialog::clearComplexTreeSelection()
 	ui->ruleTreeWidget->clearSelection();
 }
 
+void ComplexActionDialog::startGroupInRuleList()
+{
+	int const column = 0;
+	QTreeWidgetItem *item = new QTreeWidgetItem(ui->ruleTreeWidget);
+	item->setText(column, QString::fromUtf8("Начать группу {"));
+	item->setTextColor(column, QColor(100, 100, 100));
+
+	ui->finishGroupPushButton->setEnabled(true);
+}
+
+void ComplexActionDialog::finishGroupInRuleList()
+{
+	int const column = 0;
+	QTreeWidgetItem *item = new QTreeWidgetItem(ui->ruleTreeWidget);
+	item->setText(column, QString::fromUtf8("} Завершить группу"));
+	item->setTextColor(column, QColor(100, 100, 100));
+}
+
+void ComplexActionDialog::orInRuleList()
+{
+	int const column = 0;
+	QTreeWidgetItem *item = new QTreeWidgetItem(ui->ruleTreeWidget);
+	item->setText(column, QString::fromUtf8("или"));
+	item->setTextColor(column, QColor(100, 100, 255));
+}
+
+void ComplexActionDialog::startSetInRuleList()
+{
+	int const column = 0;
+	QTreeWidgetItem *item = new QTreeWidgetItem(ui->ruleTreeWidget);
+	item->setText(column, QString::fromUtf8("Начать множество ["));
+	item->setTextColor(column, QColor(100, 100, 100));
+
+	ui->finishSetPushButton->setEnabled(true);
+}
+
+void ComplexActionDialog::finishSetInRuleList()
+{
+	int const column = 0;
+	QTreeWidgetItem *item = new QTreeWidgetItem(ui->ruleTreeWidget);
+	item->setText(column, QString::fromUtf8("] Завершить множество"));
+	item->setTextColor(column, QColor(100, 100, 100));
+}
+
 void ComplexActionDialog::initComplexAction(ComplexUserAction *complexUserAction, QTreeWidgetItem *item, const int &column)
 {
 	int const currentColumn = column;
@@ -302,6 +355,16 @@ bool ComplexActionDialog::isTopLevelItemInRuleTree(QTreeWidgetItem *item)
 		}
 	}
 	return false;
+}
+
+void ComplexActionDialog::initButtonsState()
+{
+	ui->startGroupPushButton->setEnabled(true);
+	ui->startSetPushButton->setEnabled(true);
+	ui->orPushButton->setEnabled(true);
+
+	ui->finishGroupPushButton->setEnabled(false);
+	ui->finishSetPushButton->setEnabled(false);
 }
 
 void ComplexActionDialog::addBaseActionToRuleWidget(QTreeWidgetItem *parent
