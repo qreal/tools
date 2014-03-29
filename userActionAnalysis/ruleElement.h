@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QtCore/QObject>
+#include <QtCore/QStringList>
 
 #include "userAction/userActionProperty/duration.h"
 
@@ -21,6 +22,7 @@ public:
 	void addList(QList<RuleElement *> const &list);
 	void addElementToList(RuleElement *element);
 	bool isBaseAction();
+	bool isRedTapeInstruction();
 	QList<RuleElement *> list() const;
 	QString content() const;
 

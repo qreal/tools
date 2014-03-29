@@ -1,5 +1,11 @@
 #include "ruleElement.h"
 
+QStringList const reserveRuleItems = (QStringList() << QString::fromUtf8("Начать группу {")
+									  << QString::fromUtf8("} Завершить группу")
+									  << QString::fromUtf8("или")
+									  << QString::fromUtf8("Начать множество [")
+									  << QString::fromUtf8("] Завершить множество"));
+
 RuleElement::RuleElement()
 {
 
@@ -49,6 +55,11 @@ void RuleElement::addElementToList(RuleElement *element)
 bool RuleElement::isBaseAction()
 {
 	return mList.isEmpty();
+}
+
+bool RuleElement::isRedTapeInstruction()
+{
+	return reserveRuleItems.contains(mContent);
 }
 
 QList<RuleElement *> RuleElement::list() const

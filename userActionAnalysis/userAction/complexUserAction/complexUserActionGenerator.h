@@ -26,6 +26,7 @@ signals:
 private:
 	QDomElement userActionElement(RuleElement *userAction, QDomDocument &document, QList<UserAction *> &userActionList);
 	QDomElement baseUserActionElement(RuleElement *userAction, QDomDocument &document, QList<UserAction *> &userActionList);
+	QDomElement redTapeInstructionElement(QString const &instructionName, QDomDocument &document, QList<UserAction *> &userActionList);
 	void addComplexAction(RuleElement *userAction, QDomDocument &document, QDomElement &complexUserActionElement);
 	QMap<QString, QString> userActionPropertiesMap(QString const &userActionProperties);
 

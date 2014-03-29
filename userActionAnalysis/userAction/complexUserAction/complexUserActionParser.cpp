@@ -98,6 +98,12 @@ ComplexUserAction *ComplexUserActionParser::parseAction(const QString &fileName)
 				userActions.append(complexAction);
 			}
 		}
+		else if (userActionElement.tagName() == "redTapeInstruction") {
+			UserAction *redTapeInstruction = parseRedTapeInstruction(userActionElement);
+			if (redTapeInstruction != nullptr) {
+				userActions.append(redTapeInstruction);
+			}
+		}
 	}
 	return new ComplexUserAction(actionName, userActions);
 }
@@ -180,6 +186,17 @@ ComplexUserAction *ComplexUserActionParser::parseComplexUserAction(const QDomEle
 				userActions.append(complexAction);
 			}
 		}
+		else if (userActionElement.tagName() == "redTapeInstruction") {
+			UserAction *redTapeInstruction = parseRedTapeInstruction(userActionElement);
+			if (redTapeInstruction != nullptr) {
+				userActions.append(redTapeInstruction);
+			}
+		}
 	}
 	return new ComplexUserAction(actionName, userActions);
+}
+
+UserAction *ComplexUserActionParser::parseRedTapeInstruction(const QDomElement &element)
+{
+	return new UserAction(element.attribute("name", ""));
 }

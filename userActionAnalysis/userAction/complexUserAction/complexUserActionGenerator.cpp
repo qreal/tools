@@ -67,6 +67,9 @@ void ComplexUserActionGenerator::generateComplexAction(const QString &name, cons
 
 QDomElement ComplexUserActionGenerator::userActionElement(RuleElement *userAction, QDomDocument &document, QList<UserAction *> &userActionList)
 {
+	if (userAction->isRedTapeInstruction()) {
+		return redTapeInstructionElement(userAction->content(), document, userActionList);
+	}
 	if (userAction->isBaseAction()) {
 		return baseUserActionElement(userAction, document, userActionList);
 	}
@@ -162,6 +165,15 @@ QDomElement ComplexUserActionGenerator::baseUserActionElement(RuleElement *userA
 			qDebug() << "base action was't unique or has't found at all.";
 		}
 		return baseUserActionElement;
+}
+
+QDomElement ComplexUserActionGenerator::redTapeInstructionElement(const QString &instructionName, QDomDocument &document, QList<UserAction *> &userActionList)
+{
+	QDomElement redTapeInstructionElement = document.createElement("redTapeInstruction");
+	redTapeInstructionElement.setAttribute("name", instructionName);
+	UserAction *redTapeInstruction = new UserAction(instructionName);
+	userActionList.append(redTapeInstruction);
+	return redTapeInstructionElement;
 }
 
 void ComplexUserActionGenerator::addComplexAction(RuleElement *userAction, QDomDocument &document, QDomElement &complexUserActionElement)

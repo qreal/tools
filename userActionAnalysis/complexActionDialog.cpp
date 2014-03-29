@@ -285,6 +285,15 @@ void ComplexActionDialog::initComplexAction(ComplexUserAction *complexUserAction
 				complexActionItem->setText(currentColumn, newComplexUserAction->userActionName());
 				initComplexAction(newComplexUserAction, complexActionItem, currentColumn);
 			}
+			else if (reserveRuleItems.contains(userAction->userActionName())) {
+				int blue = 100;
+				if (userAction->userActionName() == QString::fromUtf8("или")) {
+					blue = 255;
+				}
+				QTreeWidgetItem *redTapeInstructionItem = new QTreeWidgetItem(item);
+				redTapeInstructionItem->setText(currentColumn, userAction->userActionName());
+				redTapeInstructionItem->setTextColor(currentColumn, QColor(100, 100, blue));
+			}
 		}
 	}
 }
@@ -321,6 +330,15 @@ void ComplexActionDialog::addComplexActionToRuleWidget(QTreeWidgetItem *parent, 
 							, baseAction->isKeyAction()
 							, *(baseAction->duration())
 							, topLevelParentItem);
+				}
+				else if (reserveRuleItems.contains(userAction->userActionName())) {
+					int blue = 100;
+					if (userAction->userActionName() == QString::fromUtf8("или")) {
+						blue = 255;
+					}
+					QTreeWidgetItem *redTapeInstructionItem = new QTreeWidgetItem(ruleItem);
+					redTapeInstructionItem->setText(column, userAction->userActionName());
+					redTapeInstructionItem->setTextColor(column, QColor(100, 100, blue));
 				}
 			}
 		}

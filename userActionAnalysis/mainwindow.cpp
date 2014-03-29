@@ -11,6 +11,12 @@
 #include <QtWidgets/QFileDialog>
 #include <QtGui/QColor>
 
+QStringList const reserveRuleItems = (QStringList() << QString::fromUtf8("Начать группу {")
+									  << QString::fromUtf8("} Завершить группу")
+									  << QString::fromUtf8("или")
+									  << QString::fromUtf8("Начать множество [")
+									  << QString::fromUtf8("] Завершить множество"));
+
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow)
@@ -136,7 +142,16 @@ void MainWindow::initComplexAction(ComplexUserAction *complexUserAction, QTreeWi
 				complexActionItem->setText(currentColumn, newComplexUserAction->userActionName());
 				initComplexAction(newComplexUserAction, complexActionItem, currentColumn);
 			}
-		}
+			else if (reserveRuleItems.contains(userAction->userActionName())) {
+				int blue = 100;
+				if (userAction->userActionName() == QString::fromUtf8("или")) {
+					blue = 255;
+				}
+				QTreeWidgetItem *redTapeInstructionItem = new QTreeWidgetItem(item);
+				redTapeInstructionItem->setText(currentColumn, userAction->userActionName());
+				redTapeInstructionItem->setTextColor(currentColumn, QColor(100, 100, blue));
+			}
+		} 
 	}
 }
 

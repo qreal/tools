@@ -21,6 +21,7 @@ private:
 	ComplexUserAction *parseAction(QString const &fileName);
 	BaseUserAction *parseBaseUserAction(const QDomElement &element);
 	ComplexUserAction *parseComplexUserAction(const QDomElement &element);
+	UserAction *parseRedTapeInstruction(const QDomElement &element);
 
 	BaseUserActionList mBaseUserActions;
 	ComplexUserActionList mComplexUserActions;
