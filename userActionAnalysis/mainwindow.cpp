@@ -37,6 +37,11 @@ MainWindow::MainWindow(QWidget *parent) :
 		addComplexAction(complexUserAction);
 	}
 
+	mScenarios = complexUserActionParser->parseScenarios();
+	for (ComplexUserAction *scenario: mScenarios) {
+		addScenario(scenario);
+	}
+
 	mComplexActionDialog = new ComplexActionDialog(this, mBaseUserActions, mComplexUserActions);
 	mComplexActionDialog->setWindowTitle(tr("Complex action dialog"));
 	mFindDialog = new FindDialog(this);
@@ -48,10 +53,11 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->mainToolBar->addAction(mAddComplexAction);
 
 	mAddScenarioAction = new QAction(tr("Создать новый сценарий"), nullptr);
-	connect(mAddScenarioAction, &QAction::triggered, this, &MainWindow::openComplexActionDialog);
+	connect(mAddScenarioAction, &QAction::triggered, this, &MainWindow::openScenariosDialog);
 	ui->mainToolBar->addAction(mAddScenarioAction);
 
 	connect(mComplexActionDialog, &ComplexActionDialog::newComplexActionCreated, this, &MainWindow::addComplexAction);
+	connect(mComplexActionDialog, &ComplexActionDialog::newScenarioCreated, this, &MainWindow::addScenario);
 	connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::open);
 	connect(ui->actionListWidget, &QListWidget::itemDoubleClicked, this, &MainWindow::openFindDialog);
 	connect(mFindDialog, &FindDialog::actionToFind, this, &MainWindow::findAction);
@@ -70,6 +76,13 @@ MainWindow::~MainWindow()
 
 void MainWindow::openComplexActionDialog()
 {
+	mComplexActionDialog->prepareForComplexAction();
+	mComplexActionDialog->show();
+}
+
+void MainWindow::openScenariosDialog()
+{
+	mComplexActionDialog->prepareForScenarios();
 	mComplexActionDialog->show();
 }
 
@@ -89,6 +102,17 @@ void MainWindow::addComplexAction(ComplexUserAction *action)
 	initComplexAction(action, item, column);
 	if (!mComplexUserActions.contains(action)) {
 		mComplexUserActions << action;
+	}
+}
+
+void MainWindow::addScenario(ComplexUserAction *scenario)
+{
+	int const column = 0;
+	QTreeWidgetItem *item = new QTreeWidgetItem(ui->scenarioTreeWidget);
+	item->setText(column, scenario->userActionName());
+	initComplexAction(scenario, item, column);
+	if (!mScenarios.contains(scenario)) {
+		mScenarios << scenario;
 	}
 }
 

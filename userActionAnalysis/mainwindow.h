@@ -27,8 +27,10 @@ public:
 
 public slots:
 	void openComplexActionDialog();
+	void openScenariosDialog();
 	void open();
 	void addComplexAction(ComplexUserAction *action);
+	void addScenario(ComplexUserAction *scenario);
 	void openFindDialog(QListWidgetItem *item);
 	void findAction(QString const &actionToFind);
 	void findComplexAction(QTreeWidgetItem *item);
@@ -38,6 +40,7 @@ private:
 	BaseUserActionsParser *mBaseUserActionsParser;
 	BaseUserActionList mBaseUserActions;
 	ComplexUserActionList mComplexUserActions;
+	ComplexUserActionList mScenarios;
 	ComplexActionDialog *mComplexActionDialog;
 	QAction *mAddComplexAction;
 	QAction *mAddScenarioAction;

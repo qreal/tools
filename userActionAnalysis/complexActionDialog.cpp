@@ -14,11 +14,12 @@ QStringList const reserveRuleItems = (QStringList() << QString::fromUtf8("Нач
 									  << QString::fromUtf8("Начать множество [")
 									  << QString::fromUtf8("] Завершить множество"));
 
-ComplexActionDialog::ComplexActionDialog(QWidget *parent, BaseUserActionList baseUserActions, ComplexUserActionList complexUserActions) :
+ComplexActionDialog::ComplexActionDialog(QWidget *parent, BaseUserActionList baseUserActions, ComplexUserActionList complexUserActions, ComplexUserActionList scenarios) :
 	QDialog(parent)
-	, ui(new Ui::ComplexActionDialog)
-	, mBaseUserActions(baseUserActions)
-	, mComplexUserActions(complexUserActions)
+  , ui(new Ui::ComplexActionDialog)
+  , mBaseUserActions(baseUserActions)
+  , mComplexUserActions(complexUserActions)
+  , mScenarios(scenarios)
 {
 	ui->setupUi(this);
 
@@ -32,9 +33,10 @@ ComplexActionDialog::ComplexActionDialog(QWidget *parent, BaseUserActionList bas
 
 	reservedNames << initBaseActionListWidget();
 	reservedNames << initComplexActionTreeWidget();
+	reservedNames << initScenarioWidget();
 
 	mComplexActionNameDialog->initReservedNames(reservedNames);
-	mComplexUserActionGenerator = new ComplexUserActionGenerator(mBaseUserActions, mComplexUserActions);
+	mComplexUserActionGenerator = new ComplexUserActionGenerator(mBaseUserActions, mComplexUserActions, mScenarios);
 
 	connect(ui->addPushButton, &QPushButton::clicked, this, &ComplexActionDialog::addActionToRuleList);
 	connect(ui->baseActionListWidget, &QListWidget::itemDoubleClicked, this, &ComplexActionDialog::addActionToRuleList);
@@ -42,8 +44,10 @@ ComplexActionDialog::ComplexActionDialog(QWidget *parent, BaseUserActionList bas
 	connect(ui->ruleTreeWidget, &QTreeWidget::itemDoubleClicked, this, &ComplexActionDialog::openProperties);
 	connect(mPropertiesDialog, &QDialog::accepted, this, &ComplexActionDialog::updateCustomProperties);
 	connect(ui->savePushButton, &QPushButton::clicked, this, &ComplexActionDialog::openNameDialogComplexAction);
+	connect(ui->saveScenarioPushButton, &QPushButton::clicked, this, &ComplexActionDialog::openNameDialogScenario);
 	connect(mComplexActionNameDialog, &ComplexActionNameDialog::accepted, this, &ComplexActionDialog::saveComplexAction);
 	connect(mComplexUserActionGenerator, &ComplexUserActionGenerator::newComplexActionCreated, this, &ComplexActionDialog::addNewComplexAction);
+	connect(mComplexUserActionGenerator, &ComplexUserActionGenerator::newScenarioCreated, this, &ComplexActionDialog::addNewScenario);
 	connect(ui->complexActionTreeWidget, &QTreeWidget::itemClicked, this, &ComplexActionDialog::clearBaseListSelection);
 	connect(ui->baseActionListWidget, &QListWidget::itemClicked, this, &ComplexActionDialog::clearComplexTreeSelection);
 
@@ -63,6 +67,20 @@ QStringList ComplexActionDialog::initBaseActionListWidget()
 		reservedNames << baseUserActionName;
 		QListWidgetItem *item = new QListWidgetItem(baseUserActionName);
 		ui->baseActionListWidget->addItem(item);
+	}
+	return reservedNames;
+}
+
+QStringList ComplexActionDialog::initScenarioWidget()
+{
+	QStringList reservedNames;
+	for (ComplexUserAction *scenario: mScenarios) {
+		QString const scenarioName = scenario->userActionName();
+		reservedNames << scenarioName;
+		QTreeWidgetItem *item = new QTreeWidgetItem(ui->scenarioTreeWidget);
+		int column = 0;
+		item->setText(column, scenarioName);
+		initComplexAction(scenario, item, column);
 	}
 	return reservedNames;
 }
@@ -131,12 +149,12 @@ void ComplexActionDialog::openProperties(QTreeWidgetItem *item)
 	isComplexAction = map.isEmpty();
 
 	mPropertiesDialog->setLabelsAndProperties(map, mWidgetItemCustomPropertyList.customPropertiesByItem(item)
-			, mWidgetItemCustomPropertyList.repeatCountByItem(item)
-			, mWidgetItemCustomPropertyList.isKeyActionByItem(item)
-			, mWidgetItemCustomPropertyList.durationByItem(item)
-			, mDisabledProperties.value(mOpenedRuleItem).keys()
-			, isTopLevelItem
-			, isComplexAction);
+											  , mWidgetItemCustomPropertyList.repeatCountByItem(item)
+											  , mWidgetItemCustomPropertyList.isKeyActionByItem(item)
+											  , mWidgetItemCustomPropertyList.durationByItem(item)
+											  , mDisabledProperties.value(mOpenedRuleItem).keys()
+											  , isTopLevelItem
+											  , isComplexAction);
 
 	mPropertiesDialog->show();
 }
@@ -158,22 +176,21 @@ void ComplexActionDialog::updateCustomProperties()
 	mOpenedRuleItem->setText(column, itemName + ruleProperties);
 	mWidgetItemCustomPropertyList.replaceProperties(mOpenedRuleItem, customProperties);
 	mWidgetItemCustomPropertyList.updateOtherProperties(mOpenedRuleItem
-			, mPropertiesDialog->repeatCount()
-			, mPropertiesDialog->isKeyAction()
-			, *(mPropertiesDialog->duration()));
+														, mPropertiesDialog->repeatCount()
+														, mPropertiesDialog->isKeyAction()
+														, *(mPropertiesDialog->duration()));
 }
 
 void ComplexActionDialog::openNameDialogComplexAction()
 {
-	QList<QTreeWidgetItem *> items = ui->ruleTreeWidget->findItems(QString("*"), Qt::MatchWrap | Qt::MatchWildcard);
-	if (items.isEmpty()) {
-		QMessageBox::information(this, QString::fromUtf8("Информация")
-										, QString::fromUtf8("Составное действие не содержит ни одного действия.")
-										, QMessageBox::Ok);
-		return;
-	}
 	bool isScenario = false;
-	mComplexActionNameDialog->openDialog(isScenario);
+	openNameDialog(isScenario);
+}
+
+void ComplexActionDialog::openNameDialogScenario()
+{
+	bool isScenario = true;
+	openNameDialog(isScenario);
 }
 
 void ComplexActionDialog::saveComplexAction()
@@ -192,13 +209,19 @@ void ComplexActionDialog::saveComplexAction()
 		}
 		else {
 			ruleElements.append(new RuleElement(item->text(column), QList<RuleElement *>()
-					, mWidgetItemCustomPropertyList.repeatCountByItem(item)
-					, mWidgetItemCustomPropertyList.isKeyActionByItem(item)
-					, mWidgetItemCustomPropertyList.durationByItem(item)));
+												, mWidgetItemCustomPropertyList.repeatCountByItem(item)
+												, mWidgetItemCustomPropertyList.isKeyActionByItem(item)
+												, mWidgetItemCustomPropertyList.durationByItem(item)));
 		}
 	}
 	//printRuleElements(ruleElements);
-	mComplexUserActionGenerator->generateComplexAction(mComplexActionNameDialog->complexActionName(), ruleElements);
+	if (mComplexActionNameDialog->isScenario()) {
+		mComplexUserActionGenerator->generateScenario(mComplexActionNameDialog->complexActionName(), ruleElements, mComplexActionNameDialog->actionStatus());
+	}
+	else {
+		mComplexUserActionGenerator->generateComplexAction(mComplexActionNameDialog->complexActionName()
+			, ruleElements);
+	}
 }
 
 void ComplexActionDialog::addNewComplexAction(ComplexUserAction *action)
@@ -210,6 +233,17 @@ void ComplexActionDialog::addNewComplexAction(ComplexUserAction *action)
 	mComplexActionNameDialog->addReservedName(action->userActionName());
 	mComplexUserActions << action;
 	emit newComplexActionCreated(action);
+}
+
+void ComplexActionDialog::addNewScenario(ComplexUserAction *scenario)
+{
+	int const column = 0;
+	QTreeWidgetItem *item = new QTreeWidgetItem(ui->scenarioTreeWidget);
+	item->setText(column, scenario->userActionName());
+	initComplexAction(scenario, item, column);
+	mComplexActionNameDialog->addReservedName(scenario->userActionName());
+	mScenarios << scenario;
+	emit newScenarioCreated(scenario);
 }
 
 void ComplexActionDialog::clearBaseListSelection()
@@ -326,11 +360,11 @@ void ComplexActionDialog::addComplexActionToRuleWidget(QTreeWidgetItem *parent, 
 				BaseUserAction *baseAction = dynamic_cast<BaseUserAction *>(userAction);
 				if (baseAction) {
 					addBaseActionToRuleWidget(ruleItem, baseAction->userActionName(),
-							baseAction->customActionProperties()
-							, baseAction->repeatCount()
-							, baseAction->isKeyAction()
-							, *(baseAction->duration())
-							, topLevelParentItem);
+											  baseAction->customActionProperties()
+											  , baseAction->repeatCount()
+											  , baseAction->isKeyAction()
+											  , *(baseAction->duration())
+											  , topLevelParentItem);
 				}
 				else if (reserveRuleItems.contains(userAction->userActionName())) {
 					int blue = 100;
@@ -344,11 +378,11 @@ void ComplexActionDialog::addComplexActionToRuleWidget(QTreeWidgetItem *parent, 
 			}
 		}
 		mWidgetItemCustomPropertyList.append(new WidgetItemCustomProperty(topLevelParentItem
-				, ruleItem
-				, QMap<QString, QString>()
-				, complexUserAction->repeatCount()
-				, complexUserAction->isKeyAction()
-				, *(complexUserAction->duration())));
+																		  , ruleItem
+																		  , QMap<QString, QString>()
+																		  , complexUserAction->repeatCount()
+																		  , complexUserAction->isKeyAction()
+																		  , *(complexUserAction->duration())));
 		mDisabledProperties.insert(ruleItem, QMap<QString, QString>());
 	}
 }
@@ -357,9 +391,9 @@ RuleElement *ComplexActionDialog::parseRuleTreeItem(QTreeWidgetItem *item)
 {
 	int column = 0;
 	RuleElement *ruleElement = new RuleElement(item->text(column), QList<RuleElement *>()
-			, mWidgetItemCustomPropertyList.repeatCountByItem(item)
-			, mWidgetItemCustomPropertyList.isKeyActionByItem(item)
-			, mWidgetItemCustomPropertyList.durationByItem(item));
+											   , mWidgetItemCustomPropertyList.repeatCountByItem(item)
+											   , mWidgetItemCustomPropertyList.isKeyActionByItem(item)
+											   , mWidgetItemCustomPropertyList.durationByItem(item));
 	for (int i = 0; i < item->childCount(); ++i) {
 		ruleElement->addElementToList(parseRuleTreeItem(item->child(i)));
 	}
@@ -395,13 +429,25 @@ void ComplexActionDialog::initButtonsState()
 	ui->finishSetPushButton->setEnabled(false);
 }
 
+void ComplexActionDialog::openNameDialog(bool isScenario)
+{
+	QList<QTreeWidgetItem *> items = ui->ruleTreeWidget->findItems(QString("*"), Qt::MatchWrap | Qt::MatchWildcard);
+	if (items.isEmpty()) {
+		QMessageBox::information(this, QString::fromUtf8("Информация")
+								 , QString::fromUtf8("Составное действие не содержит ни одного действия.")
+								 , QMessageBox::Ok);
+		return;
+	}
+	mComplexActionNameDialog->openDialog(isScenario);
+}
+
 void ComplexActionDialog::addBaseActionToRuleWidget(QTreeWidgetItem *parent
-		, QString const &name, QMap<QString, QString> const &disabledProperties
-		, const int &repeatCountValue
-		, const bool &isKeyActionValue
-		, const Duration &durationValue
-		, QTreeWidgetItem *topLevelParent
-		)
+													, QString const &name, QMap<QString, QString> const &disabledProperties
+													, const int &repeatCountValue
+													, const bool &isKeyActionValue
+													, const Duration &durationValue
+													, QTreeWidgetItem *topLevelParent
+													)
 {
 	QTreeWidgetItem *ruleItem = nullptr;
 	if (parent == nullptr) {
@@ -433,7 +479,7 @@ void ComplexActionDialog::addBaseActionToRuleWidget(QTreeWidgetItem *parent
 			topLevelParentItem = topLevelParent;
 		}
 		mWidgetItemCustomPropertyList.append(new WidgetItemCustomProperty(topLevelParentItem, ruleItem, mapProperties
-				, repeatCountValue, isKeyActionValue, durationValue));
+																		  , repeatCountValue, isKeyActionValue, durationValue));
 		mDisabledProperties.insert(ruleItem, disabledProperties);
 		int column = 0;
 		ruleItem->setText(column, name + ruleProperties);
@@ -447,4 +493,20 @@ ComplexActionDialog::~ComplexActionDialog()
 	delete mComplexActionNameDialog;
 	delete mPropertiesDialog;
 	delete ui;
+}
+
+void ComplexActionDialog::prepareForComplexAction()
+{
+	ui->label->setText("Новое составное действие");
+	ui->savePushButton->setHidden(false);
+	ui->scenarioTreeWidget->setHidden(true);
+	ui->saveScenarioPushButton->setHidden(true);
+}
+
+void ComplexActionDialog::prepareForScenarios()
+{
+	ui->label->setText("Новый сценарий");
+	ui->savePushButton->setHidden(true);
+	ui->scenarioTreeWidget->setHidden(false);
+	ui->saveScenarioPushButton->setHidden(false);
 }

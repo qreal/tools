@@ -19,6 +19,8 @@ public:
 	void initReservedNames(QStringList const &actionNames);
 	void addReservedName(QString const &actionName);
 	QString const complexActionName();
+	bool isScenario();
+	QMap<QString, ActionStatus> actionStatus() const;
 
 public slots:
 	void saveComplexActionName();
@@ -28,4 +30,6 @@ private:
 	QString mComplexActionName;
 	QStringList mReservedNames;
 	ScenarioActionsStatusForm *mScenarioForm;
+	QMap<QString, ActionStatus> mActionStatus;
+	bool mIsScenario;
 };

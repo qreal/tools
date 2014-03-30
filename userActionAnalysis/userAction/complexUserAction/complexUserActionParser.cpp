@@ -41,6 +41,30 @@ ComplexUserActionList ComplexUserActionParser::parse()
 	return complexActions;
 }
 
+ComplexUserActionList ComplexUserActionParser::parseScenarios()
+{
+	ComplexUserActionList scenarios;
+
+	QDir dir;
+	dir.current().cdUp();
+	dir.cdUp();
+	dir.setPath("userAction/userScenario");
+	QStringList filters;
+	filters << "*.xml";
+	QStringList const scenarioFileNames = dir.entryList(filters);
+	QStringList scenarioFiles;
+	for (const QString &actionFileName: scenarioFileNames) {
+		scenarioFiles << dir.absolutePath() + "/" + actionFileName;
+	}
+	for (const QString &actionFile: scenarioFiles) {
+		ComplexUserAction *scenario = parseAction(actionFile, true);
+		if (scenario != nullptr) {
+			scenarios << scenario;
+		}
+	}
+	return scenarios;
+}
+
 QDomDocument ComplexUserActionParser::loadDocument(QString const &fileName)
 {
 	QFile file(fileName);
@@ -67,10 +91,11 @@ QDomDocument ComplexUserActionParser::loadDocument(QString const &fileName)
 	return doc;
 }
 
-ComplexUserAction *ComplexUserActionParser::parseAction(const QString &fileName)
+ComplexUserAction *ComplexUserActionParser::parseAction(const QString &fileName, bool isScenario)
 {
+	QString mainTagName = (isScenario) ? "scenario" : "mainComplexUserAction";
 	QDomDocument const document = loadDocument(fileName);
-	QDomNodeList const actionList = document.elementsByTagName("mainComplexUserAction");
+	QDomNodeList const actionList = document.elementsByTagName(mainTagName);
 	if (actionList.length() != 1) {
 		return nullptr;
 	}
@@ -105,7 +130,30 @@ ComplexUserAction *ComplexUserActionParser::parseAction(const QString &fileName)
 			}
 		}
 	}
-	return new ComplexUserAction(actionName, userActions);
+	QMap<QString, ActionStatus> actionStatus;
+	if (isScenario) {
+		QDomNodeList const actionStatusList = action.toElement().elementsByTagName("actionStatus");
+		if (actionStatusList.length() == 1) {
+			QDomElement actionStatusElement = actionStatusList.at(0).toElement();
+			QDomNodeList const children = actionStatusElement.elementsByTagName("baseActionStatus");
+			for (int i = 0; i < children.length(); ++i) {
+				QDomElement child = children.at(i).toElement();
+				QString const name = child.attribute("name", "");
+				QString const value = child.attribute("value", "");
+				ActionStatus status = ActionStatus::good;
+				if (value == "bad") {
+					status = ActionStatus::bad;
+				}
+				else if (value == "neutral") {
+					status = ActionStatus::neutral;
+				}
+				actionStatus.insert(name, status);
+			}
+		}
+	}
+	ComplexUserAction *newComplexUserAction = new ComplexUserAction(actionName, userActions);
+	newComplexUserAction->setUserActionsStatus(actionStatus);
+	return newComplexUserAction;
 }
 
 BaseUserAction *ComplexUserActionParser:: parseBaseUserAction(QDomElement const &element)

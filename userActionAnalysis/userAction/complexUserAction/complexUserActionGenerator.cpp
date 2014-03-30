@@ -5,7 +5,7 @@
 #include <QtWidgets/QMessageBox>
 
 ComplexUserActionGenerator::ComplexUserActionGenerator(const BaseUserActionList &baseUserActionList
-		, ComplexUserActionList const &complexUserActionList)
+		, ComplexUserActionList const &complexUserActionList, const ComplexUserActionList &scenarios)
 {
 	if (mComplexActionsDir.current().cdUp()) {
 		if (mComplexActionsDir.cd("userAction/complexUserAction/XMLcomplexUserActions")) {
@@ -19,8 +19,22 @@ ComplexUserActionGenerator::ComplexUserActionGenerator(const BaseUserActionList 
 	else {
 		mComplexActionsCount = 0;
 	}
+
+	if (mScenariosDir.current().cdUp()) {
+		if (mScenariosDir.cd("userAction/userScenario")) {
+			int const count = mScenariosDir.count();
+			mScenariosCount = count;
+		}
+		else {
+			mScenariosCount = 0;
+		}
+	}
+	else {
+		mScenariosCount = 0;
+	}
 	mBaseUserActions << baseUserActionList;
 	mComplexUserActions << complexUserActionList;
+	mScenarios << scenarios;
 }
 
 
@@ -63,6 +77,64 @@ void ComplexUserActionGenerator::generateComplexAction(const QString &name, cons
 	ComplexUserAction *newComplexUserAction = new ComplexUserAction(name, mUserActions);
 	mComplexUserActions << newComplexUserAction;
 	emit newComplexActionCreated(newComplexUserAction);
+}
+
+void ComplexUserActionGenerator::generateScenario(const QString &name, const QList<RuleElement *> &userActions, QMap<QString, ActionStatus> const &actionStatus)
+{
+	mScenariosCount++;
+	mProperties.clear();
+	mCustomProperties.clear();
+	mUserActions.clear();
+	mActionStatus.clear();
+
+	QString const documentName = "userScenario" + QString::number(mScenariosCount);
+	QDomDocument document(documentName);
+	QDomElement scenario = document.createElement("scenario");
+	scenario.setAttribute("name", name);
+	document.appendChild(scenario);
+
+	for (RuleElement *userAction: userActions) {
+		addComplexAction(userAction, document, scenario);
+	}
+	QDomElement actionStatusElement = document.createElement("actionStatus");
+	QMap<QString, ActionStatus>::const_iterator i = actionStatus.constBegin();
+	while (i != actionStatus.constEnd()) {
+		QDomElement baseActionStatus = document.createElement("baseActionStatus");
+		baseActionStatus.setAttribute("name", i.key());
+		QString value;
+		if (i.value() == ActionStatus::good) {
+			value = "good";
+		}
+		else if (i.value() == ActionStatus::neutral) {
+			value = "neutral";
+		}
+		else if (i.value() == ActionStatus::bad) {
+			value = "bad";
+		}
+		baseActionStatus.setAttribute("value", value);
+		actionStatusElement.appendChild(baseActionStatus);
+		++i;
+	}
+	scenario.appendChild(actionStatusElement);
+
+	QString const dir = mScenariosDir.absolutePath();
+	if (!QDir(dir).exists()) {
+		QDir(dir).mkpath(dir);
+	}
+
+	QFile file(dir + "/" + documentName + ".xml");
+	if (file.open(QFile::WriteOnly | QFile::Truncate)) {
+		QTextStream stream(&file);
+		document.save(stream, 1);
+	}
+	file.close();
+	QMessageBox::information(nullptr, QString::fromUtf8("Сохранение")
+							 , QString::fromUtf8("Сценарий успешно сохранен."),
+							 QMessageBox::Ok);
+	ComplexUserAction *newScenario = new ComplexUserAction(name, mUserActions);
+	newScenario->setUserActionsStatus(actionStatus);
+	mScenarios << newScenario;
+	emit newScenarioCreated(newScenario);
 }
 
 QDomElement ComplexUserActionGenerator::userActionElement(RuleElement *userAction, QDomDocument &document, QList<UserAction *> &userActionList)

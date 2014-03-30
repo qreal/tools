@@ -22,18 +22,23 @@ class ComplexActionDialog : public QDialog
 public:
 	explicit ComplexActionDialog(QWidget *parent = 0
 			, BaseUserActionList baseUserActions = BaseUserActionList()
-			, ComplexUserActionList complexUserActions = ComplexUserActionList());
+			, ComplexUserActionList complexUserActions = ComplexUserActionList()
+			, ComplexUserActionList scenarios = ComplexUserActionList());
 	~ComplexActionDialog();
 
-	QStringList initComplexActionTreeWidget();
+	void prepareForComplexAction();
+	void prepareForScenarios();
+
 public slots:
 	void addActionToRuleList();
 	void deleteActionFromRuleList();
 	void openProperties(QTreeWidgetItem *item);
 	void updateCustomProperties();
 	void openNameDialogComplexAction();
+	void openNameDialogScenario();
 	void saveComplexAction();
 	void addNewComplexAction(ComplexUserAction *action);
+	void addNewScenario(ComplexUserAction *scenario);
 	void clearBaseListSelection();
 	void clearComplexTreeSelection();
 
@@ -46,9 +51,12 @@ public slots:
 
 signals:
 	void newComplexActionCreated(ComplexUserAction *complexUserAction);
+	void newScenarioCreated(ComplexUserAction *scenario);
 
 private:
+	QStringList initComplexActionTreeWidget();
 	QStringList initBaseActionListWidget();
+	QStringList initScenarioWidget();
 	void initComplexAction(ComplexUserAction *complexUserAction, QTreeWidgetItem *item, int const &column);
 	void addBaseActionToRuleWidget(QTreeWidgetItem *parent
 			, const QString &name
@@ -62,11 +70,13 @@ private:
 	void printRuleElements(QList<RuleElement *> ruleElements);
 	bool isTopLevelItemInRuleTree(QTreeWidgetItem *item);
 	void initButtonsState();
+	void openNameDialog(bool isScenario);
 
 	Ui::ComplexActionDialog *ui;
 
 	BaseUserActionList mBaseUserActions;
 	ComplexUserActionList mComplexUserActions;
+	ComplexUserActionList mScenarios;
 
 	PropertiesDialog *mPropertiesDialog;
 	ComplexActionNameDialog *mComplexActionNameDialog;

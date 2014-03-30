@@ -14,7 +14,9 @@ class ScenarioActionsStatusForm : public QWidget
 public:
 	explicit ScenarioActionsStatusForm(QWidget *parent = 0, QStringList const &baseActionNames = QStringList());
 	~ScenarioActionsStatusForm();
+
 	QMap<QString, ActionStatus> saveContent();
+	void clearSelection();
 
 private:
 	Ui::ScenarioActionsStatusForm *ui;

@@ -15,13 +15,17 @@ class ComplexUserActionGenerator : public QObject
 	Q_OBJECT
 
 public:
-	ComplexUserActionGenerator(BaseUserActionList const &baseUserActionList, ComplexUserActionList const &complexUserActionList);
+	ComplexUserActionGenerator(BaseUserActionList const &baseUserActionList
+			, ComplexUserActionList const &complexUserActionList
+			, ComplexUserActionList const &scenarios);
 	~ComplexUserActionGenerator();
 
 	void generateComplexAction(QString const &name, QList<RuleElement *> const &userActions);
 
+	void generateScenario(const QString &name, const QList<RuleElement *> &userActions, const QMap<QString, ActionStatus> &actionStatus);
 signals:
 	void newComplexActionCreated(ComplexUserAction *action);
+	void newScenarioCreated(ComplexUserAction *scenario);
 
 private:
 	QDomElement userActionElement(RuleElement *userAction, QDomDocument &document, QList<UserAction *> &userActionList);
@@ -32,8 +36,13 @@ private:
 
 	BaseUserActionList mBaseUserActions;
 	ComplexUserActionList mComplexUserActions;
+	ComplexUserActionList mScenarios;
 	int mComplexActionsCount;
 	QDir mComplexActionsDir;
+
+	int mScenariosCount;
+	QDir mScenariosDir;
+	QMap<QString, ActionStatus> mActionStatus;
 
 	QMap<QString, QStringList> mProperties;
 	QMap<QString, QString> mCustomProperties;

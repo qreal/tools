@@ -4,6 +4,7 @@
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QRadioButton>
+#include <QtCore/QDebug>
 
 ScenarioActionsStatusForm::ScenarioActionsStatusForm(QWidget *parent, const QStringList &baseActionNames)
 	: QWidget(parent)
@@ -49,32 +50,56 @@ void ScenarioActionsStatusForm::addBaseAction(const QString &baseActionName)
 QMap<QString, ActionStatus> ScenarioActionsStatusForm::saveContent()
 {
 	mActionStatus.clear();
-	for (QObject *object: ui->verticalLayout->children()) {
-		QHBoxLayout *layout = dynamic_cast<QHBoxLayout *>(object);
-		if (layout) {
-			for (QObject *child: layout->children()) {
-				QString baseActionName;
-				ActionStatus status = ActionStatus::good;
-				QLabel *label = dynamic_cast<QLabel *>(child);
-				if (label) {
-					baseActionName = label->text();
-				}
-				else {
-					QRadioButton *radioButton = dynamic_cast<QRadioButton *>(child);
-					if (radioButton && radioButton->isChecked()) {
-						if (radioButton->objectName().contains("good")) {
-							status = ActionStatus::good;
-						}
-						else if (radioButton->objectName().contains("bad")) {
-							status = ActionStatus::neutral;
-						}
-						else if (radioButton->objectName().contains("angry"))
-							status = ActionStatus::bad;
-					}
-				}
-				mActionStatus.insert(baseActionName, status);
-			}
+	if (ui->gridLayout->columnCount() != 4) {
+		qDebug() << "columns != 4 (";
+		return mActionStatus;
+	}
+	int const labelColumn = 0;
+	int const goodColumn = 1;
+	int const badColumn = 2;
+	int const angryColumn = 3;
+	for (int i = 0; i < ui->gridLayout->rowCount(); ++i) {
+		if (i == 0) {
+			continue;
+		}
+		QLabel *label = dynamic_cast<QLabel *>(ui->gridLayout->itemAtPosition(i, labelColumn)->widget());
+		if (!label) {
+			continue;
+		}
+		QString const name = label->text();
+		ActionStatus status = ActionStatus::good;
+		QRadioButton *goodRadioButton = dynamic_cast<QRadioButton *>(ui->gridLayout->itemAtPosition(i, goodColumn)->widget());
+		if (!goodRadioButton) {
+			continue;
+		}
+		if (goodRadioButton->isChecked()) {
+			mActionStatus.insert(name, status);
+			continue;
+		}
+
+		QRadioButton *badRadioButton = dynamic_cast<QRadioButton *>(ui->gridLayout->itemAtPosition(i, badColumn)->widget());
+		if (!badRadioButton) {
+			continue;
+		}
+		if (badRadioButton->isChecked()) {
+			status = ActionStatus::neutral;
+			mActionStatus.insert(name, status);
+			continue;
+		}
+
+		QRadioButton *angryRadioButton = dynamic_cast<QRadioButton *>(ui->gridLayout->itemAtPosition(i, angryColumn)->widget());
+		if (!angryRadioButton) {
+			continue;
+		}
+		if (angryRadioButton->isChecked()) {
+			status = ActionStatus::bad;
+			mActionStatus.insert(name, status);
 		}
 	}
 	return mActionStatus;
+}
+
+void ScenarioActionsStatusForm::clearSelection()
+{
+	//todo;
 }
