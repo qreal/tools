@@ -41,19 +41,6 @@
      </layout>
     </item>
     <item>
-     <spacer name="horizontalSpacer">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>40</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <property name="leftMargin">
        <number>0</number>
@@ -73,6 +60,15 @@
         <column>
          <property name="text">
           <string>Составные действия</string>
+         </property>
+        </column>
+       </widget>
+      </item>
+      <item>
+       <widget class="QTreeWidget" name="scenarioTreeWidget">
+        <column>
+         <property name="text">
+          <string>Сценарии</string>
          </property>
         </column>
        </widget>

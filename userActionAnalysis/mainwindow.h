@@ -31,6 +31,7 @@ public slots:
 	void addComplexAction(ComplexUserAction *action);
 	void openFindDialog(QListWidgetItem *item);
 	void findAction(QString const &actionToFind);
+	void findComplexAction(QTreeWidgetItem *item);
 
 private:
 	Ui::MainWindow *ui;
@@ -39,9 +40,12 @@ private:
 	ComplexUserActionList mComplexUserActions;
 	ComplexActionDialog *mComplexActionDialog;
 	QAction *mAddComplexAction;
+	QAction *mAddScenarioAction;
 	FindDialog *mFindDialog;
 
 
 	void loadFile(const QString &fileName);
 	void initComplexAction(ComplexUserAction *complexUserAction, QTreeWidgetItem *item, const int &column);
+	bool matchComplexAction(QStringList const &currentList, QStringList const &ruleList);
+	void highlightMatch(int startIndex, int finishIndex);
 };

@@ -41,13 +41,20 @@ const QString BaseUserAction::actionToString()
 	while (i != actionPropertiesMap.constEnd()) {
 		QString property = i.key();
 		if (customActionProperties().keys().contains(property)) {
-			property = property + ": " + customActionProperties().value(property) + "|";
+			QString const value = customActionProperties().value(property);
+			if (value == QString::fromUtf8("<параметр>")) {
+				property = property + ": *|";
+			}
+			else {
+			property = property + ": " + value + "|";
+			}
 		}
 		else {
-			property = property + ": " + i.value().at(0) + "|";
+			property = property + ": *|";
 		}
 		result += property;
 		++i;
 	}
+
 	return result;
 }

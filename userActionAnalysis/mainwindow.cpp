@@ -38,6 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	}
 
 	mComplexActionDialog = new ComplexActionDialog(this, mBaseUserActions, mComplexUserActions);
+	mComplexActionDialog->setWindowTitle(tr("Complex action dialog"));
 	mFindDialog = new FindDialog(this);
 
 	setWindowTitle(tr("User interaction analysis"));
@@ -46,15 +47,21 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(mAddComplexAction, &QAction::triggered, this, &MainWindow::openComplexActionDialog);
 	ui->mainToolBar->addAction(mAddComplexAction);
 
+	mAddScenarioAction = new QAction(tr("Создать новый сценарий"), nullptr);
+	connect(mAddScenarioAction, &QAction::triggered, this, &MainWindow::openComplexActionDialog);
+	ui->mainToolBar->addAction(mAddScenarioAction);
+
 	connect(mComplexActionDialog, &ComplexActionDialog::newComplexActionCreated, this, &MainWindow::addComplexAction);
 	connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::open);
 	connect(ui->actionListWidget, &QListWidget::itemDoubleClicked, this, &MainWindow::openFindDialog);
 	connect(mFindDialog, &FindDialog::actionToFind, this, &MainWindow::findAction);
+	connect(ui->complexActionTreeWidget, &QTreeWidget::itemDoubleClicked, this, &MainWindow::findComplexAction);
 }
 
 MainWindow::~MainWindow()
 {
 	delete mFindDialog;
+	delete mAddScenarioAction;
 	delete mAddComplexAction;
 	delete mComplexActionDialog;
 	delete mBaseUserActionsParser;
@@ -106,14 +113,79 @@ void MainWindow::findAction(const QString &actionToFind)
 	for (QListWidgetItem *item: items) {
 		item->setBackgroundColor(QColor(255, 255, 255));
 	}
+	QRegExp regExp(actionToFind);
+	qDebug() << actionToFind;
+	regExp.setPatternSyntax(QRegExp::Wildcard);
 	for (QListWidgetItem *item: items) {
 		allActionCount++;
-		if (item->text() == actionToFind) {
+		if (regExp.exactMatch(item->text()) || actionToFind == item->text()) {
 			rightActionCount++;
 			item->setBackgroundColor(QColor(0, 255, 0, 127));
 			ui->ruleListWidget->setCurrentItem(item);
 		}
 	}
+	QString textMessage;
+	if (rightActionCount == 0) {
+		textMessage = "Совпадений не найдено.";
+	}
+	else {
+		textMessage = "Совпадения обнаружены: " + QString::number(rightActionCount) + " из " + QString::number(allActionCount) + " действий.";
+	}
+	QMessageBox::information(this, "Результат поиска", textMessage, QMessageBox::Ok);
+}
+
+void MainWindow::findComplexAction(QTreeWidgetItem *item)
+{
+	if (item->parent()) {
+		return;
+	}
+	QList<QListWidgetItem *> items = ui->ruleListWidget->findItems(QString("*"), Qt::MatchWrap | Qt::MatchWildcard);
+	if (items.isEmpty()) {
+		QMessageBox::information(this, QString::fromUtf8("Информация")
+										, QString::fromUtf8("Не загружен файл с действиями пользователя")
+										, QMessageBox::Ok);
+		return;
+	}
+
+	int const column = 0;
+	int allActionCount = 0;
+	int rightActionCount = 0;
+
+	QStringList const actionsToFind = mComplexUserActions.complexUserActionByName(item->text(column))->toStringList();
+	QStringList userItems;
+	for (QListWidgetItem *item: items) {
+		userItems.append(item->text());
+		allActionCount++;
+		item->setBackgroundColor(QColor(255, 255, 255));
+	}
+	QStringList currentList;
+	int startIndex = 0;
+	for (int i = 0; i < actionsToFind.length(); ++i) {
+		currentList << userItems.at(i);
+	}
+	int finishIndex = actionsToFind.length() - 1;
+
+	if (matchComplexAction(currentList, actionsToFind)) {
+		highlightMatch(startIndex, finishIndex);
+		rightActionCount++;
+	}
+
+	startIndex++;
+	finishIndex++;
+
+	do {
+		currentList.removeFirst();
+		currentList << userItems.at(finishIndex);
+
+		if (matchComplexAction(currentList, actionsToFind)) {
+			highlightMatch(startIndex, finishIndex);
+			rightActionCount++;
+		}
+
+		startIndex++;
+		finishIndex++;
+	} while (finishIndex < userItems.length());
+
 	QString textMessage;
 	if (rightActionCount == 0) {
 		textMessage = "Совпадений не найдено.";
@@ -153,6 +225,30 @@ void MainWindow::initComplexAction(ComplexUserAction *complexUserAction, QTreeWi
 			}
 		} 
 	}
+}
+
+bool MainWindow::matchComplexAction(const QStringList &currentList, const QStringList &ruleList)
+{
+	if (currentList.length() != ruleList.length()) {
+		return false;
+	}
+	for (int i = 0; i < currentList.length(); ++i) {
+		QString actionToFind = ruleList.at(i);
+		QRegExp regExp(actionToFind);
+		regExp.setPatternSyntax(QRegExp::Wildcard);
+		if (!regExp.exactMatch(currentList.at(i))) {
+			return false;
+		}
+	}
+	return true;
+}
+
+void MainWindow::highlightMatch(int startIndex, int finishIndex)
+{
+	for (int i = startIndex; i <= finishIndex; ++i) {
+		ui->ruleListWidget->item(i)->setBackgroundColor(QColor(0, 255, 0, 127));
+	}
+	ui->ruleListWidget->setCurrentRow(finishIndex);
 }
 
 void MainWindow::loadFile(const QString &fileName)
