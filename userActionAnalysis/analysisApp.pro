@@ -24,7 +24,8 @@ SOURCES += main.cpp \
 	complexActionDialog.cpp \
 	findDialog.cpp \
 	userAction/complexUserAction/complexUserActionList.cpp \
-	ruleElement.cpp
+	ruleElement.cpp \
+    scenarioActionsStatusForm.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -43,11 +44,14 @@ HEADERS  += mainwindow.h \
 	complexActionDialog.h \
 	findDialog.h \
 	userAction/complexUserAction/complexUserActionList.h \
-	ruleElement.h
+	ruleElement.h \
+    scenarioActionsStatusForm.h \
+    constants.h
 
 
 FORMS  += mainwindow.ui \
 	propertiesDialog.ui \
 	complexActionNameDialog.ui \
 	complexActionDialog.ui \
-	findDialog.ui
+	findDialog.ui \
+    scenarioActionsStatusForm.ui

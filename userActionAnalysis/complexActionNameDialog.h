@@ -1,5 +1,7 @@
 #pragma once
 
+#include "scenarioActionsStatusForm.h"
+
 #include <QDialog>
 
 namespace Ui {
@@ -11,9 +13,9 @@ class ComplexActionNameDialog : public QDialog
 	Q_OBJECT
 
 public:
-	explicit ComplexActionNameDialog(QWidget *parent = 0);
+	explicit ComplexActionNameDialog(QWidget *parent = 0, QStringList const &baseActionNames = QStringList());
 	~ComplexActionNameDialog();
-	void openDialog();
+	void openDialog(bool isScenario);
 	void initReservedNames(QStringList const &actionNames);
 	void addReservedName(QString const &actionName);
 	QString const complexActionName();
@@ -25,4 +27,5 @@ private:
 	Ui::ComplexActionNameDialog *ui;
 	QString mComplexActionName;
 	QStringList mReservedNames;
+	ScenarioActionsStatusForm *mScenarioForm;
 };

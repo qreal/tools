@@ -26,7 +26,7 @@ ComplexActionDialog::ComplexActionDialog(QWidget *parent, BaseUserActionList bas
 	mPropertiesDialog = new PropertiesDialog(this);
 	mPropertiesDialog->move(this->geometry().center() - mPropertiesDialog->geometry().center());
 
-	mComplexActionNameDialog = new ComplexActionNameDialog();
+	mComplexActionNameDialog = new ComplexActionNameDialog(this, mBaseUserActions.baseUserActionNames());
 	mOpenedRuleItem = new QTreeWidgetItem();
 	QStringList reservedNames;
 
@@ -172,7 +172,8 @@ void ComplexActionDialog::openNameDialogComplexAction()
 										, QMessageBox::Ok);
 		return;
 	}
-	mComplexActionNameDialog->openDialog();
+	bool isScenario = false;
+	mComplexActionNameDialog->openDialog(isScenario);
 }
 
 void ComplexActionDialog::saveComplexAction()

@@ -3,13 +3,8 @@
 #include <QtCore/QMap>
 #include <QtCore/QStringList>
 
+#include "constants.h"
 #include "userAction/baseUserAction/baseUserAction.h"
-
-enum ActionStatus {
-	good = 0
-	, neutral = 1
-	, bad = 2
-};
 
 class ComplexUserAction : public UserAction
 {

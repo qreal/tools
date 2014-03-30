@@ -1,23 +1,29 @@
 #include "complexActionNameDialog.h"
 #include "ui_complexActionNameDialog.h"
 #include <QtWidgets/QMessageBox>
+#include <QtGui/QFont>
 
-ComplexActionNameDialog::ComplexActionNameDialog(QWidget *parent) :
+ComplexActionNameDialog::ComplexActionNameDialog(QWidget *parent, const QStringList &baseActionNames) :
 	QDialog(parent),
 	ui(new Ui::ComplexActionNameDialog)
 {
 	ui->setupUi(this);
+	mScenarioForm = new ScenarioActionsStatusForm(this, baseActionNames);
 	connect(ui->pushButton, &QPushButton::clicked, this, &ComplexActionNameDialog::saveComplexActionName);
 }
 
 ComplexActionNameDialog::~ComplexActionNameDialog()
 {
+	delete mScenarioForm;
 	delete ui;
 }
 
-void ComplexActionNameDialog::openDialog()
+void ComplexActionNameDialog::openDialog(bool isScenario)
 {
 	ui->lineEdit->clear();
+//	if (isScenario) {
+	ui->verticalLayout->addWidget(mScenarioForm);
+//	}
 	show();
 }
 
