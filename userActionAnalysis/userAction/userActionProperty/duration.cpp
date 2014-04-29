@@ -1,8 +1,9 @@
 #include "userAction/userActionProperty/duration.h"
 
-Duration::Duration(int from, int to)
+Duration::Duration(int from, int to, int exact)
 	: mFrom(from)
 	, mTo(to)
+    , mExact (exact)
 {
 
 }
@@ -19,7 +20,12 @@ int Duration::from() const
 
 int Duration::to() const
 {
-	return mTo;
+    return mTo;
+}
+
+int Duration::exact() const
+{
+    return mExact;
 }
 
 void Duration::setFrom(int from)
@@ -29,5 +35,10 @@ void Duration::setFrom(int from)
 
 void Duration::setTo(int to)
 {
-	mTo = to;
+    mTo = to;
+}
+
+void Duration::setExact(int exact)
+{
+    mExact = exact;
 }

@@ -77,7 +77,25 @@ QList<BaseUserAction *> BaseUserActionsParser::parseUserLog(const QStringList &u
 	for (const QString &userAction: userLog) {
 		baseUserActions << parseUserActionFromLog(userAction);
 	}
-	return baseUserActions;
+    return uniteBaseUserActions(baseUserActions);
+}
+
+QList<BaseUserAction *> BaseUserActionsParser::uniteBaseUserActions(const QList<BaseUserAction *> &userLogBaseActions)
+{
+    QList<BaseUserAction *> unitedBaseUserActions;
+    BaseUserAction *previousUserAction = nullptr;
+    for (BaseUserAction *userAction: userLogBaseActions) {
+        if (userAction->compare(previousUserAction)) {
+            previousUserAction = previousUserAction->unite(userAction);
+        }
+        else {
+            if (previousUserAction != nullptr) {
+                unitedBaseUserActions << previousUserAction;
+            }
+            previousUserAction = userAction;
+        }
+    }
+    return unitedBaseUserActions;
 }
 
 BaseUserAction *BaseUserActionsParser::parseUserActionFromLog(const QString &userAction)
@@ -105,7 +123,18 @@ BaseUserAction *BaseUserActionsParser::parseUserActionFromLog(const QString &use
 		baseUserActionFromLog->setUserActionProperty(propertyName, propertyValue);
 	}
 	QString const duration = userActionProperties.last();
+    int exact = 0;
+    if (duration.length() > 1) {
+        if (duration.at(1) == '+') {
+            QStringList durationValues = duration.split(" ", QString::SkipEmptyParts);
+            if (!durationValues.isEmpty()) {
+                exact = durationValues.at(0).mid(1).toInt();
+                qDebug() << exact;
+            }
+        }
+    }
 	qDebug() << duration;
+    baseUserActionFromLog->duration()->setExact(exact);
 	return baseUserActionFromLog;
 }
 

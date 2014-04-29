@@ -15,26 +15,567 @@
 	</userAction>
 	<userAction name="Навести на элемент в палитре">
 		<property name="название элемента" type="variants">
-			<value>Конец</value>
-			<value>Гудок</value>
+			<value>Комментарий</value>
+			<value>Линия соединения</value>
+			<value>Подпрограмма</value>
+			<value>Условие</value>
 			<value>Цикл</value>
-			<value>Условие</value>			
+			<value>Гудок</value>
+			<value>Играть звук</value>
+			<value>Моторы вперед</value>			
+			<value>Моторы назад</value>
+			<value>Моторы стоп</value>
+			<value>Параллельные задачи</value>
+			<value>Функция</value>			
+			<value>Конец</value>
+			<value>Начало</value>
+			<value>Сбросить показания энкодера</value>
+			<value>Ждать гироскоп</value>			
+			<value>Ждать интенсивность цвета</value>
+			<value>Ждать нажатия кнопок</value>
+			<value>Ждать свет</value>
+			<value>Ждать сенсор звука</value>			
+			<value>Ждать сенсор касания</value>
+			<value>Ждать сонар</value>
+			<value>Ждать цвет</value>
+			<value>Ждать энкодер</value>			
+			<value>Таймер</value>
+			<value>Напечатать текст</value>
+			<value>Нарисовать круг</value>
+			<value>Нарисовать линию</value>			
+			<value>Нарисовать прямоугольник</value>
+			<value>Нарисовать точку</value>
+			<value>Очистить экран</value>						
 		</property>
 	</userAction>
 	<userAction name="Убрать наведение с элемента в палитре">
 		<property name="название элемента" type="variants">
-			<value>Конец</value>
-			<value>Гудок</value>
+			<value>Комментарий</value>
+			<value>Линия соединения</value>
+			<value>Подпрограмма</value>
+			<value>Условие</value>
 			<value>Цикл</value>
-			<value>Условие</value>			
+			<value>Гудок</value>
+			<value>Играть звук</value>
+			<value>Моторы вперед</value>			
+			<value>Моторы назад</value>
+			<value>Моторы стоп</value>
+			<value>Параллельные задачи</value>
+			<value>Функция</value>			
+			<value>Конец</value>
+			<value>Начало</value>
+			<value>Сбросить показания энкодера</value>
+			<value>Ждать гироскоп</value>			
+			<value>Ждать интенсивность цвета</value>
+			<value>Ждать нажатия кнопок</value>
+			<value>Ждать свет</value>
+			<value>Ждать сенсор звука</value>			
+			<value>Ждать сенсор касания</value>
+			<value>Ждать сонар</value>
+			<value>Ждать цвет</value>
+			<value>Ждать энкодер</value>			
+			<value>Таймер</value>
+			<value>Напечатать текст</value>
+			<value>Нарисовать круг</value>
+			<value>Нарисовать линию</value>			
+			<value>Нарисовать прямоугольник</value>
+			<value>Нарисовать точку</value>
+			<value>Очистить экран</value>		
 		</property>
 	</userAction>
 		<userAction name="Нажать на элемент в палитре">
 		<property name="название элемента" type="variants">
-			<value>Конец</value>
-			<value>Гудок</value>
+			<value>Комментарий</value>
+			<value>Линия соединения</value>
+			<value>Подпрограмма</value>
+			<value>Условие</value>
 			<value>Цикл</value>
-			<value>Условие</value>			
+			<value>Гудок</value>
+			<value>Играть звук</value>
+			<value>Моторы вперед</value>			
+			<value>Моторы назад</value>
+			<value>Моторы стоп</value>
+			<value>Параллельные задачи</value>
+			<value>Функция</value>			
+			<value>Конец</value>
+			<value>Начало</value>
+			<value>Сбросить показания энкодера</value>
+			<value>Ждать гироскоп</value>			
+			<value>Ждать интенсивность цвета</value>
+			<value>Ждать нажатия кнопок</value>
+			<value>Ждать свет</value>
+			<value>Ждать сенсор звука</value>			
+			<value>Ждать сенсор касания</value>
+			<value>Ждать сонар</value>
+			<value>Ждать цвет</value>
+			<value>Ждать энкодер</value>			
+			<value>Таймер</value>
+			<value>Напечатать текст</value>
+			<value>Нарисовать круг</value>
+			<value>Нарисовать линию</value>			
+			<value>Нарисовать прямоугольник</value>
+			<value>Нарисовать точку</value>
+			<value>Очистить экран</value>		
 		</property>
 	</userAction>
+	<userAction name="Ввести элемент из палитры на сцену">
+		<property name="название элемента" type="variants">
+			<value>Комментарий</value>
+			<value>Линия соединения</value>
+			<value>Подпрограмма</value>
+			<value>Условие</value>
+			<value>Цикл</value>
+			<value>Гудок</value>
+			<value>Играть звук</value>
+			<value>Моторы вперед</value>			
+			<value>Моторы назад</value>
+			<value>Моторы стоп</value>
+			<value>Параллельные задачи</value>
+			<value>Функция</value>			
+			<value>Конец</value>
+			<value>Начало</value>
+			<value>Сбросить показания энкодера</value>
+			<value>Ждать гироскоп</value>			
+			<value>Ждать интенсивность цвета</value>
+			<value>Ждать нажатия кнопок</value>
+			<value>Ждать свет</value>
+			<value>Ждать сенсор звука</value>			
+			<value>Ждать сенсор касания</value>
+			<value>Ждать сонар</value>
+			<value>Ждать цвет</value>
+			<value>Ждать энкодер</value>			
+			<value>Таймер</value>
+			<value>Напечатать текст</value>
+			<value>Нарисовать круг</value>
+			<value>Нарисовать линию</value>			
+			<value>Нарисовать прямоугольник</value>
+			<value>Нарисовать точку</value>
+			<value>Очистить экран</value>		
+		</property>
+	</userAction>
+	<userAction name="Оставить элемент из палитры на сцене">
+		<property name="название элемента" type="variants">
+			<value>Комментарий</value>
+			<value>Линия соединения</value>
+			<value>Подпрограмма</value>
+			<value>Условие</value>
+			<value>Цикл</value>
+			<value>Гудок</value>
+			<value>Играть звук</value>
+			<value>Моторы вперед</value>			
+			<value>Моторы назад</value>
+			<value>Моторы стоп</value>
+			<value>Параллельные задачи</value>
+			<value>Функция</value>			
+			<value>Конец</value>
+			<value>Начало</value>
+			<value>Сбросить показания энкодера</value>
+			<value>Ждать гироскоп</value>			
+			<value>Ждать интенсивность цвета</value>
+			<value>Ждать нажатия кнопок</value>
+			<value>Ждать свет</value>
+			<value>Ждать сенсор звука</value>			
+			<value>Ждать сенсор касания</value>
+			<value>Ждать сонар</value>
+			<value>Ждать цвет</value>
+			<value>Ждать энкодер</value>			
+			<value>Таймер</value>
+			<value>Напечатать текст</value>
+			<value>Нарисовать круг</value>
+			<value>Нарисовать линию</value>			
+			<value>Нарисовать прямоугольник</value>
+			<value>Нарисовать точку</value>
+			<value>Очистить экран</value>		
+		</property>
+	</userAction>
+	<userAction name="Бросить элемент из палитры на сцену">
+		<property name="название элемента" type="variants">
+			<value>Комментарий</value>
+			<value>Линия соединения</value>
+			<value>Подпрограмма</value>
+			<value>Условие</value>
+			<value>Цикл</value>
+			<value>Гудок</value>
+			<value>Играть звук</value>
+			<value>Моторы вперед</value>			
+			<value>Моторы назад</value>
+			<value>Моторы стоп</value>
+			<value>Параллельные задачи</value>
+			<value>Функция</value>			
+			<value>Конец</value>
+			<value>Начало</value>
+			<value>Сбросить показания энкодера</value>
+			<value>Ждать гироскоп</value>			
+			<value>Ждать интенсивность цвета</value>
+			<value>Ждать нажатия кнопок</value>
+			<value>Ждать свет</value>
+			<value>Ждать сенсор звука</value>			
+			<value>Ждать сенсор касания</value>
+			<value>Ждать сонар</value>
+			<value>Ждать цвет</value>
+			<value>Ждать энкодер</value>			
+			<value>Таймер</value>
+			<value>Напечатать текст</value>
+			<value>Нарисовать круг</value>
+			<value>Нарисовать линию</value>			
+			<value>Нарисовать прямоугольник</value>
+			<value>Нарисовать точку</value>
+			<value>Очистить экран</value>
+		</property>
+	</userAction>
+	<userAction name="Передвигать элемент по сцене">
+		<property name="название элемента" type="variants">
+			<value>Комментарий</value>
+			<value>Линия соединения</value>
+			<value>Подпрограмма</value>
+			<value>Условие</value>
+			<value>Цикл</value>
+			<value>Гудок</value>
+			<value>Играть звук</value>
+			<value>Моторы вперед</value>			
+			<value>Моторы назад</value>
+			<value>Моторы стоп</value>
+			<value>Параллельные задачи</value>
+			<value>Функция</value>			
+			<value>Конец</value>
+			<value>Начало</value>
+			<value>Сбросить показания энкодера</value>
+			<value>Ждать гироскоп</value>			
+			<value>Ждать интенсивность цвета</value>
+			<value>Ждать нажатия кнопок</value>
+			<value>Ждать свет</value>
+			<value>Ждать сенсор звука</value>			
+			<value>Ждать сенсор касания</value>
+			<value>Ждать сонар</value>
+			<value>Ждать цвет</value>
+			<value>Ждать энкодер</value>			
+			<value>Таймер</value>
+			<value>Напечатать текст</value>
+			<value>Нарисовать круг</value>
+			<value>Нарисовать линию</value>			
+			<value>Нарисовать прямоугольник</value>
+			<value>Нарисовать точку</value>
+			<value>Очистить экран</value>
+		</property>
+	</userAction>
+	<userAction name="Навести на элемент на сцене">
+		<property name="название элемента" type="variants">
+			<value>Комментарий</value>
+			<value>Линия соединения</value>
+			<value>Подпрограмма</value>
+			<value>Условие</value>
+			<value>Цикл</value>
+			<value>Гудок</value>
+			<value>Играть звук</value>
+			<value>Моторы вперед</value>			
+			<value>Моторы назад</value>
+			<value>Моторы стоп</value>
+			<value>Параллельные задачи</value>
+			<value>Функция</value>			
+			<value>Конец</value>
+			<value>Начало</value>
+			<value>Сбросить показания энкодера</value>
+			<value>Ждать гироскоп</value>			
+			<value>Ждать интенсивность цвета</value>
+			<value>Ждать нажатия кнопок</value>
+			<value>Ждать свет</value>
+			<value>Ждать сенсор звука</value>			
+			<value>Ждать сенсор касания</value>
+			<value>Ждать сонар</value>
+			<value>Ждать цвет</value>
+			<value>Ждать энкодер</value>			
+			<value>Таймер</value>
+			<value>Напечатать текст</value>
+			<value>Нарисовать круг</value>
+			<value>Нарисовать линию</value>			
+			<value>Нарисовать прямоугольник</value>
+			<value>Нарисовать точку</value>
+			<value>Очистить экран</value>
+		</property>
+	</userAction>
+	<userAction name="Убрать наведение с элемента на сцене">
+		<property name="название элемента" type="variants">
+			<value>Комментарий</value>
+			<value>Линия соединения</value>
+			<value>Подпрограмма</value>
+			<value>Условие</value>
+			<value>Цикл</value>
+			<value>Гудок</value>
+			<value>Играть звук</value>
+			<value>Моторы вперед</value>			
+			<value>Моторы назад</value>
+			<value>Моторы стоп</value>
+			<value>Параллельные задачи</value>
+			<value>Функция</value>			
+			<value>Конец</value>
+			<value>Начало</value>
+			<value>Сбросить показания энкодера</value>
+			<value>Ждать гироскоп</value>			
+			<value>Ждать интенсивность цвета</value>
+			<value>Ждать нажатия кнопок</value>
+			<value>Ждать свет</value>
+			<value>Ждать сенсор звука</value>			
+			<value>Ждать сенсор касания</value>
+			<value>Ждать сонар</value>
+			<value>Ждать цвет</value>
+			<value>Ждать энкодер</value>			
+			<value>Таймер</value>
+			<value>Напечатать текст</value>
+			<value>Нарисовать круг</value>
+			<value>Нарисовать линию</value>			
+			<value>Нарисовать прямоугольник</value>
+			<value>Нарисовать точку</value>
+			<value>Очистить экран</value>
+		</property>
+	</userAction>
+	<userAction name="Нажать на надпись на сцене левой кнопкой мыши">
+		<property name="текст" type="variants">
+			<value>50</value>
+			<value>60</value>
+			<value>70</value>
+		</property>
+	</userAction>
+		<userAction name="Перемещение элемента по сцене с зажатой левой кнопкой мыши">
+		<property name="название элемента" type="variants">
+			<value>Комментарий</value>
+			<value>Линия соединения</value>
+			<value>Подпрограмма</value>
+			<value>Условие</value>
+			<value>Цикл</value>
+			<value>Гудок</value>
+			<value>Играть звук</value>
+			<value>Моторы вперед</value>			
+			<value>Моторы назад</value>
+			<value>Моторы стоп</value>
+			<value>Параллельные задачи</value>
+			<value>Функция</value>			
+			<value>Конец</value>
+			<value>Начало</value>
+			<value>Сбросить показания энкодера</value>
+			<value>Ждать гироскоп</value>			
+			<value>Ждать интенсивность цвета</value>
+			<value>Ждать нажатия кнопок</value>
+			<value>Ждать свет</value>
+			<value>Ждать сенсор звука</value>			
+			<value>Ждать сенсор касания</value>
+			<value>Ждать сонар</value>
+			<value>Ждать цвет</value>
+			<value>Ждать энкодер</value>			
+			<value>Таймер</value>
+			<value>Напечатать текст</value>
+			<value>Нарисовать круг</value>
+			<value>Нарисовать линию</value>			
+			<value>Нарисовать прямоугольник</value>
+			<value>Нарисовать точку</value>
+			<value>Очистить экран</value>
+		</property>
+	</userAction>
+			<userAction name="Кликнуть левой кнопкой мыши на элемент на сцене">
+		<property name="название элемента" type="variants">
+			<value>Комментарий</value>
+			<value>Линия соединения</value>
+			<value>Подпрограмма</value>
+			<value>Условие</value>
+			<value>Цикл</value>
+			<value>Гудок</value>
+			<value>Играть звук</value>
+			<value>Моторы вперед</value>			
+			<value>Моторы назад</value>
+			<value>Моторы стоп</value>
+			<value>Параллельные задачи</value>
+			<value>Функция</value>			
+			<value>Конец</value>
+			<value>Начало</value>
+			<value>Сбросить показания энкодера</value>
+			<value>Ждать гироскоп</value>			
+			<value>Ждать интенсивность цвета</value>
+			<value>Ждать нажатия кнопок</value>
+			<value>Ждать свет</value>
+			<value>Ждать сенсор звука</value>			
+			<value>Ждать сенсор касания</value>
+			<value>Ждать сонар</value>
+			<value>Ждать цвет</value>
+			<value>Ждать энкодер</value>			
+			<value>Таймер</value>
+			<value>Напечатать текст</value>
+			<value>Нарисовать круг</value>
+			<value>Нарисовать линию</value>			
+			<value>Нарисовать прямоугольник</value>
+			<value>Нарисовать точку</value>
+			<value>Очистить экран</value>
+		</property>
+	</userAction>
+		<userAction name="Нажатие левой кнопкой мыши по сцене">
+		<property name="свойство" type="variants">
+			<value>нет</value>
+		</property>
+		</userAction>
+		<userAction name="Нажатие на линкер у элемента на сцене">
+		<property name="название" type="variants">
+			<value>Комментарий</value>
+			<value>Линия соединения</value>
+			<value>Подпрограмма</value>
+			<value>Условие</value>
+			<value>Цикл</value>
+			<value>Гудок</value>
+			<value>Играть звук</value>
+			<value>Моторы вперед</value>			
+			<value>Моторы назад</value>
+			<value>Моторы стоп</value>
+			<value>Параллельные задачи</value>
+			<value>Функция</value>			
+			<value>Конец</value>
+			<value>Начало</value>
+			<value>Сбросить показания энкодера</value>
+			<value>Ждать гироскоп</value>			
+			<value>Ждать интенсивность цвета</value>
+			<value>Ждать нажатия кнопок</value>
+			<value>Ждать свет</value>
+			<value>Ждать сенсор звука</value>			
+			<value>Ждать сенсор касания</value>
+			<value>Ждать сонар</value>
+			<value>Ждать цвет</value>
+			<value>Ждать энкодер</value>			
+			<value>Таймер</value>
+			<value>Напечатать текст</value>
+			<value>Нарисовать круг</value>
+			<value>Нарисовать линию</value>			
+			<value>Нарисовать прямоугольник</value>
+			<value>Нарисовать точку</value>
+			<value>Очистить экран</value>
+		</property>
+	</userAction>
+		<userAction name="Вытягивание линка из линкера у элемента на сцене">
+		<property name="название" type="variants">
+			<value>Комментарий</value>
+			<value>Линия соединения</value>
+			<value>Подпрограмма</value>
+			<value>Условие</value>
+			<value>Цикл</value>
+			<value>Гудок</value>
+			<value>Играть звук</value>
+			<value>Моторы вперед</value>			
+			<value>Моторы назад</value>
+			<value>Моторы стоп</value>
+			<value>Параллельные задачи</value>
+			<value>Функция</value>			
+			<value>Конец</value>
+			<value>Начало</value>
+			<value>Сбросить показания энкодера</value>
+			<value>Ждать гироскоп</value>			
+			<value>Ждать интенсивность цвета</value>
+			<value>Ждать нажатия кнопок</value>
+			<value>Ждать свет</value>
+			<value>Ждать сенсор звука</value>			
+			<value>Ждать сенсор касания</value>
+			<value>Ждать сонар</value>
+			<value>Ждать цвет</value>
+			<value>Ждать энкодер</value>			
+			<value>Таймер</value>
+			<value>Напечатать текст</value>
+			<value>Нарисовать круг</value>
+			<value>Нарисовать линию</value>			
+			<value>Нарисовать прямоугольник</value>
+			<value>Нарисовать точку</value>
+			<value>Очистить экран</value>
+		</property>
+	</userAction>
+		<userAction name="Отпускание элемента на сцене">
+		<property name="название элемента" type="variants">
+			<value>Комментарий</value>
+			<value>Линия соединения</value>
+			<value>Подпрограмма</value>
+			<value>Условие</value>
+			<value>Цикл</value>
+			<value>Гудок</value>
+			<value>Играть звук</value>
+			<value>Моторы вперед</value>			
+			<value>Моторы назад</value>
+			<value>Моторы стоп</value>
+			<value>Параллельные задачи</value>
+			<value>Функция</value>			
+			<value>Конец</value>
+			<value>Начало</value>
+			<value>Сбросить показания энкодера</value>
+			<value>Ждать гироскоп</value>			
+			<value>Ждать интенсивность цвета</value>
+			<value>Ждать нажатия кнопок</value>
+			<value>Ждать свет</value>
+			<value>Ждать сенсор звука</value>			
+			<value>Ждать сенсор касания</value>
+			<value>Ждать сонар</value>
+			<value>Ждать цвет</value>
+			<value>Ждать энкодер</value>			
+			<value>Таймер</value>
+			<value>Напечатать текст</value>
+			<value>Нарисовать круг</value>
+			<value>Нарисовать линию</value>			
+			<value>Нарисовать прямоугольник</value>
+			<value>Нарисовать точку</value>
+			<value>Очистить экран</value>
+		</property>
+	</userAction>
+	<userAction name="Выбрать из контекстного меню линкера">
+		<property name="название элемента" type="variants">
+			<value>Комментарий</value>
+			<value>Линия соединения</value>
+			<value>Подпрограмма</value>
+			<value>Условие</value>
+			<value>Цикл</value>
+			<value>Гудок</value>
+			<value>Играть звук</value>
+			<value>Моторы вперед</value>			
+			<value>Моторы назад</value>
+			<value>Моторы стоп</value>
+			<value>Параллельные задачи</value>
+			<value>Функция</value>			
+			<value>Конец</value>
+			<value>Начало</value>
+			<value>Сбросить показания энкодера</value>
+			<value>Ждать гироскоп</value>			
+			<value>Ждать интенсивность цвета</value>
+			<value>Ждать нажатия кнопок</value>
+			<value>Ждать свет</value>
+			<value>Ждать сенсор звука</value>			
+			<value>Ждать сенсор касания</value>
+			<value>Ждать сонар</value>
+			<value>Ждать цвет</value>
+			<value>Ждать энкодер</value>			
+			<value>Таймер</value>
+			<value>Напечатать текст</value>
+			<value>Нарисовать круг</value>
+			<value>Нарисовать линию</value>			
+			<value>Нарисовать прямоугольник</value>
+			<value>Нарисовать точку</value>
+			<value>Очистить экран</value>
+		</property>
+	</userAction>
+		<userAction name="Нажатие горячей клавиши на сцене">
+		<property name="свойство" type="variants">
+			<value>Delete</value>
+			<value>Copy</value>
+			<value>Paste</value>
+			<value>Arrow</value>
+		</property>
+	</userAction>	
+			<userAction name="Зажатие линка правой кнопкой мыши">
+		<property name="свойство" type="variants">
+			<value>Линия соединения</value>
+		</property>
+	</userAction>
+		<userAction name="Начало рисования мышиного жеста правой кнопкой мыши">
+		<property name="свойство" type="variants">
+			<value>нет</value>
+		</property>
+		</userAction>
+		<userAction name="Продолжение рисования мышиного жеста правой кнопкой мыши">
+		<property name="свойство" type="variants">
+			<value>нет</value>
+		</property>
+		</userAction>
+		<userAction name="Конец рисования мышиного жеста правой кнопкой мыши">
+		<property name="свойство" type="variants">
+			<value>нет</value>
+		</property>
+		</userAction>		
 </userActions>

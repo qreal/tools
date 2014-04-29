@@ -69,6 +69,6 @@ void FindDialog::sendCustomAction()
 	if (!ui->comboBoxProperty2->isHidden()) {
 		mAction->setUserActionProperty(ui->labelProperty2->text(), ui->comboBoxProperty2->currentText());
 	}
-	emit actionToFind(mAction->actionToString());
+    emit actionToFind(mAction->actionToRegExpString());
 	accept();
 }

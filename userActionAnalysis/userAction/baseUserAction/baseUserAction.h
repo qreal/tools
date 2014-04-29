@@ -15,6 +15,10 @@ public:
 	QMap<QString, QString> customActionProperties() const;
 	void setUserActionProperty(QString const &propertyName, QString const &propertyValue);
 	QString const actionToString();
+    QString const actionToRegExpString();
+
+    bool compare(BaseUserAction *otherBaseUserAction);
+    BaseUserAction* unite(BaseUserAction *otherBaseUserAction);
 
 private:
 	QMap<QString, QStringList> mProperties;

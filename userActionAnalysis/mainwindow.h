@@ -45,6 +45,7 @@ private:
 	QAction *mAddComplexAction;
 	QAction *mAddScenarioAction;
 	FindDialog *mFindDialog;
+	QString mWhereToFind;
 
 
 	void loadFile(const QString &fileName);

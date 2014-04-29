@@ -56,7 +56,7 @@ QStringList ComplexUserAction::actionsToStringList(QList<UserAction *> userActio
 	for (UserAction *userAction: userActions) {
 		BaseUserAction *baseUserAction = dynamic_cast<BaseUserAction *>(userAction);
 		if (baseUserAction != nullptr) {
-			result << baseUserAction->actionToString();
+            result << baseUserAction->actionToRegExpString();
 		}
 		else {
 			ComplexUserAction *complexUserAction = dynamic_cast<ComplexUserAction *>(userAction);

@@ -15,6 +15,7 @@ public:
 	~BaseUserActionsParser();
 	BaseUserActionList parse();
 	QList<BaseUserAction *> parseUserLog(QStringList const &userLog);
+    QList<BaseUserAction *> uniteBaseUserActions(QList<BaseUserAction *> const &userLogBaseActions);
 
 private:
 	BaseUserAction *parseUserActionFromLog(QString const &userAction);
