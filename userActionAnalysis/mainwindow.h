@@ -4,7 +4,7 @@
 #include <QListWidgetItem>
 #include <QMap>
 
-#include <RInside.h>
+//#include <RInside.h>
 
 #include "complexActionNameDialog.h"
 #include "userAction/complexUserAction/complexUserActionGenerator.h"
@@ -36,6 +36,7 @@ public slots:
 	void openFindDialog(QListWidgetItem *item);
 	void findAction(QString const &actionToFind);
 	void findComplexAction(QTreeWidgetItem *item);
+	bool tryToFindBySeparateActions(QString const &userActionList, QList<UserAction *> const &actionsToFind, int &pos);
 
 private:
 	Ui::MainWindow *ui;
@@ -48,6 +49,7 @@ private:
 	QAction *mAddScenarioAction;
 	FindDialog *mFindDialog;
 	QString mWhereToFind;
+	int mStartPos;
 
 
 	void loadFile(const QString &fileName);

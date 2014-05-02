@@ -63,7 +63,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(mFindDialog, &FindDialog::actionToFind, this, &MainWindow::findAction);
 	connect(ui->complexActionTreeWidget, &QTreeWidget::itemDoubleClicked, this, &MainWindow::findComplexAction);
 
-	loadFile("C:/QReal_github/tools/userActionAnalysis/userActions.txt");
+	//loadFile("C:/QReal_github/tools/userActionAnalysis/userActions.txt");
 }
 
 MainWindow::~MainWindow()
@@ -133,23 +133,23 @@ void MainWindow::findAction(const QString &actionToFind)
 	QList<QListWidgetItem *> items = ui->ruleListWidget->findItems(QString("*"), Qt::MatchWrap | Qt::MatchWildcard);
 	if (items.isEmpty()) {
 		QMessageBox::information(this, QString::fromUtf8("Информация")
-										, QString::fromUtf8("Не загружен файл с действиями пользователя")
-										, QMessageBox::Ok);
+								 , QString::fromUtf8("Не загружен файл с действиями пользователя")
+								 , QMessageBox::Ok);
 		return;
 	}
 	for (QListWidgetItem *item: items) {
 		item->setBackgroundColor(QColor(255, 255, 255));
 	}
-    QString action = actionToFind;
-    action.replace("|", "\\|");
-    QRegExp regExp(action);
-    regExp.setMinimal(true);
-    qDebug() << action;
+	QString action = actionToFind;
+	action.replace("|", "\\|");
+	QRegExp regExp(action);
+	regExp.setMinimal(true);
+	qDebug() << action;
 	for (QListWidgetItem *item: items) {
 		allActionCount++;
-        QString matchedString = "_" + item->text();
-        qDebug() << matchedString;
-        if (regExp.exactMatch(matchedString)) {
+		QString matchedString = "_" + item->text();
+		qDebug() << matchedString;
+		if (regExp.exactMatch(matchedString)) {
 			rightActionCount++;
 			item->setBackgroundColor(QColor(0, 255, 0, 127));
 			ui->ruleListWidget->setCurrentItem(item);
@@ -176,56 +176,130 @@ void MainWindow::findComplexAction(QTreeWidgetItem *item)
 	QList<QListWidgetItem *> items = ui->ruleListWidget->findItems(QString("*"), Qt::MatchWrap | Qt::MatchWildcard);
 	if (items.isEmpty()) {
 		QMessageBox::information(this, QString::fromUtf8("Информация")
-										, QString::fromUtf8("Не загружен файл с действиями пользователя")
-										, QMessageBox::Ok);
+								 , QString::fromUtf8("Не загружен файл с действиями пользователя")
+								 , QMessageBox::Ok);
 		return;
 	}
 
 	int const column = 0;
 	int allActionCount = 0;
 
-	QStringList const actionsToFind = mComplexUserActions.complexUserActionByName(item->text(column))->toStringList();
-    QString complexActionToFind = actionsToFind.join("").replace("|", "\\|").replace(".+", "[^_]+").toUtf8();
+	ComplexUserAction *complexUserAction = mComplexUserActions.complexUserActionByName(item->text(column));
+	QStringList const actionsToFind = complexUserAction->toStringList();
+	QString complexActionToFind = actionsToFind.join("").replace("|", "\\|").replace(".+", "[^_]+").toUtf8();
 	QStringList userItems;
 	for (QListWidgetItem *item: items) {
 		userItems.append(item->text());
 		allActionCount++;
 		item->setBackgroundColor(QColor(255, 255, 255));
 	}
-    QString const userItemsList = "_" + userItems.join("_").toUtf8();
+	QString const userItemsList = "_" + userItems.join("_").toUtf8();
 	QRegExp regExp(complexActionToFind);
 	regExp.setMinimal(true);
 	qDebug() << complexActionToFind;
 	qDebug() << "\n" << userItemsList;
-    int pos = 0;
-    int foundCount = 0;
-    while ((pos = regExp.indexIn(userItemsList, pos)) != -1) {
-        foundCount++;
-        int sCount = 0;
-        for (int j = 0; j < pos; ++j) {
-            if (userItemsList.at(j) == '|') {
-                sCount++;
-            }
-        }
-        int eCount = sCount;
-        for (int j = pos; j < (pos + regExp.matchedLength()); ++j) {
-            if (userItemsList.at(j) == '|') {
-                eCount++;
-            }
-        }
-        for (int i = sCount; i < eCount; ++i) {
-            ui->ruleListWidget->item(i)->setBackgroundColor(QColor(0, 0, 255, 127));
-        }
-        pos += regExp.matchedLength();
-    }
-    QString textMessage;
-    if (foundCount == 0) {
-        textMessage = "Совпадений не найдено.";
-    }
-    else {
-        textMessage = "Совпадения обнаружены: " + QString::number(foundCount) + " из " + QString::number(allActionCount) + " действий.";
-    }
-    QMessageBox::information(this, "Результат поиска", textMessage, QMessageBox::Ok);
+	int pos = 0;
+	int foundCount = 0;
+	while ((pos = regExp.indexIn(userItemsList, pos)) != -1) {
+		foundCount++;
+		int sCount = 0;
+		for (int j = 0; j < pos; ++j) {
+			if (userItemsList.at(j) == '|') {
+				sCount++;
+			}
+		}
+		int eCount = sCount;
+		for (int j = pos; j < (pos + regExp.matchedLength()); ++j) {
+			if (userItemsList.at(j) == '|') {
+				eCount++;
+			}
+		}
+		for (int i = sCount; i < eCount; ++i) {
+			ui->ruleListWidget->item(i)->setBackgroundColor(QColor(0, 0, 255, 127));
+		}
+		pos += regExp.matchedLength();
+	}
+	QString textMessage;
+	if (foundCount == 0) {
+		int startPos = mStartPos = 0;
+		while (tryToFindBySeparateActions(userItemsList, complexUserAction->userActions(), startPos)) {
+			textMessage = "Что-то тут есть.";
+			mStartPos = startPos;
+		}
+		if (mStartPos == 0) {
+			textMessage = "Совпадений не найдено.";
+		}
+	}
+	else {
+		textMessage = "Совпадения обнаружены: " + QString::number(foundCount) + " из " + QString::number(allActionCount) + " действий.";
+	}
+	QMessageBox::information(this, "Результат поиска", textMessage, QMessageBox::Ok);
+}
+
+bool MainWindow::tryToFindBySeparateActions(const QString &userActionList, const QList<UserAction *> &actionsToFind, int &pos)
+{
+	bool result = true;
+	qDebug() << "pos = " << pos;
+	for (UserAction* actionToFind : actionsToFind) {
+		qDebug() << pos;
+		ComplexUserAction *complexUserAction = dynamic_cast<ComplexUserAction *>(actionToFind);
+		if (complexUserAction) {
+			QStringList const actionsToFindList = complexUserAction->toStringList();
+			QString complexActionToFind = actionsToFindList.join("").replace("|", "\\|").replace(".+", "[^_]+").toUtf8();
+			qDebug() << complexActionToFind;
+			QRegExp regExp(complexActionToFind);
+			regExp.setMinimal(true);
+			if ((pos = regExp.indexIn(userActionList, pos)) != -1) {
+				int sCount = 0;
+				for (int j = 0; j < pos; ++j) {
+					if (userActionList.at(j) == '|') {
+						sCount++;
+					}
+				}
+				int eCount = sCount;
+				for (int j = pos; j < (pos + regExp.matchedLength()); ++j) {
+					if (userActionList.at(j) == '|') {
+						eCount++;
+					}
+				}
+				for (int i = sCount; i < eCount; ++i) {
+					ui->ruleListWidget->item(i)->setBackgroundColor(QColor(0, 0, 255, 127));
+				}
+				pos += regExp.matchedLength();
+			}
+			else {
+				pos = pos == -1 ? mStartPos : pos;
+				result = tryToFindBySeparateActions(userActionList, complexUserAction->userActions(), pos);
+			}
+		}
+		else {
+			BaseUserAction *baseUserAction = dynamic_cast<BaseUserAction *>(actionToFind);
+			if (baseUserAction) {
+				QString action = baseUserAction->actionToRegExpString();
+				action.replace("|", "\\|");
+				QRegExp regExp(action);
+				regExp.setMinimal(true);
+				qDebug() << action;
+				if ((pos = regExp.indexIn(userActionList, pos)) != -1) {
+					int sCount = 0;
+					for (int j = 0; j < pos; ++j) {
+						if (userActionList.at(j) == '|') {
+							sCount++;
+						}
+					}
+					ui->ruleListWidget->item(sCount)->setBackgroundColor(QColor(0, 0, 255, 127));
+					pos += regExp.matchedLength();
+				}
+				else {
+					return false;
+				}
+			}
+		}
+		if (pos == -1) {
+			pos = mStartPos;
+		}
+	}
+	return result;
 }
 
 void MainWindow::initComplexAction(ComplexUserAction *complexUserAction, QTreeWidgetItem *item, const int &column)
@@ -253,9 +327,9 @@ void MainWindow::initComplexAction(ComplexUserAction *complexUserAction, QTreeWi
 				}
 				QTreeWidgetItem *redTapeInstructionItem = new QTreeWidgetItem(item);
 				redTapeInstructionItem->setText(currentColumn, userAction->userActionName());
-                redTapeInstructionItem->setTextColor(currentColumn, QColor(100, 100, blue));
+				redTapeInstructionItem->setTextColor(currentColumn, QColor(100, 100, blue));
 			}
-		} 
+		}
 	}
 }
 
@@ -309,7 +383,7 @@ void MainWindow::loadFile(const QString &fileName)
 	int i = 1;
 	QString whereToFind;
 	for (BaseUserAction *action: userActions) {
-        QString const actionToStr = action->actionToString();// + QString::number(action->duration()->exact());
+		QString const actionToStr = action->actionToString();// + QString::number(action->duration()->exact());
 		ui->ruleListWidget->addItem(actionToStr);
 		whereToFind += actionToStr + "\n";
 		++i;
