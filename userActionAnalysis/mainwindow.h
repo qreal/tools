@@ -4,6 +4,8 @@
 #include <QListWidgetItem>
 #include <QMap>
 
+#include <RInside.h>
+
 #include "complexActionNameDialog.h"
 #include "userAction/complexUserAction/complexUserActionGenerator.h"
 #include "userAction/baseUserAction/baseUserActionsParser.h"
