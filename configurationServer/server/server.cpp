@@ -9,20 +9,6 @@ Server::Server(QWidget *parent) :
 	networkSession(0),
 	blockSize(0)
 {
-	/// creating widgets:
-	statusLabel = new QLabel;
-
-	allText	 = new QTextEdit;
-	allText	->setReadOnly(true);
-
-	messageText = new QLineEdit;
-
-	sendButton = new QPushButton(tr("Send"));
-	sendButton->setDisabled(true);
-
-	quitButton = new QPushButton(tr("Quit"));
-	quitButton->setAutoDefault(false);
-
 	QNetworkConfigurationManager manager;
 	if (manager.capabilities() & QNetworkConfigurationManager::NetworkSessionRequired)
 	{
@@ -52,25 +38,8 @@ Server::Server(QWidget *parent) :
 
 	/// connecting widgets:
 	connect(sendButton, SIGNAL(clicked()), this, SLOT(sendSettings()));
-	connect(quitButton, SIGNAL(clicked()), this, SLOT(close()));
 	connect(tcpServer, SIGNAL(newConnection()), this, SLOT(acceptClientConnection()));
 
-	/// adding widgets into the window:
-	QHBoxLayout *messageLayout = new QHBoxLayout;
-	messageLayout->addWidget(messageText);
-	messageLayout->addWidget(sendButton);
-
-	QHBoxLayout *quitLayout = new QHBoxLayout;
-	quitLayout->addStretch(1);
-	quitLayout->addWidget(quitButton);
-	quitLayout->addStretch(1);
-
-	QVBoxLayout *mainLayout = new QVBoxLayout;
-	mainLayout->addWidget(statusLabel);
-	mainLayout->addWidget(allText);
-	mainLayout->addLayout(messageLayout);
-	mainLayout->addLayout(quitLayout);
-	setLayout(mainLayout);
 
 	setWindowTitle(tr("Chat Server"));
 }
@@ -115,9 +84,6 @@ void Server::acceptClientConnection()
 	connect(clientSocket, SIGNAL(readyRead()), this, SLOT(receiveMessage()));
 	connect(clientSocket, SIGNAL(disconnected()), this, SLOT(disconnectedFromClient()));
 	connect(clientSocket, SIGNAL(disconnected()), clientSocket, SLOT(deleteLater()));
-
-	allText->clear();
-	allText->textCursor().insertText("Client connected!\n");
 
 	sendButton->setEnabled(true);
 }
