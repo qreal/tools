@@ -1,4 +1,5 @@
 #pragma once
+#include "server/server.h"
 
 #include <QWidget>
 
@@ -15,7 +16,11 @@ public:
     ~Widget();
     void init();
 
+private slots:
+	void addNewClient(QString newClient);
+
 private:
     Ui::Widget *ui;
+	Server *server;
 };
 

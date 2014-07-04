@@ -5,11 +5,11 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT       += network
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = gui
 TEMPLATE = app
-
 CONFIG += c++11
 
 SOURCES += main.cpp\
@@ -29,7 +29,8 @@ SOURCES += main.cpp\
     hotKeyManager/hotKeyManagerPage.cpp \
     hotKeyManager/shortcutEdit.cpp \
     qrutils/qRealDialog.cpp \
-    widget.cpp
+    widget.cpp \
+    server/server.cpp
 
 HEADERS  += \
     preferencesDialog.h \
@@ -55,7 +56,8 @@ HEADERS  += \
     hotKeyManager/shortcutEdit.h \
     qrutils/qRealDialog.h \
     widget.h \
-    ui_widget.h
+    ui_widget.h \
+    server/server.h
 
 FORMS    += \
     preferencesDialog.ui \
@@ -68,7 +70,8 @@ FORMS    += \
     widget.ui
 
 SUBDIRS += \
-    qrkernel/qrkernel.pro
+    qrkernel/qrkernel.pro \
+    server/server.pro
 
 OTHER_FILES +=
 
