@@ -8,6 +8,8 @@
 #include <QPushButton>
 #include <QLineEdit>
 
+#include "settingsManager.h"
+
 namespace Ui {
 class Server;
 }
@@ -22,9 +24,8 @@ public:
 private slots:
 	void sessionOpened();
 	void acceptClientConnection();
-	//void sendMessage();
 	void sendSettings();
-	//void receiveMessage();
+	void receiveMessage();
 	void clientDisconnected();
 
 private:
@@ -41,8 +42,9 @@ private:
 
 
 	QTcpServer *tcpServer;
-	QTcpSocket *clientSocket;
 	QNetworkSession *networkSession;
+	QMap<int,QTcpSocket *> SClients;
+	//qReal::SettingsManager *Qmanager;
 
 	quint16 blockSize;
 };

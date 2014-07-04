@@ -1,8 +1,12 @@
-HEADERS       = server.h
+HEADERS       = server.h \
+    settingsManager.h \
+    kernelDeclSpec.h
  SOURCES       = server.cpp \
-					  main.cpp
+					  main.cpp \
+    settingsManager.cpp
  QT           += network
  QT           += core gui widgets
+ CONFIG       += c++11
 
  # install
  target.path = $$[QT_INSTALL_EXAMPLES]/network/fortuneserver
