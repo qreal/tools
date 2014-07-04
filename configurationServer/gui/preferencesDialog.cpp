@@ -52,6 +52,7 @@ void PreferencesDialog::init(QAction * const showGridAction, QAction * const sho
 	connect(mUi->cancelButton, SIGNAL(clicked()), this, SLOT(cancel()));
 	connect(mUi->exportButton, SIGNAL(clicked()), this, SLOT(exportSettings()));
 	connect(mUi->importButton, SIGNAL(clicked()), this, SLOT(importSettings()));
+    connect(mUi->saveButton, SIGNAL(clicked()), this, SLOT(applyChanges()));
 
 	connect(editorPage, SIGNAL(gridChanged()), this, SIGNAL(gridChanged()));
 	connect(editorPage, SIGNAL(fontChanged()), this, SIGNAL(fontChanged()));
@@ -179,4 +180,8 @@ void PreferencesDialog::importSettings()
 	QString fileNameForImport = QRealFileDialog::getOpenFileName("OpenEnginePreferences", this
 			, tr("Open File"),"/mySettings",tr("*.ini"));
 	SettingsManager::instance()->loadSettings(fileNameForImport);
+
+    foreach (PreferencesPage *page, mCustomPages.values()) {
+        page->restoreSettings();
+    }
 }

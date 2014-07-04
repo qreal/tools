@@ -130,7 +130,7 @@ void PreferencesEditorPage::save()
 	SettingsManager::setValue("IndexGrid", mIndexGrid);
 	SettingsManager::setValue("DragArea", mDragArea);
 
-	mShowGridAction->setChecked(mUi->showGridCheckBox->isChecked());
+    mShowGridAction->setChecked(mUi->showGridCheckBox->isChecked());
 	mShowAlignmentAction->setChecked(mUi->showAlignmentCheckBox->isChecked());
 	mActivateGridAction->setChecked(mUi->activateGridCheckBox->isChecked());
 	mActivateAlignmentAction->setChecked(mUi->activateAlignmentCheckBox->isChecked());

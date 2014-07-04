@@ -40,6 +40,7 @@ public:
     QWidget *pageContentWigdetPage1;
     QPushButton *exportButton;
     QPushButton *importButton;
+    QPushButton *saveButton;
 
     void setupUi(QDialog *PreferencesDialog)
     {
@@ -72,6 +73,11 @@ public:
         applyButton->setObjectName(QStringLiteral("applyButton"));
 
         gridLayout->addWidget(applyButton, 4, 3, 1, 1);
+
+        saveButton = new QPushButton(PreferencesDialog);
+        saveButton->setObjectName(QStringLiteral("saveButton"));
+
+        gridLayout->addWidget(saveButton, 3, 1, 1, 1);
 
         listWidget = new QListWidget(PreferencesDialog);
         listWidget->setObjectName(QStringLiteral("listWidget"));
@@ -140,6 +146,7 @@ public:
         applyButton->setText(QApplication::translate("PreferencesDialog", "Apply", 0));
         exportButton->setText(QApplication::translate("PreferencesDialog", "Export", 0));
         importButton->setText(QApplication::translate("PreferencesDialog", "Import", 0));
+        saveButton->setText(QApplication::translate("PreferenceDialog", "Save", 0));
     } // retranslateUi
 
 };

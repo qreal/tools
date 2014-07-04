@@ -3,6 +3,8 @@
 
 #include "preferencesDialog.h"
 
+#include <QAction>
+
 Widget::Widget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Widget)
@@ -18,9 +20,7 @@ Widget::~Widget()
 void Widget::init()
 {
     PreferencesDialog * dialog = new PreferencesDialog();
-    dialog->init(nullptr, nullptr, nullptr, nullptr);
+    dialog->init(new QAction(dialog), new QAction(dialog), new QAction(dialog), new QAction(dialog));
     ui->widgetSettings->layout()->addWidget(dialog);
     dialog->setParent(ui->widgetSettings);
-//    ui->widgetSettings = dialog;
-//    dialog->show();
 }
