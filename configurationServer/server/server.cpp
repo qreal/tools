@@ -5,10 +5,29 @@
 Server::Server(QWidget *parent) :
 	QDialog(parent),
 	tcpServer(0),
-	clientSocket(0),
+	//clientSocket(0),
 	networkSession(0),
 	blockSize(0)
 {
+	/// creating widgets:
+	statusLabel = new QLabel;
+
+	allText	 = new QTextEdit;
+	allText	->setReadOnly(true);
+
+	messageText = new QLineEdit;
+
+	sendButton = new QPushButton(tr("Send"));
+	sendButton->setDisabled(true);
+
+	quitButton = new QPushButton(tr("Quit"));
+	quitButton->setAutoDefault(false);
+
+	//Qmanager->setValue("abc", "def");
+	//Qmanager->setValue("ghi", "jkl");
+
+	//allText->setText(Qmanager->);
+
 	QNetworkConfigurationManager manager;
 	if (manager.capabilities() & QNetworkConfigurationManager::NetworkSessionRequired)
 	{
@@ -38,8 +57,25 @@ Server::Server(QWidget *parent) :
 
 	/// connecting widgets:
 	connect(sendButton, SIGNAL(clicked()), this, SLOT(sendSettings()));
+	connect(quitButton, SIGNAL(clicked()), this, SLOT(close()));
 	connect(tcpServer, SIGNAL(newConnection()), this, SLOT(acceptClientConnection()));
 
+	/// adding widgets into the window:
+	QHBoxLayout *messageLayout = new QHBoxLayout;
+	messageLayout->addWidget(messageText);
+	messageLayout->addWidget(sendButton);
+
+	QHBoxLayout *quitLayout = new QHBoxLayout;
+	quitLayout->addStretch(1);
+	quitLayout->addWidget(quitButton);
+	quitLayout->addStretch(1);
+
+	QVBoxLayout *mainLayout = new QVBoxLayout;
+	mainLayout->addWidget(statusLabel);
+	mainLayout->addWidget(allText);
+	mainLayout->addLayout(messageLayout);
+	mainLayout->addLayout(quitLayout);
+	setLayout(mainLayout);
 
 	setWindowTitle(tr("Chat Server"));
 }
@@ -79,40 +115,45 @@ void Server::sessionOpened()
 
 void Server::acceptClientConnection()
 {
-	clientSocket = tcpServer->nextPendingConnection();
+	QTcpSocket* clientSocket=tcpServer->nextPendingConnection();
+	int idusersocs=clientSocket->socketDescriptor();
+	SClients[idusersocs]=clientSocket;
+	connect(SClients[idusersocs], SIGNAL(readyRead()), this, SLOT(receiveMessage()));
+	connect(SClients[idusersocs], SIGNAL(disconnected()), this, SLOT(disconnectedFromClient()));
+	connect(SClients[idusersocs], SIGNAL(disconnected()), SClients[idusersocs], SLOT(deleteLater()));
 
-	connect(clientSocket, SIGNAL(readyRead()), this, SLOT(receiveMessage()));
-	connect(clientSocket, SIGNAL(disconnected()), this, SLOT(disconnectedFromClient()));
-	connect(clientSocket, SIGNAL(disconnected()), clientSocket, SLOT(deleteLater()));
+	allText->clear();
+	allText->textCursor().insertText("Client connected!\n");
 
 	sendButton->setEnabled(true);
 }
 
-//void Server::receiveMessage()
+void Server::receiveMessage()
+{
+	QTcpSocket* clientSocket = (QTcpSocket*)sender();
+	QDataStream in(clientSocket);
+	in.setVersion(QDataStream::Qt_5_2);
+
+	if (blockSize == 0)
+	{
+		if (clientSocket->bytesAvailable() < (int)sizeof(quint16))
+			return;
+
+		in >> blockSize;
+	}
+
+	if (clientSocket->bytesAvailable() < blockSize)
+		return;
+
+	blockSize = 0;
+	QString newMessage;
+	in >> newMessage;
+	allText	->textCursor().insertText("Client: " + newMessage + '\n');
+}
+
+//void Server::sendSettings()
 //{
-//	QDataStream in(clientSocket);
-//	in.setVersion(QDataStream::Qt_5_2);
-
-//	if (blockSize == 0)
-//	{
-//		if (clientSocket->bytesAvailable() < (int)sizeof(quint16))
-//			return;
-
-//		in >> blockSize;
-//	}
-
-//	if (clientSocket->bytesAvailable() < blockSize)
-//		return;
-
-//	blockSize = 0;
-//	QString newMessage;
-//	in >> newMessage;
-//	allText	->textCursor().insertText("Client: " + newMessage + '\n');
-//}
-
-//void Server::sendMessage()
-//{
-//	if(clientSocket)
+//	if(!SClients.isEmpty())
 //	{
 //		if (messageText->text().isEmpty())
 //			return;
@@ -123,7 +164,10 @@ void Server::acceptClientConnection()
 
 //		out << (quint16)messageText->text().length();
 //		out << messageText->text();
-//		clientSocket->write(block);
+//		foreach(int i,SClients.keys())
+//		{
+//			SClients[i]->write(block);
+//		}
 
 //		allText	->textCursor().insertText("You: " + messageText->text() + '\n');
 
@@ -135,7 +179,28 @@ void Server::acceptClientConnection()
 
 void Server::sendSettings()
 {
+	if(!SClients.isEmpty())
+	{
+		//if (messageText->text().isEmpty())
+		//	return;
+		sendButton->setDisabled(true);
 
+		QByteArray block;
+		QDataStream out(&block, QIODevice::WriteOnly);
+
+		out << (quint16)qReal::SettingsManager::instance()->convertToString().length();
+		out << qReal::SettingsManager::instance()->convertToString();
+		foreach(int i, SClients.keys())
+		{
+			SClients[i]->write(block);
+		}
+
+		allText	->textCursor().insertText("You: " + qReal::SettingsManager::instance()->convertToString() + '\n');
+
+		messageText->clear();
+
+		sendButton->setEnabled(true);
+	}
 }
 
 void Server::clientDisconnected()
