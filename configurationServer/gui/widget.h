@@ -9,18 +9,19 @@ class Widget;
 
 class Widget : public QWidget
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit Widget(QWidget *parent = 0);
-    ~Widget();
-    void init();
+	explicit Widget(QWidget *parent = 0);
+	~Widget();
+	void init();
 
 private slots:
 	void addNewClient(QString newClient);
 
 private:
-    Ui::Widget *ui;
+	Ui::Widget *ui;
+	QWidget *widgetSettings;
 	Server *server;
 };
 

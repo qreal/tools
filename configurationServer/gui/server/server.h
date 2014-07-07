@@ -5,10 +5,6 @@
 
 #include "qrkernel/settingsManager.h"
 
-namespace Ui {
-class Server;
-}
-
 class Server : public QDialog
 {
 	Q_OBJECT

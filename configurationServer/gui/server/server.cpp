@@ -4,7 +4,6 @@
 Server::Server(QWidget *parent) :
 	QDialog(parent),
 	tcpServer(0),
-	//clientSocket(0),
 	networkSession(0),
 	blockSize(0)
 {
@@ -38,45 +37,40 @@ Server::Server(QWidget *parent) :
 }
 
 void Server::sessionOpened()
- {
-	 // Save the used configuration
-	 if (networkSession)
-	 {
-		 QNetworkConfiguration config = networkSession->configuration();
-		 QString id;
-		 if (config.type() == QNetworkConfiguration::UserChoice)
-			 id = networkSession->sessionProperty(QLatin1String("UserChoiceConfiguration")).toString();
-		 else
-			 id = config.identifier();
+{
+	// Save the used configuration
+	if (networkSession)
+	{
+		QNetworkConfiguration config = networkSession->configuration();
+		QString id;
+		if (config.type() == QNetworkConfiguration::UserChoice)
+			id = networkSession->sessionProperty(QLatin1String("UserChoiceConfiguration")).toString();
+		else
+			id = config.identifier();
 
-		 QSettings settings(QSettings::UserScope, QLatin1String("Trolltech"));
-		 settings.beginGroup(QLatin1String("QtNetwork"));
-		 settings.setValue(QLatin1String("DefaultNetworkConfiguration"), id);
-		 settings.endGroup();
-	 }
+		QSettings settings(QSettings::UserScope, QLatin1String("Trolltech"));
+		settings.beginGroup(QLatin1String("QtNetwork"));
+		settings.setValue(QLatin1String("DefaultNetworkConfiguration"), id);
+		settings.endGroup();
+	}
 
-	 tcpServer = new QTcpServer(this);
-	 if (!tcpServer->listen(QHostAddress::LocalHost, tcpServer->serverPort()))
-	 {
-		 QMessageBox::critical(this, tr("qReal Server"),
-							   tr("Unable to start the server: %1.")
-							   .arg(tcpServer->errorString()));
-		 close();
-		 return;
-	 }
-
-	//statusLabel->setText(tr("The server is running on\n\nIP-adress: %1\nPort: %2\n\n"
-	//						 "Run the Chat Client now.")
-	//					  .arg(tcpServer->serverAddress().toString()).arg(tcpServer->serverPort()));
- }
+	tcpServer = new QTcpServer(this);
+	if (!tcpServer->listen(QHostAddress::AnyIPv4, tcpServer->serverPort()))
+	{
+		QMessageBox::critical(this, tr("qReal Server"),
+							  tr("Unable to start the server: %1.")
+							  .arg(tcpServer->errorString()));
+		close();
+		return;
+	}
+}
 
 void Server::acceptClientConnection()
 {
 	QTcpSocket* clientSocket = tcpServer->nextPendingConnection();
-	emit newClient(clientSocket->localAddress().toString());
+	emit newClient(clientSocket->peerAddress().toString());
 	int idusersocs = clientSocket->socketDescriptor();
 	SClients[idusersocs] = clientSocket;
-	//connect(SClients[idusersocs], SIGNAL(readyRead()), this, SLOT(sendSettings()));
 	connect(SClients[idusersocs], SIGNAL(disconnected()), this, SLOT(disconnectedFromClient()));
 	connect(SClients[idusersocs], SIGNAL(disconnected()), SClients[idusersocs], SLOT(deleteLater()));
 	sendSettings();
@@ -104,7 +98,17 @@ quint16 Server::getAdress()
 
 QString Server::getIP()
 {
-	return tcpServer->serverAddress().toString();
+	QList<QNetworkInterface> adressList = QNetworkInterface::allInterfaces();
+	QString address;
+	for (int j = 0; j < adressList.size(); j++)
+	{
+		QList<QNetworkAddressEntry> addressEntry = adressList[j].addressEntries();
+		for (int i = 0; i < addressEntry.size(); i++)
+			address += addressEntry[i].ip().toString() + "\n";
+		address += "\n";
+	}
+
+	return address;
 }
 
 void Server::clientDisconnected()

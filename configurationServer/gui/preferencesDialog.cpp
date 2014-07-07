@@ -181,7 +181,7 @@ void PreferencesDialog::importSettings()
 			, tr("Open File"),"/mySettings",tr("*.ini"));
 	SettingsManager::instance()->loadSettings(fileNameForImport);
 
-    foreach (PreferencesPage *page, mCustomPages.values()) {
-        page->restoreSettings();
-    }
+	foreach (PreferencesPage *page, mCustomPages.values()) {
+		page->restoreSettings();
+	}
 }

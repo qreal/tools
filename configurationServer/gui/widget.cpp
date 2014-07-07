@@ -3,11 +3,9 @@
 
 #include "preferencesDialog.h"
 
-#include <QAction>
-
 Widget::Widget(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::Widget)
+	QWidget(parent),
+	ui(new Ui::Widget)
 {
 	ui->setupUi(this);
 }
@@ -25,8 +23,8 @@ void Widget::init()
 	ui->widgetSettings->layout()->addWidget(dialog);
 	dialog->setParent(ui->widgetSettings);
 	connect(server, SIGNAL(newClient(QString)), this, SLOT(addNewClient(QString)));
-	setWindowTitle("IP: " + server->getIP()
-		+ " Adress: " + QString::number(server->getAdress()));
+	setWindowTitle(" Adress: " + QString::number(server->getAdress()));
+	ui->widgetListOfIP->setText(server->getIP());
 }
 
 void Widget::addNewClient(QString newClient)
