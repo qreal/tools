@@ -18,6 +18,7 @@ public:
 
 private slots:
 	void addNewClient(QString newClient);
+	void deleteClient(QString clientsIP);
 
 private:
 	Ui::Widget *ui;

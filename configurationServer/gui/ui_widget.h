@@ -53,7 +53,7 @@ public:
 		verticalLeftLayout->setContentsMargins(0, 0, 0, 0);
 
 		widgetNameLostOfIP = new QLabel(Widget);
-		widgetNameLostOfIP->setText("Your IP-address:");
+		widgetNameLostOfIP->setText("Your IP:");
 		verticalLeftLayout->addWidget(widgetNameLostOfIP);
 
 		widgetListOfIP = new QTextEdit(Widget);
@@ -99,9 +99,11 @@ public:
 
 		horizontalLayout_2->addWidget(widgetSettings);
 
+
 		retranslateUi(Widget);
 
 		widgetListOfNames->setCurrentRow(-1);
+
 
 		QMetaObject::connectSlotsByName(Widget);
 	} // setupUi

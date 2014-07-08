@@ -17,10 +17,11 @@ public:
 private slots:
 	void sessionOpened();
 	void acceptClientConnection();
-	void clientDisconnected();
+	void clientDisconnectedSlot(QString clientsID);
 
 signals:
 	void newClient(QString clientName);
+	void clientDisconnectedSignal(QString clientsIP);
 
 private:
 	void sendSettings();
@@ -28,5 +29,6 @@ private:
 	QTcpServer *tcpServer;
 	QNetworkSession *networkSession;
 	quint16 blockSize;
+	QSignalMapper *mapper;
 };
 

@@ -4,8 +4,8 @@
 Server::Server(QWidget *parent) :
 	QDialog(parent),
 	tcpServer(0),
-	networkSession(0),
-	blockSize(0)
+	networkSession(0)
+	//blockSize(0),
 {
 	QNetworkConfigurationManager manager;
 	if (manager.capabilities() & QNetworkConfigurationManager::NetworkSessionRequired)
@@ -33,7 +33,9 @@ Server::Server(QWidget *parent) :
 		sessionOpened();
 	}
 
+	mapper = new QSignalMapper;
 	connect(tcpServer, SIGNAL(newConnection()), this, SLOT(acceptClientConnection()));
+	connect(mapper, SIGNAL(mapped(QString)), this, SLOT(clientDisconnectedSlot(QString)));
 }
 
 void Server::sessionOpened()
@@ -55,7 +57,7 @@ void Server::sessionOpened()
 	}
 
 	tcpServer = new QTcpServer(this);
-	if (!tcpServer->listen(QHostAddress::AnyIPv4, tcpServer->serverPort()))
+	if (!tcpServer->listen(QHostAddress::AnyIPv4, 55555))
 	{
 		QMessageBox::critical(this, tr("qReal Server"),
 							  tr("Unable to start the server: %1.")
@@ -71,7 +73,8 @@ void Server::acceptClientConnection()
 	emit newClient(clientSocket->peerAddress().toString());
 	int idusersocs = clientSocket->socketDescriptor();
 	SClients[idusersocs] = clientSocket;
-	connect(SClients[idusersocs], SIGNAL(disconnected()), this, SLOT(disconnectedFromClient()));
+	connect(SClients[idusersocs], SIGNAL(disconnected()), mapper, SLOT(map()));
+	mapper->setMapping(SClients[idusersocs], SClients[idusersocs]->peerAddress().toString());
 	connect(SClients[idusersocs], SIGNAL(disconnected()), SClients[idusersocs], SLOT(deleteLater()));
 	sendSettings();
 }
@@ -85,7 +88,8 @@ void Server::sendSettings()
 
 		out << (quint16)qReal::SettingsManager::instance()->convertToString().length();
 		out << qReal::SettingsManager::instance()->convertToString();
-		foreach(int i, SClients.keys()) {
+		foreach(int i, SClients.keys())
+		{
 			SClients[i]->write(block);
 		}
 	}
@@ -111,8 +115,7 @@ QString Server::getIP()
 	return address;
 }
 
-void Server::clientDisconnected()
+void Server::clientDisconnectedSlot(QString clientsID)
 {
-	QMessageBox::information(this, tr("qReal Server"),
-							 tr("Client disconnected!"));
+	emit clientDisconnectedSignal(clientsID);
 }
