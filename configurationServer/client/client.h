@@ -39,7 +39,7 @@ private:
 	QLabel *portLabel;
 
 	/// combo box:
-	QComboBox *hostAdress;
+    QLineEdit *hostAdress;
 
 	/// text widgets:
 	QLineEdit *portLineEdit;

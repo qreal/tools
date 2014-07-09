@@ -30,14 +30,14 @@ Client::Client(QWidget *parent) :
 	chatText->setReadOnly(true);
 
 	/// adding adresses to combo box
-	hostAdress = new QComboBox;
-	QList<QHostAddress> adressList = QNetworkInterface::allAddresses();
+    hostAdress = new QLineEdit;
+/*	QList<QHostAddress> adressList = QNetworkInterface::allAddresses();
 
 	for (int i = 0; i < adressList.size(); ++i)
 	{
-		hostAdress->addItem(adressList.at(i).toString());
+        hostAdress->addItem(adressList.at(i).toString());
 	}
-
+*/
 	serverSocket = new QTcpSocket;
 
 	///adding operation to buttons:
@@ -190,7 +190,7 @@ void Client::displayError(QAbstractSocket::SocketError socketError)
 
 void Client::connectToServer()
 {
-	serverSocket->connectToHost(hostAdress->currentText(), portLineEdit->text().toInt());
+    serverSocket->connectToHost(hostAdress->text(), portLineEdit->text().toInt());
 
 	if (serverSocket->waitForConnected(5000))
 	{
