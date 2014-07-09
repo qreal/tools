@@ -25,9 +25,9 @@ void Widget::init()
 	dialog->setParent(mUi->widgetSettings);
 
 	connect(mServer, SIGNAL(newClient(QString)), this, SLOT(addNewClient(QString)));
-	connect(mServer, SIGNAL(clientDisconnectedSignal(QString)), this, SLOT(deleteClient(QString)));
+	connect(mServer, SIGNAL(clientDisconnected(QString)), this, SLOT(deleteClient(QString)));
 
-	setWindowTitle("Port: " + QString::number(mServer->getAdress()));
+	setWindowTitle("Port: " + QString::number(mServer->getPort()));
 
 	QString allIP = mServer->getIP();
 	for(int i = 0; i < allIP.count("\n"); i++) {
@@ -37,20 +37,6 @@ void Widget::init()
 	}
 
 	mUi->widgetListOfIP->addItem(allIP.remove(allIP.length() - 1, 1));
-	ui->widgetSettings->layout()->addWidget(dialog);
-	dialog->setParent(ui->widgetSettings);
-	connect(server, SIGNAL(newClient(QString)), this, SLOT(addNewClient(QString)));
-	connect(server, SIGNAL(clientDisconnected(QString)), this, SLOT(deleteClient(QString)));
-	setWindowTitle("Port: " + QString::number(server->getPort()));
-	QString allIP = server->getIP();
-	int i = 0;
-	for(i = 0; i < allIP.count("\n"); i++)
-	{
-		QString temp = allIP;
-		ui->widgetListOfIP->addItem(temp.remove(temp.indexOf('\n'), temp.length() - temp.indexOf('\n')));
-		allIP = allIP.remove(0, allIP.indexOf('\n') + 1);
-	}
-	ui->widgetListOfIP->addItem(allIP.remove(allIP.length() - 1, 1));
 }
 
 void Widget::addNewClient(const QString &newClient)
