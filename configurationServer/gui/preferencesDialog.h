@@ -10,7 +10,7 @@
 #include "preferencesPages/preferencesPage.h"
 
 namespace Ui {
-	class PreferencesDialog;
+class PreferencesDialog;
 }
 
 class PreferencesDialog : public utils::QRealDialog
@@ -23,7 +23,7 @@ public:
 	~PreferencesDialog();
 
 	void init(QAction * const showGridAction, QAction * const showAlignmentAction
-		, QAction * const activateGridAction, QAction * const activateAlignmentAction);
+			  , QAction * const activateGridAction, QAction * const activateAlignmentAction);
 	void updatePluginDependendSettings();
 
 	void registerPage(QString const &pageName, PreferencesPage * const page);

@@ -23,52 +23,60 @@ public:
 	/// Returns json stylesheet for start tab background
 	virtual QString startTabBackgroundStyle() const
 	{
-//		return utils::InFile::readAll(startTabBackgroundStylePath());
+		return nullptr;
+		//		return utils::InFile::readAll(startTabBackgroundStylePath());
 	}
 
 	/// Returns json stylesheet for start tab substrate background
 	virtual QString startTabSubstrateBackgroundStyle() const
 	{
-//		return utils::InFile::readAll(startTabSubstrateBackgroundStylePath());
+		return nullptr;
+		//		return utils::InFile::readAll(startTabSubstrateBackgroundStylePath());
 	}
 
 	/// Returns json stylesheet for start tab header background
 	virtual QString startTabHeaderBackgroundStyle() const
 	{
-//		return utils::InFile::readAll(startTabHeaderBackgroundStylePath());
+		return nullptr;
+		//		return utils::InFile::readAll(startTabHeaderBackgroundStylePath());
 	}
 
 	/// Returns json stylesheet for recent projects section background on start tab
 	virtual QString startTabRecentProjectsBackgroundStyle() const
 	{
-//		return utils::InFile::readAll(startTabRecentProjectsBackgroundStylePath());
+		return nullptr;
+		//		return utils::InFile::readAll(startTabRecentProjectsBackgroundStylePath());
 	}
 
 	/// Returns json stylesheet for projects management section background on start tab
 	virtual QString startTabProjectsManagementBackgroundStyle() const
 	{
-//		return utils::InFile::readAll(startTabProjectsManagementBackgroundStylePath());
+		return nullptr;
+		//		return utils::InFile::readAll(startTabProjectsManagementBackgroundStylePath());
 	}
 
 	/// Returns json stylesheet for command buttons on start tab
 	virtual QString startTabButtonStyle() const
 	{
-//		return utils::InFile::readAll(startTabButtonStylePath())
-//				.replace("@@FONT@@", mFonts.commandButtonsFont());
+		return nullptr;
+		//		return utils::InFile::readAll(startTabButtonStylePath())
+		//				.replace("@@FONT@@", mFonts.commandButtonsFont());
 	}
 
 	/// Returns json stylesheet for styled text on start tab  of level 1 heading
 	virtual QString startTabLabelLevel1Style() const
 	{
-//		return utils::InFile::readAll(startTabLabelLevel1StylePath())
-//				.replace("@@FONT@@", mFonts.styledTextFont());
+		return nullptr;
+		//		return utils::InFile::readAll(startTabLabelLevel1StylePath())
+		//				.replace("@@FONT@@", mFonts.styledTextFont());
 	}
 
 	/// Returns json stylesheet for styled text on start tab of level 2 heading
 	virtual QString startTabLabelLevel2Style() const
 	{
-//		return utils::InFile::readAll(startTabLabelLevel2StylePath())
-//				.replace("@@FONT@@", mFonts.styledTextFont());
+		return nullptr;
+		//		return utils::InFile::readAll(startTabLabelLevel2StylePath())
+		//				.replace("@@FONT@@", mFonts.styledTextFont());
 	}
 
 protected:

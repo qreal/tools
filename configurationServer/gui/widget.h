@@ -7,6 +7,7 @@ namespace Ui {
 class Widget;
 }
 
+/// Class of window configuration server.
 class Widget : public QWidget
 {
 	Q_OBJECT
@@ -14,15 +15,19 @@ class Widget : public QWidget
 public:
 	explicit Widget(QWidget *parent = 0);
 	~Widget();
+
+	/// Initialize widget.
 	void init();
 
 private slots:
-	void addNewClient(QString newClient);
-	void deleteClient(QString clientsIP);
+	/// Slot of connect new client.
+	void addNewClient(QString const &newClient);
+
+	/// Slot of delete client.
+	void deleteClient(QString const &clientsIP);
 
 private:
-	Ui::Widget *ui;
-	QWidget *widgetSettings;
-	Server *server;
+	Ui::Widget *mUi;
+	Server *mServer;
 };
 

@@ -36,7 +36,7 @@ void PreferencesDialog::init(QAction * const showGridAction, QAction * const sho
 	// Debugger page removed due to #736
 	PreferencesMiscellaniousPage *miscellaniousPage = new PreferencesMiscellaniousPage(mUi->pageContentWigdet);
 	PreferencesPage *editorPage = new PreferencesEditorPage(showGridAction
-		, showAlignmentAction, activateGridAction, activateAlignmentAction, mUi->pageContentWigdet);
+			, showAlignmentAction, activateGridAction, activateAlignmentAction, mUi->pageContentWigdet);
 	PreferencesPage *hotKeyManagerPage = new PreferencesHotKeyManagerPage(mUi->pageContentWigdet);
 
     mUi->applyButton->setVisible(false);
@@ -57,7 +57,7 @@ void PreferencesDialog::init(QAction * const showGridAction, QAction * const sho
 	connect(editorPage, SIGNAL(gridChanged()), this, SIGNAL(gridChanged()));
 	connect(editorPage, SIGNAL(fontChanged()), this, SIGNAL(fontChanged()));
 	connect(editorPage, SIGNAL(paletteRepresentationChanged()), this
-		, SIGNAL(paletteRepresentationChanged()));
+			, SIGNAL(paletteRepresentationChanged()));
 	connect(miscellaniousPage, SIGNAL(iconsetChanged()), this, SIGNAL(iconsetChanged()));
 	connect(miscellaniousPage, &PreferencesMiscellaniousPage::toolbarSizeChanged
 			, this, &PreferencesDialog::toolbarSizeChanged);
