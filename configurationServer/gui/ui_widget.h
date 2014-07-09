@@ -30,9 +30,9 @@ public:
 	QListWidget *widgetListOfNames;
 	QWidget *widgetSettings;
 	QVBoxLayout *verticalLayout;
-	QTextEdit *widgetListOfIP;
+	QListWidget *widgetListOfIP;
 	QVBoxLayout *verticalLeftLayout;
-	QLabel *widgetNameLostOfIP;
+	QLabel *widgetNameListOfIP;
 	QLabel *widgetNameListOfNames;
 
 	void setupUi(QWidget *Widget)
@@ -52,11 +52,11 @@ public:
 		verticalLeftLayout->setObjectName(QStringLiteral("verticalLeftLayout"));
 		verticalLeftLayout->setContentsMargins(0, 0, 0, 0);
 
-		widgetNameLostOfIP = new QLabel(Widget);
-		widgetNameLostOfIP->setText("Your IP:");
-		verticalLeftLayout->addWidget(widgetNameLostOfIP);
+		widgetNameListOfIP = new QLabel(Widget);
+		widgetNameListOfIP->setText("Your IP:");
+		verticalLeftLayout->addWidget(widgetNameListOfIP);
 
-		widgetListOfIP = new QTextEdit(Widget);
+		widgetListOfIP = new QListWidget(Widget);
 		widgetListOfIP->setObjectName(QStringLiteral("widgetListOfIP"));
 		QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Expanding);
 		sizePolicy1.setHorizontalStretch(0);
@@ -65,7 +65,6 @@ public:
 		widgetListOfIP->setSizePolicy(sizePolicy1);
 		widgetListOfIP->setMinimumSize(QSize(200, 0));
 		widgetListOfIP->setMaximumSize(QSize(200, 16777215));
-		widgetListOfIP->setReadOnly(true);
 		verticalLeftLayout->addWidget(widgetListOfIP);
 
 		widgetNameListOfNames = new QLabel(Widget);

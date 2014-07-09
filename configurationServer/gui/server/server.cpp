@@ -102,14 +102,15 @@ quint16 Server::getAdress()
 
 QString Server::getIP()
 {
-	QList<QNetworkInterface> adressList = QNetworkInterface::allInterfaces();
+	QList<QNetworkInterface> addressList = QNetworkInterface::allInterfaces();
 	QString address;
-	for (int j = 0; j < adressList.size(); j++)
+	for (int j = 0; j < addressList.size(); j++)
 	{
-		QList<QNetworkAddressEntry> addressEntry = adressList[j].addressEntries();
+		QList<QNetworkAddressEntry> addressEntry = addressList[j].addressEntries();
 		for (int i = 0; i < addressEntry.size(); i++)
-			address += addressEntry[i].ip().toString() + "\n";
-		address += "\n";
+				if (!addressEntry[i].ip().isLoopback()
+						&& addressEntry[i].ip().toString().contains("."))
+					address += addressEntry[i].ip().toString() + "\n";
 	}
 
 	return address;
