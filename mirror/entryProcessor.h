@@ -13,6 +13,7 @@ public:
 
 private:
 	void processMouseEntry();
+	void processWheelEntry();
 	void processKeyEntry();
 
 	LogEntry const &mEntry;

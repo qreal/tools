@@ -4,7 +4,6 @@
 #include <QtCore/QPoint>
 #include <QtCore/QSize>
 
-#include <QtCore/QStringList>
 #include "os.h"
 
 LogEntry::Level const userActionsLogLevel = LogEntry::trace;
@@ -23,6 +22,8 @@ void EntryProcessor::process()
 
 	if (mEntry.message().startsWith("Mouse")) {
 		processMouseEntry();
+	} else if (mEntry.message().startsWith("Wheel")) {
+		processWheelEntry();
 	} else if (mEntry.message().startsWith("Key")) {
 		processKeyEntry();
 	}
@@ -30,15 +31,14 @@ void EntryProcessor::process()
 	// Else it is not user action message, ignoring it
 }
 
-#include"defines.h"
 void EntryProcessor::processMouseEntry()
 {
-	QRegExp const regexp("Mouse (\\w+) in QPoint\\((\\d+),(\\d+)\\) with (\\d+) target \"(.*)\" QSize\\((\\d+), (\\d+)\\)");
+	QRegExp const regexp("Mouse (\\w+) in QPoint\\((\\d+),(\\d+)\\) with (\\d+)"\
+			" target \"(.*)\" QSize\\((\\d+), (\\d+)\\)");
 	if (!regexp.exactMatch(mEntry.message())) {
 		return;
 	}
 
-//	PRINT(regexp.capturedTexts().join("; "));
 	QString const action = regexp.cap(1);
 
 	int const x = regexp.cap(2).toInt();
@@ -56,6 +56,28 @@ void EntryProcessor::processMouseEntry()
 	} else if (action == "release") {
 //		Os::releaseMouse(QPoint(x, y), button, title, QSize(width, height));
 	}
+}
+
+void EntryProcessor::processWheelEntry()
+{
+	QRegExp const regexp("Wheel with delta QPoint\\(([0-9|\\-]+),([0-9|\\-]+)\\) in"\
+			" QPoint\\(([0-9|\\-]+),([0-9|\\-]+)\\) target \"(.*)\" QSize\\(([0-9|\\-]+), ([0-9|\\-]+)\\)");
+	if (!regexp.exactMatch(mEntry.message())) {
+		return;
+	}
+
+	int const deltaX = regexp.cap(1).toInt();
+	int const deltaY = regexp.cap(2).toInt();
+
+	int const x = regexp.cap(3).toInt();
+	int const y = regexp.cap(4).toInt();
+
+	QString const title = regexp.cap(5);
+
+	int const width = regexp.cap(6).toInt();
+	int const height = regexp.cap(7).toInt();
+
+	//Os::simulateWheel(deltaX, deltaY, QPoint(x, y), title, QSize(width, height));
 }
 
 void EntryProcessor::processKeyEntry()
