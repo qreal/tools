@@ -4,9 +4,6 @@
 
 static uint const telemetryServerPort = 9000;
 
-QString const errorMarker = "error: ";
-QString const infoMarker = "info: ";
-
 Communicator::Communicator(QHostAddress const &serverAddress)
 	: mServerAddress(serverAddress)
 {
@@ -21,12 +18,20 @@ Communicator::~Communicator()
 
 void Communicator::getNewValues()
 {
-	if (mSocket.state() != QTcpSocket::ConnectedState) {
-		emit newMessage("error");
-		return;
+	if (mSocket.state() == QTcpSocket::ConnectedState) {
+		send("data");
+	} else {
+		emit error(tr("no connection"));
 	}
+}
 
-	send("everything");
+void Communicator::getPortsInfo()
+{
+	if (mSocket.state() == QTcpSocket::ConnectedState) {
+		send("ports");
+	} else {
+		emit error(tr("no connection"));
+	}
 }
 
 void Communicator::onIncomingData()
@@ -73,7 +78,70 @@ void Communicator::onIncomingData()
 
 void Communicator::processIncomingMessage(QString const &message)
 {
-	emit newMessage(message);
+	QString dataLabel("data:");
+	QString portsLabel("ports:");
+
+	if (message.startsWith(dataLabel)) {
+		SensorData data;
+
+		for (QString const &value : message.right(message.length() - dataLabel.length()).split(";")) {
+			if (value.startsWith("analog:")) {
+				QStringList sensors = value.right(value.length() - QString("analog:").length()).split(",");
+				for (QString const &sensor : sensors) {
+					QString port = sensor.split("=")[0];
+					QStringList values = sensor.split("=")[1].split(":");
+					data.analog[port] = values[0].toInt();
+					data.analogRaw[port] = values[1].toInt();
+				}
+			} else if (value.startsWith("digital:")) {
+				QStringList sensors = value.right(value.length() - QString("digital:").length()).split(",");
+				for (QString const &sensor : sensors) {
+					QString port = sensor.split("=")[0];
+					QStringList values = sensor.split("=")[1].split(":");
+					data.digital[port] = values[0].toInt();
+					data.digitalRaw[port] = values[1].toInt();
+				}
+			} else if (value.startsWith("special:")) {
+				QStringList sensors = value.right(value.length() - QString("special:").length()).split(",");
+				for (QString const &sensor : sensors) {
+					QString port = sensor.split("=")[0];
+					QStringList values = sensor.split("=")[1].split(":");
+					data.special[port] = values[0].toInt();
+					data.specialRaw[port] = values[1].toInt();
+				}
+			} else if (value.startsWith("accelerometer:")) {
+				int const labelLength = QString("accelerometer:").length();
+				QStringList values = value.mid(labelLength + 1, value.length() - labelLength - 2).split(",");
+				data.accelerometer = QVector<int>({ values[0].toInt(), values[1].toInt(), values[2].toInt() });
+			} else if (value.startsWith("gyroscope:")) {
+				int const labelLength = QString("gyroscope:").length();
+				QStringList values = value.mid(labelLength + 1, value.length() - labelLength - 2).split(",");
+				data.gyroscope = QVector<int>({ values[0].toInt(), values[1].toInt(), values[2].toInt() });
+			}
+		}
+
+		emit newData(data);
+	} else if (message.startsWith(portsLabel)) {
+		QStringList types = message.right(message.length() - portsLabel.length()).split(";");
+		QStringList analog;
+		QStringList digital;
+		QStringList special;
+
+		for (QString const &typeSection : types) {
+			if (typeSection.startsWith("analog:")) {
+				analog = typeSection.right(typeSection.length() - QString("analog:").length())
+						.split(",", QString::SkipEmptyParts);
+			} else if (typeSection.startsWith("digital:")) {
+				digital = typeSection.right(typeSection.length() - QString("digital:").length())
+						.split(",", QString::SkipEmptyParts);
+			} else if (typeSection.startsWith("special:")) {
+				special = typeSection.right(typeSection.length() - QString("special:").length())
+						.split(",", QString::SkipEmptyParts);
+			}
+		}
+
+		emit portsInfo(analog, digital, special);
+	}
 }
 
 void Communicator::connect()

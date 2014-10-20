@@ -18,10 +18,16 @@ public:
 	~MainWindow();
 
 public slots:
-	void updateValues();
-	void setValues(QString const &values);
+	void setValues(SensorData const &values);
+	void reportError(QString const &message);
+	void configure(QStringList const &analog, QStringList const &digital, QStringList const &special);
+
+signals:
+	void configurationFinished();
 
 private:
+	void init3dSensorsWidget();
+
 	Ui::MainWindow *ui;
 
 	Communicator mCommunicator;

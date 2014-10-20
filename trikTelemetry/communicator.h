@@ -3,6 +3,8 @@
 #include <QtNetwork/QTcpSocket>
 #include <QtNetwork/QHostAddress>
 
+#include "sensorData.h"
+
 class Communicator : public QObject
 {
 	Q_OBJECT
@@ -11,10 +13,14 @@ public:
 	explicit Communicator(QHostAddress const &serverAddress);
 	~Communicator();
 
-	void getNewValues();
-
 signals:
-	void newMessage(QString const &message);
+	void error(QString const &message);
+	void newData(SensorData const &message);
+	void portsInfo(QStringList const &analog, QStringList const &digital, QStringList const &special);
+
+public slots:
+	void getNewValues();
+	void getPortsInfo();
 
 private slots:
 	void onIncomingData();
