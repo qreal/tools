@@ -96,7 +96,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QTableWidget" name="sensors3d">
+   <widget class="Sensors3DList" name="sensors3d">
     <property name="geometry">
      <rect>
       <x>40</x>
@@ -116,6 +116,11 @@
    <extends>QWidget</extends>
    <header>sensorsList.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Sensors3DList</class>
+   <extends>QTableWidget</extends>
+   <header>sensors3dList.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -9,11 +9,10 @@ class SensorsList : public QTableWidget
 public:
 	explicit SensorsList(QWidget *parent = 0);
 
-	void addPort(QString const &name);
+	void configurePorts(QStringList const &ports);
+
 	void setNormalized(QString const &port, int value);
 	void setRaw(QString const &port, int value);
-
-signals:
 
 private:
 	QMap<QString, int> mPortRowMap;

@@ -18,20 +18,12 @@ Communicator::~Communicator()
 
 void Communicator::getNewValues()
 {
-	if (mSocket.state() == QTcpSocket::ConnectedState) {
-		send("data");
-	} else {
-		emit error(tr("no connection"));
-	}
+	send("data");
 }
 
 void Communicator::getPortsInfo()
 {
-	if (mSocket.state() == QTcpSocket::ConnectedState) {
-		send("ports");
-	} else {
-		emit error(tr("no connection"));
-	}
+	send("ports");
 }
 
 void Communicator::onIncomingData()
@@ -170,6 +162,11 @@ void Communicator::disconnect()
 
 void Communicator::send(QString const &data)
 {
+	if (mSocket.state() != QTcpSocket::ConnectedState) {
+		emit error(tr("no connection"));
+		return;
+	}
+
 	QByteArray dataByteArray = data.toUtf8();
 	dataByteArray = QByteArray::number(dataByteArray.size()) + ':' + dataByteArray;
 	mSocket.write(dataByteArray);

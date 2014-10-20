@@ -11,19 +11,20 @@ SensorsList::SensorsList(QWidget *parent) :
 
 	setHorizontalHeaderLabels(QStringList({ tr("Port"), tr("Normalized"), tr("Raw") }));
 	verticalHeader()->setVisible(false);
-	horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+	horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
 }
 
-void SensorsList::addPort(QString const &name)
+void SensorsList::configurePorts(QStringList const &ports)
 {
-	int rowNumber = rowCount();
-	insertRow(rowNumber);
-	setRowHeight(rowNumber, 20);
-	mPortRowMap[name] = rowNumber;
+	setRowCount(ports.length());
+	for (int row = 0; row < ports.length(); ++row) {
+		setRowHeight(row, 20);
+		mPortRowMap[ports.at(row)] = row;
 
-	setItem(rowNumber, 0, new QTableWidgetItem(name));
-	setItem(rowNumber, 1, new QTableWidgetItem("N/A"));
-	setItem(rowNumber, 2, new QTableWidgetItem("N/A"));
+		setItem(row, 0, new QTableWidgetItem(ports.at(row)));
+		setItem(row, 1, new QTableWidgetItem("N/A"));
+		setItem(row, 2, new QTableWidgetItem("N/A"));
+	}
 }
 
 void SensorsList::setNormalized(QString const &port, int value)
