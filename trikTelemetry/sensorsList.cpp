@@ -22,8 +22,8 @@ void SensorsList::configurePorts(QStringList const &ports)
 		mPortRowMap[ports.at(row)] = row;
 
 		setItem(row, 0, new QTableWidgetItem(ports.at(row)));
-		setItem(row, 1, new QTableWidgetItem("N/A"));
-		setItem(row, 2, new QTableWidgetItem("N/A"));
+		setItem(row, 1, new QTableWidgetItem(tr("N/A")));
+		setItem(row, 2, new QTableWidgetItem(tr("N/A")));
 	}
 }
 

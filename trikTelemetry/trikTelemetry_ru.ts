@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="ru_RU">
+<TS version="2.1" language="ru_RU">
 <context>
     <name>Communicator</name>
     <message>
-        <location filename="communicator.cpp" line="24"/>
-        <location filename="communicator.cpp" line="33"/>
+        <location filename="communicator.cpp" line="178"/>
         <source>no connection</source>
         <translation>нет соединения</translation>
     </message>
@@ -35,85 +34,120 @@
     <message>
         <location filename="mainwindow.ui" line="66"/>
         <source>Special Sensors</source>
-        <translation type="unfinished"></translation>
+        <translation>Особые датчики</translation>
     </message>
     <message>
-        <location filename="mainWindow.cpp" line="11"/>
+        <location filename="mainwindow.ui" line="129"/>
+        <source>Encoders</source>
+        <translation>Энкодеры</translation>
+    </message>
+    <message>
+        <location filename="mainWindow.cpp" line="10"/>
         <source>TRIK Telemetry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainWindow.cpp" line="67"/>
+        <location filename="mainWindow.cpp" line="68"/>
         <source>Error: </source>
         <translation>Ошибка: </translation>
     </message>
     <message>
-        <location filename="mainWindow.cpp" line="91"/>
+        <source>Port</source>
+        <translation type="vanished">Порт</translation>
+    </message>
+    <message>
+        <source>Value</source>
+        <translation type="vanished">Значение</translation>
+    </message>
+    <message>
+        <source>AccelerometerX</source>
+        <translation type="vanished">АкселерометрX</translation>
+    </message>
+    <message>
+        <source>AccelerometerY</source>
+        <translation type="vanished">АкселерометрY</translation>
+    </message>
+    <message>
+        <source>AccelerometerZ</source>
+        <translation type="vanished">АкселерометрZ</translation>
+    </message>
+    <message>
+        <source>N/A</source>
+        <translation type="vanished">Нет</translation>
+    </message>
+    <message>
+        <source>GyroscopeX</source>
+        <translation type="vanished">ГироскопX</translation>
+    </message>
+    <message>
+        <source>GyroscopeY</source>
+        <translation type="vanished">ГироскопY</translation>
+    </message>
+    <message>
+        <source>GyroscopeZ</source>
+        <translation type="vanished">ГироскопZ</translation>
+    </message>
+</context>
+<context>
+    <name>Sensors3DList</name>
+    <message>
+        <location filename="sensors3dList.cpp" line="17"/>
         <source>Port</source>
         <translation>Порт</translation>
     </message>
     <message>
-        <location filename="mainWindow.cpp" line="92"/>
-        <source>Value</source>
-        <translation>Значение</translation>
+        <location filename="sensors3dList.cpp" line="17"/>
+        <source>X</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainWindow.cpp" line="95"/>
-        <source>AccelerometerX</source>
-        <translation>АкселерометрX</translation>
+        <location filename="sensors3dList.cpp" line="17"/>
+        <source>Y</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainWindow.cpp" line="96"/>
-        <source>AccelerometerY</source>
-        <translation>АкселерометрY</translation>
+        <location filename="sensors3dList.cpp" line="17"/>
+        <source>Z</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainWindow.cpp" line="97"/>
-        <source>AccelerometerZ</source>
-        <translation>АкселерометрZ</translation>
-    </message>
-    <message>
-        <location filename="mainWindow.cpp" line="99"/>
-        <location filename="mainWindow.cpp" line="100"/>
-        <location filename="mainWindow.cpp" line="101"/>
-        <location filename="mainWindow.cpp" line="107"/>
-        <location filename="mainWindow.cpp" line="108"/>
-        <location filename="mainWindow.cpp" line="109"/>
+        <location filename="sensors3dList.cpp" line="23"/>
         <source>N/A</source>
-        <translation>Нет</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainWindow.cpp" line="103"/>
-        <source>GyroscopeX</source>
-        <translation>ГироскопX</translation>
+        <location filename="sensors3dList.cpp" line="27"/>
+        <source>Accelerometer</source>
+        <translation>Акселерометр</translation>
     </message>
     <message>
-        <location filename="mainWindow.cpp" line="104"/>
-        <source>GyroscopeY</source>
-        <translation>ГироскопY</translation>
-    </message>
-    <message>
-        <location filename="mainWindow.cpp" line="105"/>
-        <source>GyroscopeZ</source>
-        <translation>ГироскопZ</translation>
+        <location filename="sensors3dList.cpp" line="28"/>
+        <source>Gyroscope</source>
+        <translation>Гироскоп</translation>
     </message>
 </context>
 <context>
     <name>SensorsList</name>
     <message>
-        <location filename="sensorsList.cpp" line="6"/>
+        <location filename="sensorsList.cpp" line="12"/>
         <source>Port</source>
         <translation>Порт</translation>
     </message>
     <message>
-        <location filename="sensorsList.cpp" line="6"/>
+        <location filename="sensorsList.cpp" line="12"/>
         <source>Normalized</source>
         <translation>Приведённое</translation>
     </message>
     <message>
-        <location filename="sensorsList.cpp" line="6"/>
+        <location filename="sensorsList.cpp" line="12"/>
         <source>Raw</source>
         <translation>Сырое</translation>
+    </message>
+    <message>
+        <location filename="sensorsList.cpp" line="25"/>
+        <location filename="sensorsList.cpp" line="26"/>
+        <source>N/A</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

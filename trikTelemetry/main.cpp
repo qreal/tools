@@ -1,6 +1,8 @@
 #include "mainWindow.h"
+
 #include <QtWidgets/QApplication>
 #include <QtNetwork/QHostAddress>
+#include <QtCore/QTranslator>
 
 int main(int argc, char *argv[])
 {
@@ -9,6 +11,12 @@ int main(int argc, char *argv[])
 	if (argc != 3) {
 		qDebug() << "Usage: trikTelemetry <ip> <update interval>";
 		return 0;
+	}
+
+	if (QLocale::system().language() == QLocale::Russian) {
+		QTranslator *translator = new QTranslator;
+		translator->load("trikTelemetry_ru");
+		a.installTranslator(translator);
 	}
 
 	QHostAddress serverAddress(a.arguments().at(1));
