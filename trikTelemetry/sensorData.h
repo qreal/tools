@@ -11,6 +11,8 @@ struct SensorData {
 	QMap<QString, int> digitalRaw;
 	QMap<QString, int> special;
 	QMap<QString, int> specialRaw;
+	QMap<QString, int> encoders;
+	QMap<QString, int> encodersRaw;
 	QVector<int> accelerometer;
 	QVector<int> gyroscope;
 };

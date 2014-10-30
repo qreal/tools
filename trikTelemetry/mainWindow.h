@@ -20,7 +20,8 @@ public:
 public slots:
 	void setValues(SensorData const &values);
 	void reportError(QString const &message);
-	void configure(QStringList const &analog, QStringList const &digital, QStringList const &special);
+	void configure(QStringList const &analog, QStringList const &digital, QStringList const &special
+			, QStringList const &encoders);
 
 signals:
 	void configurationFinished();

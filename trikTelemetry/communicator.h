@@ -16,7 +16,8 @@ public:
 signals:
 	void error(QString const &message);
 	void newData(SensorData const &message);
-	void portsInfo(QStringList const &analog, QStringList const &digital, QStringList const &special);
+	void portsInfo(QStringList const &analog, QStringList const &digital, QStringList const &special
+			, QStringList const &encoders);
 
 public slots:
 	void getNewValues();

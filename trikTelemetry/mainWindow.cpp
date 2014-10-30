@@ -15,8 +15,8 @@ MainWindow::MainWindow(QHostAddress const &server, int updateInterval, QWidget *
 	connect(&mCommunicator, SIGNAL(newData(SensorData)), this, SLOT(setValues(SensorData)));
 	connect(&mCommunicator, SIGNAL(error(QString)), this, SLOT(reportError(QString)));
 
-	connect(&mCommunicator, SIGNAL(portsInfo(QStringList,QStringList,QStringList))
-			, this, SLOT(configure(QStringList,QStringList,QStringList)));
+	connect(&mCommunicator, SIGNAL(portsInfo(QStringList,QStringList,QStringList,QStringList))
+			, this, SLOT(configure(QStringList,QStringList,QStringList,QStringList)));
 	connect(this, SIGNAL(configurationFinished()), &mUpdateTimer, SLOT(start()));
 	mCommunicator.getPortsInfo();
 }
@@ -52,6 +52,14 @@ void MainWindow::setValues(SensorData const &values)
 		ui->specialSensors->setRaw(specialPort, values.specialRaw[specialPort]);
 	}
 
+	for (QString const &encoderPort : values.encoders.keys()) {
+		ui->encoders->setNormalized(encoderPort, values.encoders[encoderPort]);
+	}
+
+	for (QString const &encoderPort : values.encodersRaw.keys()) {
+		ui->encoders->setRaw(encoderPort, values.encodersRaw[encoderPort]);
+	}
+
 	ui->sensors3d->setValues("accelerometer", values.accelerometer);
 	ui->sensors3d->setValues("gyroscope", values.gyroscope);
 }
@@ -61,11 +69,13 @@ void MainWindow::reportError(QString const &message)
 	statusBar()->showMessage(tr("Error: ") + message);
 }
 
-void MainWindow::configure(QStringList const &analog, QStringList const &digital, QStringList const &special)
+void MainWindow::configure(QStringList const &analog, QStringList const &digital, QStringList const &special
+		, QStringList const &encoders)
 {
 	ui->analogSensors->configurePorts(analog);
 	ui->digitalSensors->configurePorts(digital);
 	ui->specialSensors->configurePorts(special);
+	ui->encoders->configurePorts(encoders);
 
 	emit configurationFinished();
 }

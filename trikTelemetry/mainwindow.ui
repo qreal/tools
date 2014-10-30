@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>681</width>
-    <height>426</height>
+    <width>981</width>
+    <height>434</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -43,8 +43,8 @@
    <widget class="QLabel" name="sensors3dLabel">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>220</y>
+      <x>670</x>
+      <y>20</y>
       <width>151</width>
       <height>21</height>
      </rect>
@@ -99,11 +99,34 @@
    <widget class="Sensors3DList" name="sensors3d">
     <property name="geometry">
      <rect>
+      <x>670</x>
+      <y>40</y>
+      <width>271</width>
+      <height>171</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="SensorsList" name="encoders" native="true">
+    <property name="geometry">
+     <rect>
       <x>40</x>
       <y>240</y>
-      <width>281</width>
+      <width>291</width>
       <height>161</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="encodersLabel">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>220</y>
+      <width>151</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Encoders</string>
     </property>
    </widget>
   </widget>

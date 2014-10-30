@@ -101,6 +101,14 @@ void Communicator::processIncomingMessage(QString const &message)
 					data.special[port] = values[0].toInt();
 					data.specialRaw[port] = values[1].toInt();
 				}
+			} else if (value.startsWith("encoders:")) {
+				QStringList sensors = value.right(value.length() - QString("encoders:").length()).split(",");
+				for (QString const &sensor : sensors) {
+					QString port = sensor.split("=")[0];
+					QStringList values = sensor.split("=")[1].split(":");
+					data.encoders[port] = values[0].toInt();
+					data.encodersRaw[port] = values[1].toInt();
+				}
 			} else if (value.startsWith("accelerometer:")) {
 				int const labelLength = QString("accelerometer:").length();
 				QStringList values = value.mid(labelLength + 1, value.length() - labelLength - 2).split(",");
@@ -118,6 +126,7 @@ void Communicator::processIncomingMessage(QString const &message)
 		QStringList analog;
 		QStringList digital;
 		QStringList special;
+		QStringList encoders;
 
 		for (QString const &typeSection : types) {
 			if (typeSection.startsWith("analog:")) {
@@ -129,10 +138,13 @@ void Communicator::processIncomingMessage(QString const &message)
 			} else if (typeSection.startsWith("special:")) {
 				special = typeSection.right(typeSection.length() - QString("special:").length())
 						.split(",", QString::SkipEmptyParts);
+			} else if (typeSection.startsWith("encoders:")) {
+				encoders = typeSection.right(typeSection.length() - QString("encoders:").length())
+						.split(",", QString::SkipEmptyParts);
 			}
 		}
 
-		emit portsInfo(analog, digital, special);
+		emit portsInfo(analog, digital, special, encoders);
 	}
 }
 
