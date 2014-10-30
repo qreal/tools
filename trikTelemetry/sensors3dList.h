@@ -2,6 +2,7 @@
 
 #include <QtWidgets/QTableWidget>
 
+/// Widget for showing data from 3D devices.
 class Sensors3DList : public QTableWidget
 {
 	Q_OBJECT

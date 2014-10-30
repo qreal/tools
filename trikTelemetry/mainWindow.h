@@ -9,11 +9,13 @@ namespace Ui {
 class MainWindow;
 }
 
+/// MainWindow class coordinates a work of robot communicator and widgets that show current sensors data.
 class MainWindow : public QMainWindow
 {
 	Q_OBJECT
 
 public:
+	/// Configures sensors widgets with current robot's ports info, starts update timer.
 	explicit MainWindow(QHostAddress const &server, int updateInterval, QWidget *parent = 0);
 	~MainWindow();
 

@@ -3,6 +3,7 @@
 #include <QtWidgets/QTableWidget>
 #include <QtCore/QMap>
 
+/// Widget for showing data from scalar sensors.
 class SensorsList : public QTableWidget
 {
 	Q_OBJECT

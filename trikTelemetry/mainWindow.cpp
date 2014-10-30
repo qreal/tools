@@ -10,14 +10,13 @@ MainWindow::MainWindow(QHostAddress const &server, int updateInterval, QWidget *
 	setWindowTitle(tr("TRIK Telemetry"));
 
 	mUpdateTimer.setInterval(updateInterval);
-	connect(&mUpdateTimer, SIGNAL(timeout()), &mCommunicator, SLOT(getNewValues()));
+	QObject::connect(&mUpdateTimer, &QTimer::timeout, &mCommunicator, &Communicator::getNewValues);
 
-	connect(&mCommunicator, SIGNAL(newData(SensorData)), this, SLOT(setValues(SensorData)));
-	connect(&mCommunicator, SIGNAL(error(QString)), this, SLOT(reportError(QString)));
+	QObject::connect(&mCommunicator, &Communicator::newData, this, &MainWindow::setValues);
+	QObject::connect(&mCommunicator, &Communicator::error, this, &MainWindow::reportError);
 
-	connect(&mCommunicator, SIGNAL(portsInfo(QStringList,QStringList,QStringList,QStringList))
-			, this, SLOT(configure(QStringList,QStringList,QStringList,QStringList)));
-	connect(this, SIGNAL(configurationFinished()), &mUpdateTimer, SLOT(start()));
+	QObject::connect(&mCommunicator, &Communicator::portsInfo, this, &MainWindow::configure);
+	QObject::connect(this, SIGNAL(configurationFinished()), &mUpdateTimer, SLOT(start()));
 	mCommunicator.getPortsInfo();
 }
 

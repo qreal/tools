@@ -7,7 +7,7 @@ static uint const telemetryServerPort = 9000;
 Communicator::Communicator(QHostAddress const &serverAddress)
 	: mServerAddress(serverAddress)
 {
-	QObject::connect(&mSocket, SIGNAL(readyRead()), this, SLOT(onIncomingData()), Qt::DirectConnection);
+	QObject::connect(&mSocket, &QTcpSocket::readyRead, this, &Communicator::onIncomingData, Qt::DirectConnection);
 	connect();
 }
 
@@ -70,8 +70,8 @@ void Communicator::onIncomingData()
 
 void Communicator::processIncomingMessage(QString const &message)
 {
-	QString dataLabel("data:");
-	QString portsLabel("ports:");
+	QString const dataLabel("data:");
+	QString const portsLabel("ports:");
 
 	if (message.startsWith(dataLabel)) {
 		SensorData data;
