@@ -17,9 +17,10 @@ class MainWindow : public QMainWindow
 public:
 	/// Configures sensors widgets with current robot's ports info, starts update timer.
 	explicit MainWindow(QHostAddress const &server, int updateInterval, QWidget *parent = 0);
-	~MainWindow();
 
-public slots:
+	~MainWindow() override;
+
+private slots:
 	void setValues(SensorData const &values);
 	void reportError(QString const &message);
 	void configure(QStringList const &analog, QStringList const &digital, QStringList const &special

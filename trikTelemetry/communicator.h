@@ -13,7 +13,8 @@ class Communicator : public QObject
 
 public:
 	explicit Communicator(QHostAddress const &serverAddress);
-	~Communicator();
+
+	~Communicator() override;
 
 signals:
 	void error(QString const &message);

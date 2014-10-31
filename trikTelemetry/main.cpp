@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
 	}
 
 	QHostAddress serverAddress(a.arguments().at(1));
-	bool ok;
+	bool ok = false;
 	int updateInterval = a.arguments().at(2).toInt(&ok);
 
 	if (serverAddress.isNull() || !ok) {
