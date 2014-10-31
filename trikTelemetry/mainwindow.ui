@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>981</width>
+    <height>434</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QLabel" name="analogSensorsLabel">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>20</y>
+      <width>151</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Analog Sensors</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="digitalSensorsLabel">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>20</y>
+      <width>151</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Digital Sensors</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="sensors3dLabel">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>20</y>
+      <width>151</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>3D Sensors</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="specialSensorsLabel">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>220</y>
+      <width>151</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Special Sensors</string>
+    </property>
+   </widget>
+   <widget class="SensorsList" name="analogSensors" native="true">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>40</y>
+      <width>281</width>
+      <height>171</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="SensorsList" name="digitalSensors" native="true">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>40</y>
+      <width>291</width>
+      <height>171</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="SensorsList" name="specialSensors" native="true">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>240</y>
+      <width>291</width>
+      <height>161</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="Sensors3DList" name="sensors3d">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>40</y>
+      <width>271</width>
+      <height>171</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="SensorsList" name="encoders" native="true">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>240</y>
+      <width>291</width>
+      <height>161</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="encodersLabel">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>220</y>
+      <width>151</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Encoders</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>SensorsList</class>
+   <extends>QWidget</extends>
+   <header>sensorsList.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Sensors3DList</class>
+   <extends>QTableWidget</extends>
+   <header>sensors3dList.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
