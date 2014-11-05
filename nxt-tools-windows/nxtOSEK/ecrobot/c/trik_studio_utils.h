@@ -8,6 +8,6 @@ extern char *concat(char *str1, char *str2);
 extern char *int_to_string(int i);
 extern char *float_to_string(float f);
 extern char *bool_to_string(int b);
-extern char *array_to_string(void *a);
+extern char *other_to_string(void *a);
 
 #endif

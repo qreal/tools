@@ -24,6 +24,9 @@ char *float_to_string(float f) {
 	return result;
 }
 
-char *array_to_string(void *arr) {
-	return "<Array convertion to string is not supported for C language>";
+char *other_to_string(void *arr) {
+	int const maxLen = 14;
+	char *result = (char *)malloc(maxLen);
+	snprintf(result, maxLen, "0x%0", (int)arr);
+	return result;
 }
