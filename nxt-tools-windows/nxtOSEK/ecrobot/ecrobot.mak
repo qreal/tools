@@ -138,7 +138,8 @@ ECROBOT_SOURCES = \
 	syscalls.c \
 	ecrobot_bluetooth.c \
 	ecrobot_base.c \
-	ecrobot.c
+	ecrobot.c \
+	trik_studio_utils.c
 endif
 
 ################################################################################

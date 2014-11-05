@@ -58,7 +58,8 @@ C_LIB_SOURCES = \
 	ecrobot_interface.c \
 	NxtCam.c \
 	colorsensor.c \
-	osek_hook.c
+	osek_hook.c \
+	trik_studio_utils.c \
 
 C_LIB_RAMSOURCES := \
 	$(LEJOS_PLATFORM_SOURCES) \
