@@ -20,7 +20,7 @@ char *int_to_string(int i) {
 char *float_to_string(float f) {
 	int const maxLen = 15;
 	char *result = (char *)malloc(maxLen);
-	snprintf(result, maxLen, "%.3f", f);
+	snprintf(result, maxLen, "%d.%d", (int)f, ((int)((f - (int)f) * 1000)));
 	return result;
 }
 
