@@ -4,23 +4,20 @@
 #
 #-------------------------------------------------
 
-QT       += core
+QT += core
 
-QT       -= gui
+QT -= gui
 
-TARGET = untitled
-CONFIG   += console
-CONFIG   -= app_bundle
+TARGET = compressor
+CONFIG += console c++11
+CONFIG -= app_bundle
 
 TEMPLATE = app
 
 
-SOURCES += main.cpp \
-    folderCompressor.cpp
+SOURCES += \
+	main.cpp \
+	folderCompressor.cpp \
 
 HEADERS += \
-    folderCompressor.h
-
-
-
-
+	folderCompressor.h \
