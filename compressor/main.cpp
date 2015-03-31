@@ -23,32 +23,27 @@ int main(int argc, char *argv[])
 	parser.addPositionalArgument("source"
 			, QObject::tr("Source file to be decompressed or directory to be compressed."));
 
-	parser.addPositionalArgument("target"
-			, QObject::tr(
-					"Target directory for a file to be decompressed to or file for a directory to be compressed to."
-			));
-
 	parser.process(app);
 
 	const QStringList positionalArgs = parser.positionalArguments();
-	if (positionalArgs.size() != 2) {
+	if (positionalArgs.size() != 1) {
 		parser.showHelp();
 	}
 
 	const QString source = positionalArgs[0];
-	const QString target = positionalArgs[1];
 
 	QFileInfo sourceFileInfo(source);
-	QFileInfo targetFileInfo(target);
 
 	bool success = false;
 
-	if (sourceFileInfo.isDir() && (targetFileInfo.isFile() || !targetFileInfo.exists())) {
+	if (sourceFileInfo.isDir()) {
+		const QString target = sourceFileInfo.fileName() + ".qrs";
 		success = FolderCompressor::compressFolder(source, target);
-	} else if (sourceFileInfo.isFile() && (targetFileInfo.isDir() || !targetFileInfo.exists())) {
+	} else if (sourceFileInfo.isFile()) {
+		const QString target = sourceFileInfo.baseName();
 		success = FolderCompressor::decompressFolder(source, target);
 	} else {
-		qDebug() << QObject::tr("One of the arguments must be a file, one must be a folder.");
+		qDebug() << QObject::tr("Incorrect argument.");
 	}
 
 	return success ? 0 : 1;
