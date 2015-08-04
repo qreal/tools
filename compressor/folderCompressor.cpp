@@ -2,6 +2,7 @@
 
 #include <QtCore/QFile>
 #include <QtCore/QDir>
+#include <QtCore/QDataStream>
 #include <QtCore/QDebug>
 
 using namespace compressor;
