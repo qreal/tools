@@ -14,12 +14,12 @@ SOURCES += main.cpp\
     bitmap.cpp \
     output.cpp \
     component.cpp \
-    diagramRecognizer.cpp \
     formSegmentator.cpp \
     simpleFormsInitializer.cpp \
     recognizers/mixedGesturesManager.cpp \
     recognizers/nearestPosGridGesturesManager.cpp \
-    recognizers/rectangleGesturesManager.cpp
+    recognizers/rectangleGesturesManager.cpp \
+    diagramMainWIndow.cpp
 
 HEADERS  += \
     geometricForms.h \
@@ -30,14 +30,15 @@ HEADERS  += \
     component.h \
     figure.h \
     edge.h \
-    diagramRecognizer.h \
     formSegmentator.h \
     simpleFormsInitializer.h \
     recognizers/mixedGesturesManager.h \
     recognizers/nearestPosGridGesturesmanager.h \
-    recognizers/rectangleGesturesManager.h
+    recognizers/rectangleGesturesManager.h \
+    diagramMainWindow.h
 
-FORMS    +=
+FORMS    += \
+    mainWindow.ui
 
 OTHER_FILES += \
     readme.txt \

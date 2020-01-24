@@ -16,7 +16,7 @@ public:
 	int yLower() const;
 	Component rasterizedDiagram() const;
 
-private:
+public:
 	void rasterizeDiagram();
 	void rasterizeSegment(int x1, int y1, int x2, int y2);
 	void setLower();

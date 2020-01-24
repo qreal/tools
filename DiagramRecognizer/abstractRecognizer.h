@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QMouseEvent>
 #include "geometricForms.h"
-#include "paintmanager.h"
+#include "paintManager.h"
 
 class GesturesManager
 {
