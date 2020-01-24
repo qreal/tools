@@ -1,9 +1,9 @@
 #pragma once
 #include "bitmap.h"
-#include "formsegmentator.h"
+#include "formSegmentator.h"
 #include "abstractRecognizer.h"
 #include <QApplication>
-
+#include <field.h>
 
 class DiagramRecognizer : public QWidget
 {
@@ -27,5 +27,5 @@ private:
 	bool mRecognized;
 	QPoint mComponentPoint;
 	GesturesManager *mGesturesManager;
-	AbstractRecognizer *mAbstractRecognizer;
+	AbstractRecognizer *mAbstractRecognizer;	
 };

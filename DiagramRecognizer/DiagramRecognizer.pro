@@ -19,7 +19,17 @@ SOURCES += main.cpp\
     simpleFormsInitializer.cpp \
     recognizers/mixedGesturesManager.cpp \
     recognizers/nearestPosGridGesturesManager.cpp \
-    recognizers/rectangleGesturesManager.cpp
+    recognizers/rectangleGesturesManager.cpp \
+    newfigure.cpp \
+    segmentator.cpp \
+    connectedComponent.cpp \
+    graph.cpp \
+    field.cpp \
+    eFigure.cpp \
+    eLink.cpp \
+    section.cpp \
+    figure.cpp \
+    link.cpp
 
 HEADERS  += \
     geometricForms.h \
@@ -28,17 +38,25 @@ HEADERS  += \
     recognizers/curveKeyBuilder.h \
     output.h \
     component.h \
-    figure.h \
-    edge.h \
     diagramRecognizer.h \
     formSegmentator.h \
     simpleFormsInitializer.h \
     recognizers/mixedGesturesManager.h \
-    recognizers/nearestPosGridGesturesmanager.h \
-    recognizers/rectangleGesturesManager.h
+	recognizers/nearestPosGridGesturesManager.h \
+    recognizers/rectangleGesturesManager.h \
+    segmentator.h \
+    connectedComponent.h \
+    graph.h \
+    field.h \
+    eLink.h \
+    eFigure.h \
+    section.h \
+    figure.h \
+    link.h
 
 FORMS    +=
 
 OTHER_FILES += \
     readme.txt \
-    Conception.jpg
+    Conception.jpg \
+    test1.txt

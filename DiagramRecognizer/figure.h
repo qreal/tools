@@ -1,12 +1,8 @@
-#pragma once
+#pragma once;
+#include <eFigure.h>
+#include <eLink.h>
 
-class Figure : public Component
+class Figure
 {
-public:
-	Figure(abstractRec...);  //recognize figure, declear its type
-	int getType() const;
-	void setType(int value);
-
-private:
-	int type;
+	//QList< EItem *> *items;
 };

@@ -3,7 +3,7 @@
 #include "component.h"
 #include <QMouseEvent>
 #include "bitmap.h"
-#include "formsegmentator.h"
+#include "formSegmentator.h"
 #include <QWidget>
 
 class Output : public QWidget

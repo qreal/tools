@@ -155,3 +155,121 @@ bool Component::isNegligible() const
 	}
 	return true;
 }
+
+bool Component::intersects(Component *comp1, Component *comp2)
+{
+	Component::Iterator itr1, itr2;
+	for (itr1 = comp1->begin(); itr1 != comp1->end(); itr1++)
+	{
+		for (itr2 = comp2->begin(); itr2 != comp2->end(); itr2++)
+		{
+			if (*itr1 == *itr2)
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+SquarePos Component::intersectsAt(Component *comp1, Component *comp2)
+{
+	SquarePos beg1 = comp1->first();
+	SquarePos beg2 = comp2->first();
+	SquarePos end1 = comp1->last();
+	SquarePos end2 = comp2->last();
+	if (beg1 == beg2) { return beg1; }
+	if (beg1 == end2) { return beg1; }
+	if (end1 == beg2) { return end1; }
+	if (end1 == end2) { return end1; }
+	return SquarePos(-1, -1);  //such point does't exist; no intersection
+}
+bool Component::getIsFixed() const { return isFixed; }
+bool Component::setIsFixed(bool value) { isFixed = value; }
+SquarePos Component::center() const
+{
+	SquarePos res(0, 0);
+	int x = 0;
+	int y = 0;
+	int len = 0;
+	for (Component::const_iterator i = this->begin(); i != this->end(); i++)
+	{
+		x += (*i).first;
+		y += (*i).second;
+		len++;
+	}
+	res.first= x / len;
+	res.second = y / len;
+	return res;
+}
+SquarePos Component::getAnotherSide(SquarePos const & point) const
+{
+	SquarePos begin = this->first();
+	SquarePos end = this->last();
+	if (begin == point) { return end; }
+	else if (end == point) { return begin; }
+	else { return SquarePos(-1, -1); }
+}
+bool Component::isClosed() const
+{
+	return first() == last();
+}
+SquarePos Component::center(QList < Component *> *comps)
+{
+	SquarePos res(0, 0);
+	int x = 0;
+	int y = 0;
+	int len = 0;
+	for (QList < Component *>::const_iterator itr = comps->begin(); itr != comps->end(); itr++)
+	{
+		for (Component::const_iterator i = (*itr)->begin(); i != (*itr)->end(); i++)
+		{
+			x += (*i).first;
+			y += (*i).second;
+			len++;
+		}
+	}
+	res.first= x / len;
+	res.second = y / len;
+	return res;
+}
+
+QList < Component *>::iterator Component::getOuterComponent(QList < Component *> *comps)
+{
+	Component *cur;
+	int minX, minY;
+	int globMinX, globMinY;
+	QList < Component *>::iterator res;
+	globMinX = (*((*(comps->begin()))->begin())).first;
+	globMinY = (*((*(comps->begin()))->begin())).second;
+	for (QList < Component *>::iterator i = comps->begin(); i != comps->end(); i++)
+	{
+		cur = *i;
+		minX = (*(cur->begin())).first;
+		minY = (*(cur->begin())).second;
+		for (Component::const_iterator itr = cur->begin(); itr != cur->end(); itr++)
+		{
+			minX = (minX < (*itr).first) ? minX : (*itr).first;
+			minY = (minY < (*itr).second) ? minY : (*itr).second;
+		}
+		if (minX < globMinX)
+		{
+			globMinX = minX;
+			globMinY = minY;
+			res = i;
+		}
+		else
+		{
+			if (minY < globMinY)
+			{
+				globMinX = minX;
+				globMinY = minY;
+				res = i;
+			}
+		}
+	}
+	return res;
+}
+QList < Component *> *Component::prioritetSort(QList < Component *> *comps)
+{
+	return new QList < Component *>();
+}
